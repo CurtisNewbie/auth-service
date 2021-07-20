@@ -1,11 +1,13 @@
 package com.curtisnewbie.service.auth.remote.consts;
 
+import com.curtisnewbie.common.enums.IntEnum;
+
 /**
  * User isDisabled enum
  *
  * @author yongjie.zhuang
  */
-public enum UserIsDisabled {
+public enum UserIsDisabled implements IntEnum<UserIsDisabled> {
 
     /** normal */
     NORMAL(0),
