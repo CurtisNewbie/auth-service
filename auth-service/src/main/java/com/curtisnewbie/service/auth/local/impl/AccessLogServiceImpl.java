@@ -7,7 +7,6 @@ import com.curtisnewbie.service.auth.dao.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.AccessLogVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -28,8 +27,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     private AccessLogMapper m;
 
     @Override
-    public void save(AccessLogVo accessLogVo) {
-        accessLogVo.setId(null);
+    public void save(AccessLogInfoVo accessLogVo) {
         m.insert(BeanCopyUtils.toType(accessLogVo, AccessLogEntity.class));
     }
 
