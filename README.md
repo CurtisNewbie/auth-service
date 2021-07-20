@@ -2,7 +2,7 @@
 
 Service that handles authentication-related operations, it internally uses Dubbo RPC framework.
 
-## Projects that uses this service
+## Projects that uses this service (examples)
 
 1. FileServer
 
