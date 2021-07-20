@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
-@MapperScan(basePackages = "com.curtisnewbie.service.auth.dao")
+@MapperScan("com.curtisnewbie.service.auth.dao")
 @PropertySources({
         @PropertySource(value = "classpath:dubbo.properties"),
         @PropertySource(value = "classpath:application.properties")

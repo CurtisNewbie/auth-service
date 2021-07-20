@@ -1,13 +1,14 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * access_log entity
+ * access_log vo
  *
  * @author yongjie.zhuang
  */
-public class AccessLogVo {
+public class AccessLogVo implements Serializable {
 
     /** primary key */
     private Integer id;

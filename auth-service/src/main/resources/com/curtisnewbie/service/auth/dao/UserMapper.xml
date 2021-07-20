@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.curtisnewbie.module.auth.dao.UserMapper">
+<mapper namespace="com.curtisnewbie.service.auth.dao.UserMapper">
 
   <update id="updatePwd">
     UPDATE user
@@ -24,7 +24,7 @@
     WHERE id = #{id} AND is_disabled = 1
   </update>
 
-  <select id="findByUsername" resultType="com.curtisnewbie.module.auth.dao.UserEntity">
+  <select id="findByUsername" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
     SELECT *
     FROM user
     WHERE username = #{username}
@@ -46,18 +46,18 @@
   </select>
 
   <!-- disabled users are not included -->
-  <select id="findNormalUserInfoList" resultType="com.curtisnewbie.module.auth.dao.UserEntity">
+  <select id="findNormalUserInfoList" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
     SELECT id, username, role
     FROM user
     WHERE is_disabled = 0
   </select>
 
-  <select id="findAllUserInfoList" resultType="com.curtisnewbie.module.auth.dao.UserEntity">
+  <select id="findAllUserInfoList" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
     SELECT id, username, role, is_disabled
     FROM user
   </select>
 
-  <select id="findById" resultType="com.curtisnewbie.module.auth.dao.UserEntity">
+  <select id="findById" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
     SELECT *
     FROM user
     WHERE id = #{id}

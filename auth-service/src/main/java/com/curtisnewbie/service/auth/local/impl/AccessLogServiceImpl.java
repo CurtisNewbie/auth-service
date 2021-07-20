@@ -5,6 +5,7 @@ import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.AccessLogEntity;
 import com.curtisnewbie.service.auth.dao.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
+import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogVo;
 import com.github.pagehelper.PageHelper;
@@ -20,7 +21,7 @@ import java.util.Objects;
  * @author yongjie.zhuang
  */
 @Service
-@DubboService
+@DubboService(interfaceClass = RemoteAccessLogService.class)
 public class AccessLogServiceImpl implements LocalAccessLogService {
 
     @Autowired
