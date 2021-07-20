@@ -1,4 +1,4 @@
-package com.curtisnewbie.service.auth.exception;
+package com.curtisnewbie.service.auth.remote.exception;
 
 /**
  * Exception indicating that username is not found

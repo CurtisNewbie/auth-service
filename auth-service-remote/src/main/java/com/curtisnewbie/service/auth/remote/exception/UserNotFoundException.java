@@ -1,4 +1,4 @@
-package com.curtisnewbie.service.auth.exception;
+package com.curtisnewbie.service.auth.remote.exception;
 
 /**
  * User is not found

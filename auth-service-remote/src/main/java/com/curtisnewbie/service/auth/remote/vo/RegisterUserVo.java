@@ -1,7 +1,7 @@
-package com.curtisnewbie.service.auth.vo;
+package com.curtisnewbie.service.auth.remote.vo;
 
 
-import com.curtisnewbie.service.auth.consts.UserRole;
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 
 import java.io.Serializable;
 

@@ -1,9 +1,9 @@
-package com.curtisnewbie.service.auth.api;
+package com.curtisnewbie.service.auth.remote.api;
 
-import com.curtisnewbie.service.auth.exception.*;
-import com.curtisnewbie.service.auth.vo.RegisterUserVo;
-import com.curtisnewbie.service.auth.vo.UserInfoVo;
-import com.curtisnewbie.service.auth.vo.UserVo;
+import com.curtisnewbie.service.auth.remote.exception.*;
+import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
+import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
+import com.curtisnewbie.service.auth.remote.vo.UserVo;
 
 import java.util.List;
 

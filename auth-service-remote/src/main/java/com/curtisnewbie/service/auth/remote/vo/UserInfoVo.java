@@ -1,4 +1,4 @@
-package com.curtisnewbie.service.auth.vo;
+package com.curtisnewbie.service.auth.remote.vo;
 
 import java.io.Serializable;
 

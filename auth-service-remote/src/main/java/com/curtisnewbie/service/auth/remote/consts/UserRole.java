@@ -1,4 +1,4 @@
-package com.curtisnewbie.service.auth.consts;
+package com.curtisnewbie.service.auth.remote.consts;
 
 import com.curtisnewbie.common.enums.ValueEnum;
 import com.curtisnewbie.common.util.EnumUtils;

@@ -1,7 +1,7 @@
-package com.curtisnewbie.service.auth.api;
+package com.curtisnewbie.service.auth.remote.api;
 
 import com.curtisnewbie.common.vo.PagingVo;
-import com.curtisnewbie.service.auth.vo.AccessLogInfoVo;
+import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.github.pagehelper.PageInfo;
 
 /**

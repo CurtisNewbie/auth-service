@@ -10,10 +10,10 @@
   </parent>
 
   <groupId>com.curtisnewbie</groupId>
-  <artifactId>auth-service-api</artifactId>
+  <artifactId>auth-service-remote</artifactId>
   <version>0.0.1</version>
   <name>auth-service-api</name>
-  <description>RPC api for authentication service</description>
+  <description>RPC module for authentication service</description>
   <packaging>jar</packaging>
 
   <properties>

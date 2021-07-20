@@ -1,4 +1,4 @@
-package com.curtisnewbie.service.auth.exception;
+package com.curtisnewbie.service.auth.remote.exception;
 
 /**
  * User with the same name is already registered

@@ -1,4 +1,4 @@
-package com.curtisnewbie.service.auth.consts;
+package com.curtisnewbie.service.auth.remote.consts;
 
 /**
  * User isDisabled enum
