@@ -12,7 +12,7 @@
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-remote</artifactId>
   <version>0.0.1</version>
-  <name>auth-service-api</name>
+  <name>auth-service-remote</name>
   <description>RPC module for authentication service</description>
   <packaging>jar</packaging>
 

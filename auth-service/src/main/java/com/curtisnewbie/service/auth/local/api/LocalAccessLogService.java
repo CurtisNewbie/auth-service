@@ -10,11 +10,4 @@ import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
  */
 public interface LocalAccessLogService extends RemoteAccessLogService {
 
-    /**
-     * Save access_log entity
-     *
-     * @param accessLogEntity
-     */
-    void save(AccessLogEntity accessLogEntity);
-
 }
