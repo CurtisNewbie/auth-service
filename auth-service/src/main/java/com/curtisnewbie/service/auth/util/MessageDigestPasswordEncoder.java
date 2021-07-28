@@ -34,11 +34,7 @@ public class MessageDigestPasswordEncoder implements PasswordEncoder {
 
         // check if the password was encoded by spring's encoder
         String springSalt = extractSpringGeneratedSalt(encodedPassword);
-        String encoded;
-        if (springSalt == null) {
-            encoded = encodePassword(plainText);
-        } else
-            encoded = springSalt + encodePassword(plainText + springSalt);
+        String encoded = springSalt + encodePassword(plainText + springSalt);
         return Objects.equals(encoded, encodedPassword);
     }
 
