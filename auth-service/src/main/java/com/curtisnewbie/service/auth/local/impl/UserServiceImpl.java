@@ -59,21 +59,29 @@ public class UserServiceImpl implements LocalUserService {
     @Override
     public UserVo login(@NotEmpty String username, @NotEmpty String password) throws UserDisabledException, UsernameNotFoundException,
             PasswordIncorrectException {
+
         UserEntity ue = loadUserByUsername(username);
-        if (ue == null)
+        if (ue == null) {
+            logger.info("User '{}' attempt to login, but username is not found.", username);
             throw new UsernameNotFoundException(username);
+        }
         UserIsDisabled isDisabled = EnumUtils.parse(ue.getIsDisabled(), UserIsDisabled.class);
         Objects.requireNonNull(isDisabled);
-        if (isDisabled == UserIsDisabled.DISABLED)
+        if (isDisabled == UserIsDisabled.DISABLED) {
+            logger.info("User '{}' attempt to login, but user is disabled.", username);
             throw new UserDisabledException(username);
+        }
 
         boolean isPwdCorrect = PasswordUtil.getValidator()
                 .givenPasswordAndSalt(password, ue.getSalt())
                 .compareToPasswordHash(ue.getPassword())
                 .isMatched();
-        if (!isPwdCorrect)
+        if (!isPwdCorrect) {
+            logger.info("User '{}' attempt to login, but password is incorrect.", username);
             throw new PasswordIncorrectException(username);
+        }
 
+        logger.info("User '{}' login successful, user_info returned", username);
         return BeanCopyUtils.toType(ue, UserVo.class);
     }
 
@@ -85,6 +93,7 @@ public class UserServiceImpl implements LocalUserService {
         Objects.requireNonNull(registerUserVo.getRole());
 
         if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
+            logger.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
             throw new UserRegisteredException(registerUserVo.getUsername());
         }
 
@@ -94,18 +103,25 @@ public class UserServiceImpl implements LocalUserService {
             int currCntOfAdmin = userMapper.countAdmin();
             // exceeded the max num of administrators
             if (currCntOfAdmin >= optInt.get()) {
+                logger.info("Try to register user '{}' as admin, but the maximum number of admin ({}) is exceeded.",
+                        registerUserVo.getUsername(), optInt.get());
                 throw new ExceededMaxAdminCountException(MessageFormat.format("Max: {0}, curr: {1}",
                         optInt.get(), currCntOfAdmin));
             }
         }
+
+        logger.info("New user '{}' successfully registered, role: {}", registerUserVo.getUsername(), registerUserVo.getRole().getValue());
         userMapper.insert(toUserEntity(registerUserVo));
     }
 
     @Override
     public void updatePassword(final String newPassword, final String oldPassword, long id) throws UserNotFoundException,
             PasswordIncorrectException {
+
+
         UserEntity ue = userMapper.findById(id);
         if (ue == null) {
+            logger.info("User_id '{}' attempt to change password, but user is not found.", id);
             throw new UserNotFoundException("user.id: " + id);
         }
         boolean isPasswordMatched = PasswordUtil.getValidator()
@@ -113,8 +129,11 @@ public class UserServiceImpl implements LocalUserService {
                 .compareToPasswordHash(ue.getPassword())
                 .isMatched();
         if (!isPasswordMatched) {
+            logger.info("User_id '{}' attempt to change password, but the old password is unmatched.", id);
             throw new PasswordIncorrectException("user.id: " + id);
         }
+
+        logger.info("User_id '{}' successfully changed password.", id);
         userMapper.updatePwd(PasswordUtil.encodePassword(newPassword, ue.getSalt()), id);
     }
 
