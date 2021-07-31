@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.service.auth.dao.AccessLogEntity;
 import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
 
 /**
