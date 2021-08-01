@@ -1,9 +1,11 @@
 package com.curtisnewbie.service.auth.remote.api;
 
 import com.curtisnewbie.service.auth.remote.exception.*;
+import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
 import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
+import com.github.pagehelper.PageInfo;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 
@@ -65,6 +67,12 @@ public interface RemoteUserService {
      */
     @NotNull
     List<UserInfoVo> findAllUserInfoList();
+
+    /**
+     * Fetch list of user info based on the provided arguments
+     */
+    @NotNull
+    PageInfo<UserInfoVo> findUserInfoByPage(@NotNull FindUserInfoVo vo);
 
     /**
      * Disable user by id

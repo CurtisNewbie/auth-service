@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.dao;
 
+import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -76,4 +77,9 @@ public interface UserMapper {
      * @param id id
      */
     UserEntity findById(@Param("id") long id);
+
+    /**
+     * Select id, username, role, is_disabled
+     */
+    List<UserEntity> findUserInfoBy(UserEntity ue);
 }

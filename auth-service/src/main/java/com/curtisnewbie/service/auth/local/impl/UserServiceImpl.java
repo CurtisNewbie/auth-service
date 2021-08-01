@@ -2,6 +2,7 @@ package com.curtisnewbie.service.auth.local.impl;
 
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
+import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.service.auth.dao.UserEntity;
 import com.curtisnewbie.service.auth.dao.UserMapper;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
@@ -9,11 +10,15 @@ import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
+import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
 import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
 import com.curtisnewbie.service.auth.util.RandomNumUtil;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +152,20 @@ public class UserServiceImpl implements LocalUserService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<UserInfoVo> findAllUserInfoList() {
         return BeanCopyUtils.toTypeList(userMapper.findAllUserInfoList(), UserInfoVo.class);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public @NotNull PageInfo<UserInfoVo> findUserInfoByPage(@NotNull FindUserInfoVo vo) {
+        Objects.requireNonNull(vo.getPagingVo());
+        PageHelper.startPage(vo.getPagingVo().getPage(), vo.getPagingVo().getLimit());
+        UserEntity ue = new UserEntity();
+        if (vo.getIsDisabled() != null)
+            ue.setIsDisabled(vo.getIsDisabled().getValue());
+        if (vo.getRole() != null)
+            ue.setRole(vo.getRole().getValue());
+        ue.setUsername(vo.getUsername());
+        return BeanCopyUtils.toPageList(PageInfo.of(userMapper.findUserInfoBy(ue)), UserInfoVo.class);
     }
 
     @Override

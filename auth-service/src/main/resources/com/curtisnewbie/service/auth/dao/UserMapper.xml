@@ -62,6 +62,21 @@
     FROM user
     WHERE id = #{id}
   </select>
+  <select id="findUserInfoBy" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
+    Select id, username, role, is_disabled
+    FROM user
+    <where>
+      <if test="username != null and username != ''">
+        username like "%"#{username}"%"
+      </if>
+      <if test="role != null">
+        and role = #{role}
+      </if>
+      <if test="isDisabled != null">
+        and is_disabled = #{isDisabled}
+      </if>
+    </where>
+  </select>
 
   <insert id="insert">
     INSERT INTO user (username, password, salt, role, create_time, create_by)
