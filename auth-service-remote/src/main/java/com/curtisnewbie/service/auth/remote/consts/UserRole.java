@@ -10,7 +10,7 @@ import java.util.Objects;
  *
  * @author yongjie.zhuang
  */
-public enum UserRole implements ValueEnum<UserRole, String> {
+public enum UserRole implements ValueEnum<String> {
 
     /** Administrator */
     ADMIN("admin"),
