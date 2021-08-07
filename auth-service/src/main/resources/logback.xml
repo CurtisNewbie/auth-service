@@ -20,6 +20,10 @@
     <appender-ref ref="TRACED_STDOUT"/>
   </logger>
 
+  <logger name="com.curtisnewbie.AuthServiceApplication" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
   <root level="info">
     <appender-ref ref="STDOUT"/>
   </root>
