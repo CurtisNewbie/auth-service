@@ -7,7 +7,7 @@ import com.curtisnewbie.common.enums.IntEnum;
  *
  * @author yongjie.zhuang
  */
-public enum UserIsDisabled implements IntEnum<UserIsDisabled> {
+public enum UserIsDisabled implements IntEnum {
 
     /** normal */
     NORMAL(0),

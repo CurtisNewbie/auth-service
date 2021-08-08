@@ -18,3 +18,13 @@ CREATE TABLE IF NOT EXISTS access_log (
     username VARCHAR(255) NOT NULL COMMENT 'username',
     user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user'
 ) ENGINE=InnoDB COMMENT 'access log';
+
+CREATE TABLE IF NOT EXISTS operate_log (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT 'primary key',
+    operate_name VARCHAR(255) NOT NULL COMMENT 'name of operation',
+    operate_desc VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'description of operation',
+    operate_time TIMESTAMP NOT NULL DEFAULT NOW() COMMENT 'when the operation happens',
+    operate_param VARCHAR(1000) NOT NULL  COMMENT 'parameters used for the operation',
+    username VARCHAR(255) NOT NULL COMMENT 'username',
+    user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user'
+) ENGINE=InnoDB COMMENT 'operate log';
