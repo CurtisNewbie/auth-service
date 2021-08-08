@@ -33,5 +33,6 @@
   <select id="selectBasicInfo" resultType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
     select operate_name, operate_desc, operate_time, operate_param, username, user_id
     from operate_log
+    order by id desc
   </select>
 </mapper>
