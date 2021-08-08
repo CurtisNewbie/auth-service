@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.local.impl;
 
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
-import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.service.auth.dao.UserEntity;
 import com.curtisnewbie.service.auth.dao.UserMapper;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
@@ -16,7 +15,6 @@ import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
 import com.curtisnewbie.service.auth.util.RandomNumUtil;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -71,7 +69,7 @@ public class UserServiceImpl implements LocalUserService {
             throw new UsernameNotFoundException(username);
         }
         UserIsDisabled isDisabled = EnumUtils.parse(ue.getIsDisabled(), UserIsDisabled.class);
-        Objects.requireNonNull(isDisabled);
+        Objects.requireNonNull(isDisabled, "Illegal is_disabled value");
         if (isDisabled == UserIsDisabled.DISABLED) {
             logger.info("User '{}' attempt to login, but user is disabled.", username);
             throw new UserDisabledException(username);

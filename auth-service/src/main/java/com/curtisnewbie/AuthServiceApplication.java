@@ -10,7 +10,8 @@ import org.springframework.context.annotation.PropertySources;
 @MapperScan("com.curtisnewbie.service.auth.dao")
 @PropertySources({
         @PropertySource(value = "classpath:dubbo.properties"),
-        @PropertySource(value = "classpath:application.properties")
+        @PropertySource(value = "classpath:application.properties"),
+        @PropertySource(value = "classpath:common.properties")
 })
 @EnableDubbo
 @SpringBootApplication
