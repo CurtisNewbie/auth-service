@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.curtisnewbie</groupId>
 	<artifactId>auth-service-web</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>auth-service-web</name>
 	<description>Web layer for authentication service</description>
 	<properties>
@@ -46,18 +46,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.9.5</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.9.5</version>
-		</dependency>
-
-		<dependency>
 			<groupId>com.curtisnewbie</groupId>
 			<artifactId>common-module</artifactId>
 			<version>1.0.0</version>
@@ -73,6 +61,13 @@
 			<groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-data-redis</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.curtisnewbie</groupId>
+			<artifactId>redis-util-module</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
