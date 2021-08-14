@@ -1,25 +1,29 @@
 # auth-service
 
-Service that handles authentication-related operations, it internally uses Dubbo RPC framework.
+Service for managing users, access log and operation log, it internally uses Dubbo RPC framework, and the API layer is under **`/auth-service-remote`**.
 
-## Dependencies
+## Middlewares
+
+- MySQL
+- Nacos (or others, e.g., zookeeper)
+
+## Modules and Dependencies
 
 This project depends on the following modules that you must manually install (using `mvn clean install`).
 
-### 1. service-module
+- service-module
+    - description: import dependencies for a Dubbo service
+    - url: https://github.com/CurtisNewbie/service-module
+    - branch: main
 
-Make the app a standalone Dubbo service
+- log-tracing-module
+    - desription: for log tracing between web endpoints and service layers
+    - url: https://github.com/CurtisNewbie/log-tracing-module
+    - branch: main
 
-```
-URL: https://github.com/CurtisNewbie/service-module
-Branch: main
-```
 
 ## Projects that uses this service (examples)
 
 1. FileServer
-
-```
-URL: https://github.com/CurtisNewbie/file-server/tree/microservice
-Branch: microservice
-```
+    - url: https://github.com/CurtisNewbie/file-server/
+    - branch: main 
