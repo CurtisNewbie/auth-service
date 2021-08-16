@@ -24,7 +24,6 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>common-module</artifactId>
-      <version>1.0.0</version>
     </dependency>
 
     <dependency>
@@ -34,4 +33,15 @@
 
   </dependencies>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.curtisnewbie</groupId>
+        <artifactId>curtisnewbie-bom</artifactId>
+        <version>micro-0.0.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 </project>
