@@ -30,9 +30,10 @@
     </rabbit:bindings>
   </rabbit:direct-exchange>
 
-  <rabbit:listener-container connection-factory="connectionFactory">
-    <rabbit:listener ref="accessLogSaveListener" queue-names="auth.access-log.queue"></rabbit:listener>
-    <rabbit:listener ref="operateLogSaveListener" queue-names="auth.operate-log.queue"></rabbit:listener>
+  <rabbit:listener-container connection-factory="connectionFactory"
+                             message-converter="jackson2JsonMessageConverter">
+    <rabbit:listener ref="accessLogSaveListener" queue-names="auth.access-log.queue" method="onMessage"></rabbit:listener>
+    <rabbit:listener ref="operateLogSaveListener" queue-names="auth.operate-log.queue" method="onMessage"></rabbit:listener>
   </rabbit:listener-container>
 
 </beans>

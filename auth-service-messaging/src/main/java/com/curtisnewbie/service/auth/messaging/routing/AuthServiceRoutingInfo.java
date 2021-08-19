@@ -1,11 +1,13 @@
 package com.curtisnewbie.service.auth.messaging.routing;
 
+import com.curtisnewbie.module.messaging.config.RoutingInfo;
+
 /**
- * Constants for Mq message routing
+ * Constants for auth-service Mq message routing
  *
  * @author yongjie.zhuang
  */
-public enum RoutingEnum {
+public enum AuthServiceRoutingInfo implements RoutingInfo {
 
     /**
      * save access_log
@@ -20,7 +22,7 @@ public enum RoutingEnum {
     private final String routingKey;
     private final String exchange;
 
-    RoutingEnum(String routingKey, String exchange) {
+    AuthServiceRoutingInfo(String routingKey, String exchange) {
         this.routingKey = routingKey;
         this.exchange = exchange;
     }
