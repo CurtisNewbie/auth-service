@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-messaging</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
   <name>auth-service-messaging</name>
   <description>Module that provides required constants to send async messages to auth-service</description>
