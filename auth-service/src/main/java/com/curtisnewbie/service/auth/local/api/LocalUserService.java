@@ -4,6 +4,8 @@ import com.curtisnewbie.service.auth.dao.UserEntity;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
 import com.curtisnewbie.service.auth.remote.exception.*;
 
+import javax.validation.constraints.NotEmpty;
+
 
 /**
  * Service related to user table
@@ -17,6 +19,6 @@ public interface LocalUserService extends RemoteUserService {
      *
      * @throws UsernameNotFoundException user with given username is not found
      */
-    UserEntity loadUserByUsername(String username) throws UsernameNotFoundException;
+    UserEntity loadUserByUsername(@NotEmpty String username) throws UsernameNotFoundException;
 
 }
