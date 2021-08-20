@@ -1,7 +1,13 @@
 package com.curtisnewbie.service.auth.mq;
 
+import com.curtisnewbie.module.messaging.config.SimpleConnectionFactoryBeanFactory;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
+import org.springframework.core.env.Environment;
 
 
 /**
@@ -9,7 +15,15 @@ import org.springframework.context.annotation.ImportResource;
  *
  * @author yongjie.zhuang
  */
-@ImportResource("classpath:rabbitmq.xml")
+@EnableRabbit
 @Configuration
 public class MqConfig {
+
+    @Autowired
+    private Environment environment;
+
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        return SimpleConnectionFactoryBeanFactory.createByProperties(environment);
+    }
 }
