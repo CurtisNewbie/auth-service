@@ -30,11 +30,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>com.curtisnewbie</groupId>
-      <artifactId>messaging-module</artifactId>
-    </dependency>
-
   </dependencies>
 
 

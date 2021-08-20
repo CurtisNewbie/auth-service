@@ -1,13 +1,13 @@
 package com.curtisnewbie.service.auth.messaging.routing;
 
-import com.curtisnewbie.module.messaging.config.RoutingInfo;
+
 
 /**
  * Constants for auth-service Mq message routing
  *
  * @author yongjie.zhuang
  */
-public enum AuthServiceRoutingInfo implements RoutingInfo {
+public enum AuthServiceRoutingInfo {
 
     /**
      * save access_log
