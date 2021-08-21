@@ -31,7 +31,7 @@ public class AccessLogSaveListener {
             log.error("Received null messages, unable to save access_log");
             return;
         }
-        log.debug("Log access_log message: '{}'", vo);
+        log.info("Save access_log: '{}'", vo);
         localAccessLogService.save(vo);
 
     }

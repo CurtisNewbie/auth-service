@@ -35,7 +35,7 @@ public class OperateLogSaveListener {
             return;
         }
 
-        log.debug("Log operate_log message: '{}'", vo);
+        log.info("Save operate_log: '{}'", vo);
         operateLogService.saveOperateLogInfo(vo);
     }
 }
