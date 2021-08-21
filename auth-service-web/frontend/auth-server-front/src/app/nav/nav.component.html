@@ -1,0 +1,21 @@
+<div class="mt-3 mb-4" [hidden]="!isLoggedIn">
+    <nav>
+        <ul class="nav">
+            <li class="nav-item" [hidden]="!isAdmin">
+                <a class="nav-link" routerLink="/manage-user" routerLinkActive="active">Manage Users</a>
+            </li>
+            <li class="nav-item" [hidden]="!isAdmin">
+                <a class="nav-link" routerLink="/access-log" routerLinkActive="active">Access History</a>
+            </li>
+            <li class="nav-item" [hidden]="!isAdmin">
+                <a class="nav-link" routerLink="/operate-history" routerLinkActive="active">Operate History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" routerLink="/change-password" routerLinkActive="active">Change Password</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" (click)="logout()">Logout</a>
+            </li>
+        </ul>
+    </nav>
+</div>
