@@ -1,5 +1,7 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,6 +10,7 @@ import java.util.Date;
  *
  * @author yongjie.zhuang
  */
+@Data
 public class AccessLogInfoVo implements Serializable {
 
     /** when the user signed in */
@@ -21,36 +24,4 @@ public class AccessLogInfoVo implements Serializable {
 
     /** primary key of user */
     private Integer userId;
-
-    public Date getAccessTime() {
-        return accessTime;
-    }
-
-    public void setAccessTime(Date accessTime) {
-        this.accessTime = accessTime;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 }
