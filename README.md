@@ -32,6 +32,10 @@ This project depends on the following modules that you must manually install (us
     - url: https://github.com/CurtisNewbie/messaging-module
     - branch: main
 
+- auth-module
+    - description: for user authentication, security and integration with auth-service (this is used by `auth-service-web`) 
+    - url: https://github.com/CurtisNewbie/auth-module
+    - branch: main 
 
 ## Projects that uses this service (examples)
 
