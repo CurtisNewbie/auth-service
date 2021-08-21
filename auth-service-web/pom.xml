@@ -32,7 +32,6 @@
 		<dependency>
 			<groupId>com.curtisnewbie</groupId>
 			<artifactId>authmodule</artifactId>
-			<version>micro-1.0.1</version>
 		</dependency>
 
 		<dependency>
@@ -48,13 +47,11 @@
 		<dependency>
 			<groupId>com.curtisnewbie</groupId>
 			<artifactId>common-module</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.curtisnewbie</groupId>
 			<artifactId>log-tracing-module</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -65,7 +62,6 @@
 		<dependency>
 			<groupId>com.curtisnewbie</groupId>
 			<artifactId>redis-util-module</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 
 	</dependencies>
@@ -78,5 +74,17 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.curtisnewbie</groupId>
+				<artifactId>curtisnewbie-bom</artifactId>
+				<version>micro-0.0.1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>
