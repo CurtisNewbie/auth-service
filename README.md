@@ -1,6 +1,6 @@
 # auth-service
 
-Service for managing users, access log and operation log, it internally uses Dubbo RPC framework, and the API layer is under **`/auth-service-remote`**.
+Service for managing users, access log and operation log, it internally uses Dubbo RPC framework. The API layer for Dubbo is under **`/auth-service-remote`**, and the exposed routing infomation for messaging/MQ is under **`/auth-service-messaging`**.
 
 ## Middlewares
 
@@ -25,6 +25,11 @@ This project depends on the following modules that you must manually install (us
 - log-tracing-module
     - desription: for log tracing between web endpoints and service layers
     - url: https://github.com/CurtisNewbie/log-tracing-module
+    - branch: main
+
+- messaging-module
+    - description: for RabbitMQ-based messaging 
+    - url: https://github.com/CurtisNewbie/messaging-module
     - branch: main
 
 
