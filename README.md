@@ -6,6 +6,8 @@ Service for managing users, access log and operation log, it internally uses Dub
 
 - MySQL
 - Nacos (or others, e.g., zookeeper)
+- RabbitMQ
+- Redis
 
 ## Modules and Dependencies
 
