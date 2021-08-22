@@ -20,11 +20,19 @@
     <appender-ref ref="TRACED_STDOUT"/>
   </logger>
 
-  <logger name="com.curtisnewbie.module.auth.config.SecurityConfig" additivity="false">
+  <logger name="com.curtisnewbie.module.auth.config.SecurityConfigurer" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
 
   <logger name="com.curtisnewbie.module.auth.config.CorsConfigImpl" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <logger name="com.curtisnewbie.module.auth.config.AuthenticationSuccessHandlerDelegate" additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <logger name="com.curtisnewbie.module.auth.config.AuthenticationFailureHandlerDelegate" additivity="false">
     <appender-ref ref="STDOUT"/>
   </logger>
 
