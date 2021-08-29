@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { AccessLogComponent } from "./access-log/access-log.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { LoginComponent } from "./login/login.component";
+import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
 import { ManagerUserComponent } from "./manager-user/manager-user.component";
 import { OperateHistoryComponent } from "./operate-history/operate-history.component";
 
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: "operate-history",
     component: OperateHistoryComponent,
+  },
+  {
+    path: "manage-task",
+    component: ManageTasksComponent,
   },
   { path: "**", redirectTo: "/login-page" },
 ];

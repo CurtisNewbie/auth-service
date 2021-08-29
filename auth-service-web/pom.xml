@@ -64,6 +64,16 @@
 			<artifactId>redis-util-module</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.curtisnewbie</groupId>
+			<artifactId>distributed-task-module</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

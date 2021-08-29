@@ -30,6 +30,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatDialogModule } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "./dialog/confirm/confirm-dialog.component";
 import { OperateHistoryComponent } from "./operate-history/operate-history.component";
+import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
 
 @NgModule({
   exports: [],
@@ -42,6 +43,7 @@ import { OperateHistoryComponent } from "./operate-history/operate-history.compo
     ChangePasswordComponent,
     ConfirmDialogComponent,
     OperateHistoryComponent,
+    ManageTasksComponent,
   ],
   imports: [
     BrowserModule,
