@@ -31,7 +31,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="operate_log" mapperName="OperateLogMapper" domainObjectName="OperateLog">
+        <table tableName="event_handling" mapperName="EventHandlingMapper" domainObjectName="EventHandling">
             <property name="enableSelectByExample" value="false"/>
             <property name="enableDeleteByExample" value="false"/>
             <property name="enableCountByExample" value="false"/>

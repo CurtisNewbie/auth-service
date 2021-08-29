@@ -12,6 +12,15 @@ CREATE TABLE IF NOT EXISTS user (
     update_by VARCHAR(255) COMMENT 'who updated this user'
 ) ENGINE=InnoDB COMMENT 'user';
 
+CREATE TABLE IF NOT EXISTS event_handling (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
+    type INT NOT NULL COMMENT "type of event, 1-registration",
+    body VARCHAR(1000) NOT NULL COMMENT "body of the event",
+    status INT NOT NULL COMMENT "status of event, 0-no need to handle, 1-to be handled, 2-handled",
+    handler_id INT UNSIGNED COMMENT "id of user who handled the event",
+    handle_time DATETIME COMMENT 'when the event is handled'
+) ENGINE=InnoDB COMMENT 'events that need to be handled by someone, e.g., administrators';
+
 CREATE TABLE IF NOT EXISTS access_log (
     id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT 'primary key',
     access_time TIMESTAMP NOT NULL DEFAULT NOW() COMMENT 'when the user signed in',
