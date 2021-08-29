@@ -15,7 +15,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 import java.io.IOException;
 
-@EnableRedisHttpSession(redisNamespace = "auth-service")
+@EnableRedisHttpSession(redisNamespace = "auth-service:session")
 @PropertySources({
         @PropertySource("classpath:dubbo.properties"),
         @PropertySource("classpath:application.properties"),
