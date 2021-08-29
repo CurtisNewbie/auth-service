@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,5 +42,22 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
         PageHelper.startPage(pagingVo.getPage(), pagingVo.getLimit());
         PageInfo<OperateLogEntity> pi = PageInfo.of(operateLogMapper.selectBasicInfo());
         return BeanCopyUtils.toPageList(pi, OperateLogVo.class);
+    }
+
+    @Override
+    public @NotNull PageInfo<Integer> findIdsBeforeDateByPage(@NotNull PagingVo paging, @NotNull Date date) {
+        Objects.requireNonNull(paging);
+        Objects.requireNonNull(date);
+
+        PageHelper.startPage(paging.getPage(), paging.getLimit());
+        return PageInfo.of(operateLogMapper.selectIdsBeforeDate(date));
+    }
+
+    @Override
+    public void moveRecordsToHistory(@NotNull List<Integer> ids) {
+        if (ids.isEmpty())
+            return;
+        operateLogMapper.copyToHistory(ids);
+        operateLogMapper.deleteByIds(ids);
     }
 }

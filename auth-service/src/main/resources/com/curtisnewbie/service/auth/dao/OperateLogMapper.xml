@@ -10,6 +10,7 @@
     #{operateTime,jdbcType=TIMESTAMP}, #{operateParam,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
     #{userId,jdbcType=INTEGER})
   </insert>
+
   <update id="updateByPrimaryKey" parameterType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
     update operate_log
     set operate_name = #{operateName,jdbcType=VARCHAR},
@@ -20,6 +21,7 @@
     user_id = #{userId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
           resultType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
     select id, operate_name, operate_desc, operate_time, operate_param, username, user_id
@@ -35,4 +37,28 @@
     from operate_log
     order by id desc
   </select>
+
+  <select id="selectIdsBeforeDate" resultType="java.lang.Integer">
+    select id from operate_log
+    where operate_time <![CDATA[<]]> #{date}
+  </select>
+
+  <insert id="copyToHistory">
+    insert into operate_log_history
+    select * from operate_log
+    where id in (
+    <foreach collection="ids" item="id" separator=",">
+      #{id}
+    </foreach>
+    )
+  </insert>
+
+  <delete id="deleteByIds">
+    delete from operate_log
+    where id in (
+    <foreach collection="ids" item="id" separator=",">
+      #{id}
+    </foreach>
+    )
+  </delete>
 </mapper>
