@@ -13,6 +13,8 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,5 +39,22 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
         PageHelper.startPage(paging.getPage(), paging.getLimit());
         List<AccessLogEntity> list = m.selectAllBasicInfo();
         return BeanCopyUtils.toPageList(PageInfo.of(list), AccessLogInfoVo.class);
+    }
+
+    @Override
+    public @NotNull PageInfo<Integer> findIdsBeforeDateByPage(@NotNull PagingVo paging, @NotNull Date date) {
+        Objects.requireNonNull(paging);
+        Objects.requireNonNull(date);
+
+        PageHelper.startPage(paging.getPage(), paging.getLimit());
+        return PageInfo.of(m.selectIdsBeforeDate(date));
+    }
+
+    @Override
+    public void moveRecordsToHistory(@NotNull List<Integer> ids) {
+        if (ids.isEmpty())
+            return;
+        m.copyToHistory(ids);
+        m.deleteByIds(ids);
     }
 }

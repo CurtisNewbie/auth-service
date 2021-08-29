@@ -37,6 +37,26 @@
     user_id = #{userId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <update id="copyToHistory">
+    insert into access_log_history
+    select * from access_log
+    where id in (
+    <foreach collection="ids" item="id" separator=",">
+      #{id}
+    </foreach>
+    )
+  </update>
+
+  <delete id="deleteByIds">
+    delete from access_log
+    where id in (
+    <foreach collection="ids" item="id" separator=",">
+      #{id}
+    </foreach>
+    )
+  </delete>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
       WARNING - @mbg.generated
@@ -61,5 +81,10 @@
     select access_time, ip_address, username, user_id
     from access_log
     order by id desc
+  </select>
+
+  <select id="selectIdsBeforeDate" resultType="java.lang.Integer">
+    select id from access_log
+    where access_time <![CDATA[<]]> #{date}
   </select>
 </mapper>

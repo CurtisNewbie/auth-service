@@ -1,5 +1,8 @@
 package com.curtisnewbie.service.auth.dao;
 
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 
 public interface AccessLogMapper {
@@ -37,4 +40,10 @@ public interface AccessLogMapper {
     int updateByPrimaryKey(AccessLogEntity record);
 
     List<AccessLogEntity> selectAllBasicInfo();
+
+    List<Integer> selectIdsBeforeDate(@Param("date") Date date);
+
+    void copyToHistory(@Param("ids") List<Integer> ids);
+
+    void deleteByIds(@Param("ids") List<Integer> ids);
 }
