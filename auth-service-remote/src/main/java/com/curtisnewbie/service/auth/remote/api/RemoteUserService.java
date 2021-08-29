@@ -36,13 +36,37 @@ public interface RemoteUserService {
             PasswordIncorrectException;
 
     /**
+     * <p>
      * Register user of different role
+     * </p>
+     * <p>
+     * This method should only be called by admin, since it doesn't require any approve/reject processes.
+     * </p>
      *
      * @param registerUserVo
      * @throws UserRegisteredException        username is already registered
      * @throws ExceededMaxAdminCountException the max number of admin exceeded
+     * @see
      */
     void register(@NotNull RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException;
+
+    /**
+     * <p>
+     * Register user of different role
+     * </p>
+     * <p>
+     * User registered with this method is disabled by default, it requires the admin to 'approve' the registration by
+     * enabling it. To do this, this method will generate a {@code event_handling} record, that will later be received
+     * by the admin and handled. For more information, see {@link RemoveEventHandlingService}
+     * </p>
+     *
+     * @param registerUserVo
+     * @throws UserRegisteredException        username is already registered
+     * @throws ExceededMaxAdminCountException the max number of admin exceeded
+     * @see
+     */
+    void requestRegistrationApproval(@NotNull RegisterUserVo registerUserVo) throws UserRegisteredException,
+            ExceededMaxAdminCountException;
 
     /**
      * Update password

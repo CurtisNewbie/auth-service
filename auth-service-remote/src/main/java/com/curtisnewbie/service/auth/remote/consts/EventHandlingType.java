@@ -10,7 +10,7 @@ import com.curtisnewbie.common.enums.IntEnum;
 public enum EventHandlingType implements IntEnum {
 
     /**
-     * 1-registration event
+     * 1-registration event, the body is the id of user
      */
     REGISTRATION_EVENT(1);
 

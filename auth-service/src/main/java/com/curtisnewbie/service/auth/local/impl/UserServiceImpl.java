@@ -4,15 +4,15 @@ import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.dao.UserEntity;
 import com.curtisnewbie.service.auth.dao.UserMapper;
+import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
-import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
-import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.UserVo;
+import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
 import com.curtisnewbie.service.auth.util.RandomNumUtil;
 import com.github.pagehelper.PageHelper;
@@ -46,6 +46,8 @@ public class UserServiceImpl implements LocalUserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private LocalEventHandlingService eventHandlingService;
     @Autowired
     private Environment environment;
 
@@ -101,26 +103,56 @@ public class UserServiceImpl implements LocalUserService {
         }
 
         // limit the total number of administrators
-        Optional<Integer> optInt = parseInteger(environment.getProperty(ADMIN_LIMIT_COUNT_KEY));
-        if (optInt.isPresent() && registerUserVo.getRole().equals(UserRole.ADMIN.getValue())) {
-            int currCntOfAdmin = userMapper.countAdmin();
-            // exceeded the max num of administrators
-            if (currCntOfAdmin >= optInt.get()) {
-                logger.info("Try to register user '{}' as admin, but the maximum number of admin ({}) is exceeded.",
-                        registerUserVo.getUsername(), optInt.get());
-                throw new ExceededMaxAdminCountException(MessageFormat.format("Max: {0}, curr: {1}",
-                        optInt.get(), currCntOfAdmin));
-            }
+        if (registerUserVo.getRole().equals(UserRole.ADMIN.getValue())) {
+            checkAdminQuota();
         }
+        UserEntity userEntity = toUserEntity(registerUserVo);
+        userEntity.setIsDisabled(UserIsDisabled.NORMAL.getValue());
 
         logger.info("New user '{}' successfully registered, role: {}", registerUserVo.getUsername(), registerUserVo.getRole().getValue());
-        userMapper.insert(toUserEntity(registerUserVo));
+        userMapper.insert(userEntity);
+    }
+
+    @Override
+    public void requestRegistrationApproval(@NotNull RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException {
+        Objects.requireNonNull(registerUserVo);
+        Objects.requireNonNull(registerUserVo.getUsername());
+        Objects.requireNonNull(registerUserVo.getPassword());
+        Objects.requireNonNull(registerUserVo.getRole());
+
+        if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
+            logger.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
+            throw new UserRegisteredException(registerUserVo.getUsername());
+        }
+
+        // limit the total number of administrators
+        if (registerUserVo.getRole().equals(UserRole.ADMIN.getValue())) {
+            checkAdminQuota();
+        }
+
+        // set user disabled, this will be handled by the admin
+        UserEntity userEntity = toUserEntity(registerUserVo);
+        userEntity.setIsDisabled(UserIsDisabled.DISABLED.getValue());
+        userMapper.insert(userEntity);
+
+        logger.info("New user '{}' successfully registered, role: {}, currently disabled and waiting for approval",
+                registerUserVo.getUsername(), registerUserVo.getRole().getValue());
+
+        // generate a handling_event for registration request
+        Objects.requireNonNull(userEntity.getId());
+        eventHandlingService.createEvent(
+                EventHandlingVo.builder()
+                        .body(String.valueOf(userEntity.getId()))
+                        .status(EventHandlingStatus.TO_BE_HANDLED.getValue())
+                        .type(EventHandlingType.REGISTRATION_EVENT.getValue())
+                        .build()
+        );
+        logger.info("Created event_handling for {}'s registration", registerUserVo.getUsername());
     }
 
     @Override
     public void updatePassword(final String newPassword, final String oldPassword, long id) throws UserNotFoundException,
             PasswordIncorrectException {
-
 
         UserEntity ue = userMapper.findById(id);
         if (ue == null) {
@@ -197,6 +229,20 @@ public class UserServiceImpl implements LocalUserService {
             return Optional.of(count);
         } catch (NumberFormatException e) {
             return Optional.empty();
+        }
+    }
+
+    private void checkAdminQuota() throws ExceededMaxAdminCountException {
+        // limit the total number of administrators
+        Optional<Integer> optInt = parseInteger(environment.getProperty(ADMIN_LIMIT_COUNT_KEY));
+        if (optInt.isPresent()) {
+            int currCntOfAdmin = userMapper.countAdmin();
+            // exceeded the max num of administrators
+            if (currCntOfAdmin >= optInt.get()) {
+                logger.info("Try to register user as admin, but the maximum number of admin ({}) is exceeded.", optInt.get());
+                throw new ExceededMaxAdminCountException(MessageFormat.format("Max: {0}, curr: {1}",
+                        optInt.get(), currCntOfAdmin));
+            }
         }
     }
 

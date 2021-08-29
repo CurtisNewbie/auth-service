@@ -79,7 +79,7 @@
   </select>
 
   <insert id="insert">
-    INSERT INTO user (username, password, salt, role, create_time, create_by)
-    VALUES (#{username}, #{password}, #{salt}, #{role}, #{createTime}, #{createBy})
+    INSERT INTO user (username, password, salt, role, create_time, create_by, is_disabled)
+    VALUES (#{username}, #{password}, #{salt}, #{role}, #{createTime}, #{createBy}, #{is_disabled})
   </insert>
 </mapper>
