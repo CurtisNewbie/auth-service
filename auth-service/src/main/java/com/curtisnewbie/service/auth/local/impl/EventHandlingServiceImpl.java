@@ -9,7 +9,7 @@ import com.curtisnewbie.service.auth.dao.EventHandlingMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.eventhandling.EventHandler;
 import com.curtisnewbie.service.auth.local.api.eventhandling.RegistrationEventHandler;
-import com.curtisnewbie.service.auth.remote.api.RemoveEventHandlingService;
+import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
@@ -35,7 +35,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @Transactional
-@DubboService(interfaceClass = RemoveEventHandlingService.class)
+@DubboService(interfaceClass = RemoteEventHandlingService.class)
 public class EventHandlingServiceImpl implements LocalEventHandlingService {
 
     @Autowired

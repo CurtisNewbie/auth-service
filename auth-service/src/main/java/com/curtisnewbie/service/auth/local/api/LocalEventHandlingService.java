@@ -1,6 +1,6 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.service.auth.remote.api.RemoveEventHandlingService;
+import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 
 import javax.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author yongjie.zhuang
  */
-public interface LocalEventHandlingService extends RemoveEventHandlingService {
+public interface LocalEventHandlingService extends RemoteEventHandlingService {
 
     /**
      * Update handling result

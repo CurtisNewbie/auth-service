@@ -57,7 +57,7 @@ public interface RemoteUserService {
      * <p>
      * User registered with this method is disabled by default, it requires the admin to 'approve' the registration by
      * enabling it. To do this, this method will generate a {@code event_handling} record, that will later be received
-     * by the admin and handled. For more information, see {@link RemoveEventHandlingService}
+     * by the admin and handled. For more information, see {@link RemoteEventHandlingService}
      * </p>
      *
      * @param registerUserVo
@@ -113,4 +113,10 @@ public interface RemoteUserService {
      * @param enabledBy
      */
     void enableUserById(int id, @Nullable String enabledBy);
+
+
+    /**
+     * Find username by id
+     */
+    String findUsernameById(int id);
 }

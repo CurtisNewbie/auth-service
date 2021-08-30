@@ -74,7 +74,6 @@ public class UserController {
     }
 
     @LogOperation(name = "/user/register/request", description = "User request's registration approval")
-    @PreAuthorize("permitAll")
     @PostMapping("/register/request")
     public Result<?> requestRegistration(@RequestBody RequestRegisterUserWebVo registerUserVo) throws UserRelatedException,
             MsgEmbeddedException {
@@ -95,7 +94,7 @@ public class UserController {
         // role will always be User only
         vo.setRole(UserRole.USER);
         // created by this user himself/herself
-        vo.setCreateBy(AuthUtil.getUsername());
+        vo.setCreateBy(vo.getUsername());
 
         userService.requestRegistrationApproval(vo);
         return Result.ok();

@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @author yongjie.zhuang
  */
 @Validated
-public interface RemoveEventHandlingService {
+public interface RemoteEventHandlingService {
 
     /**
      * Create an event to be handled

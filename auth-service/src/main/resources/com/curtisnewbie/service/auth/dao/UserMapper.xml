@@ -83,8 +83,8 @@
     where id = #{id}
   </select>
 
-  <insert id="insert">
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
     INSERT INTO user (username, password, salt, role, create_time, create_by, is_disabled)
-    VALUES (#{username}, #{password}, #{salt}, #{role}, #{createTime}, #{createBy}, #{is_disabled})
+    VALUES (#{username}, #{password}, #{salt}, #{role}, #{createTime}, #{createBy}, #{isDisabled})
   </insert>
 </mapper>
