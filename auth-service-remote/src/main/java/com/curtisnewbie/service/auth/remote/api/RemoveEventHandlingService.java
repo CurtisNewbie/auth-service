@@ -1,8 +1,8 @@
 package com.curtisnewbie.service.auth.remote.api;
 
-import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
+import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
 import com.github.pagehelper.PageInfo;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,12 +29,13 @@ public interface RemoveEventHandlingService {
     PageInfo<EventHandlingVo> findEventHandlingByPage(@NotNull FindEventHandlingByPageReqVo vo);
 
     /**
-     * Update event status
-     *
-     * @param id         id
-     * @param prevStatus previous status
-     * @param currStatus current status
+     * <p>
+     * Handle the event
+     * </p>
+     * <p>
+     * Trying to handle an event that doesn't need to be handled will have no effect
+     * </p>
      */
-    void updateStatus(int id, int prevStatus, int currStatus);
+    void handleEvent(@NotNull HandleEventReqVo vo);
 
 }

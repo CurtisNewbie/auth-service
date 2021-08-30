@@ -42,9 +42,11 @@
     handle_time = #{handleTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateStatus">
+  <update id="updateHandlingResult">
     update event_handling
-    set status = #{currStatus}
+    set status = #{currStatus},
+    handler_id = #{handlerId},
+    handle_time = #{handleTime}
     where id = #{id}
     and status = #{prevStatus}
   </update>
@@ -78,5 +80,10 @@
         and type = #{type}
       </if>
     </where>
+  </select>
+  <select id="selectTypeById" resultType="java.lang.Integer">
+    select type
+    from event_handling
+    where id = #{id}
   </select>
 </mapper>

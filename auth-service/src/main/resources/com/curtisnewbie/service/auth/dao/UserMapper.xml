@@ -77,6 +77,11 @@
       </if>
     </where>
   </select>
+  <select id="findUsernameById" resultType="java.lang.String">
+    select username
+    from user
+    where id = #{id}
+  </select>
 
   <insert id="insert">
     INSERT INTO user (username, password, salt, role, create_time, create_by, is_disabled)

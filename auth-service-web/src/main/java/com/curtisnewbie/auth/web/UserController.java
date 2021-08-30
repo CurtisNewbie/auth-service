@@ -73,6 +73,34 @@ public class UserController {
         return Result.ok();
     }
 
+    @LogOperation(name = "/user/register/request", description = "User request's registration approval")
+    @PreAuthorize("permitAll")
+    @PostMapping("/register/request")
+    public Result<?> requestRegistration(@RequestBody RequestRegisterUserWebVo registerUserVo) throws UserRelatedException,
+            MsgEmbeddedException {
+        RegisterUserVo vo = new RegisterUserVo();
+        BeanUtils.copyProperties(registerUserVo, vo);
+
+        // validate whether username and password is entered
+        ValidUtils.requireNotEmpty(vo.getUsername(), "Please enter username");
+        ValidUtils.requireNotEmpty(vo.getPassword(), "Please enter password");
+
+        // validate if the username and password are the same
+        ValidUtils.requireNotEquals(vo.getUsername(), vo.getPassword(), "Username and password must be different");
+
+        // validate if the password is too short
+        if (vo.getPassword().length() < PASSWORD_LENGTH)
+            return Result.error("Password must have at least " + PASSWORD_LENGTH + " characters");
+
+        // role will always be User only
+        vo.setRole(UserRole.USER);
+        // created by this user himself/herself
+        vo.setCreateBy(AuthUtil.getUsername());
+
+        userService.requestRegistrationApproval(vo);
+        return Result.ok();
+    }
+
     @LogOperation(name = "/user/list", description = "get user list")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")

@@ -21,4 +21,9 @@ public interface LocalUserService extends RemoteUserService {
      */
     UserEntity loadUserByUsername(@NotEmpty String username) throws UsernameNotFoundException;
 
+    /**
+     * Find username by id
+     */
+    String findUsernameById(int id);
+
 }

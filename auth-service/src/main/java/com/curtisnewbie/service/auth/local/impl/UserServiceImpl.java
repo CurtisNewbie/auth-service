@@ -62,6 +62,11 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    public String findUsernameById(int id) {
+        return userMapper.findUsernameById(id);
+    }
+
+    @Override
     public UserVo login(@NotEmpty String username, @NotEmpty String password) throws UserDisabledException, UsernameNotFoundException,
             PasswordIncorrectException {
 

@@ -2,6 +2,7 @@ package com.curtisnewbie.service.auth.dao;
 
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface EventHandlingMapper {
@@ -39,5 +40,8 @@ public interface EventHandlingMapper {
      */
     List<EventHandling> selectByPage(EventHandling eventHandling);
 
-    void updateStatus(@Param("id") int id, @Param("prevStatus") int prevStatus, @Param("currStatus") int currStatus);
+    int updateHandlingResult(@Param("id") int id, @Param("prevStatus") int prevStatus, @Param("currStatus") int currStatus
+            , @Param("handlerId") int handlerId, @Param("handleTime") Date handleTime);
+
+    Integer selectTypeById(int id);
 }

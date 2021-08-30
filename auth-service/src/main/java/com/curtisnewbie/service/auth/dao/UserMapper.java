@@ -82,4 +82,9 @@ public interface UserMapper {
      * Select id, username, role, is_disabled
      */
     List<UserEntity> findUserInfoBy(UserEntity ue);
+
+    /**
+     * Select username
+     */
+    String findUsernameById(int id);
 }
