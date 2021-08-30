@@ -8,6 +8,7 @@ import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -46,24 +47,28 @@ public class RegistrationEventHandler implements EventHandler {
     )
     @Override
     public void handle(HandleEventInfoVo info) {
-        final int registeredUserid = Integer.parseInt(info.getRecord().getBody());
-        final String handlerName = localUserService.findUsernameById(info.getRecord().getId());
+        try {
+            final int registeredUserid = Integer.parseInt(info.getRecord().getBody());
+            final String handlerName = localUserService.findUsernameById(info.getRecord().getId());
 
-        // mark the event as handled, semantic lock is used here
-        if (localEventHandlingService.updateHandleStatus(
-                UpdateHandleStatusReqVo.builder()
-                        .id(info.getRecord().getId())
-                        .prevStatus(EventHandlingStatus.TO_BE_HANDLED)
-                        .currStatus(EventHandlingStatus.HANDLED)
-                        .handlerId(info.getRecord().getHandlerId())
-                        .handleTime(info.getRecord().getHandleTime())
-                        .build()
-        )) {
-            log.info("Handled event {}, result: {}", info.getResult(), info.getResult());
-            if (info.getResult().equals(EventHandlingResult.ACCEPT)) {
-                // enable user
-                localUserService.enableUserById(registeredUserid, handlerName);
+            // mark the event as handled, semantic lock is used here
+            if (localEventHandlingService.updateHandleStatus(
+                    UpdateHandleStatusReqVo.builder()
+                            .id(info.getRecord().getId())
+                            .prevStatus(EventHandlingStatus.TO_BE_HANDLED)
+                            .currStatus(EventHandlingStatus.HANDLED)
+                            .handlerId(info.getRecord().getHandlerId())
+                            .handleTime(info.getRecord().getHandleTime())
+                            .build()
+            )) {
+                log.info("Handled event {}, result: {}", info.getRecord(), info.getResult());
+                if (info.getResult().equals(EventHandlingResult.ACCEPT)) {
+                    // enable user
+                    localUserService.enableUserById(registeredUserid, handlerName);
+                }
             }
+        } catch (Exception e) {
+            throw new AmqpRejectAndDontRequeueException(e);
         }
     }
 }

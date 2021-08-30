@@ -32,6 +32,7 @@ import { ConfirmDialogComponent } from "./dialog/confirm/confirm-dialog.componen
 import { OperateHistoryComponent } from "./operate-history/operate-history.component";
 import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
 import { RegisterComponent } from './register/register.component';
+import { EventComponent } from './event/event.component';
 
 @NgModule({
   exports: [],
@@ -46,6 +47,7 @@ import { RegisterComponent } from './register/register.component';
     OperateHistoryComponent,
     ManageTasksComponent,
     RegisterComponent,
+    EventComponent,
   ],
   imports: [
     BrowserModule,

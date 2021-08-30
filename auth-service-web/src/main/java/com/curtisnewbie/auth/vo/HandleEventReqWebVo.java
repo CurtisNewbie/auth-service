@@ -1,6 +1,5 @@
 package com.curtisnewbie.auth.vo;
 
-import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import lombok.Builder;
 import lombok.Data;
 

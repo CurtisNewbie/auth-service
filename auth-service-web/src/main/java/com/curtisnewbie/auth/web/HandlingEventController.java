@@ -21,6 +21,7 @@ import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
 import com.github.pagehelper.PageInfo;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,19 +38,23 @@ import java.util.stream.Collectors;
 @RequestMapping("${web.base-path}/event")
 public class HandlingEventController {
 
-    @Autowired
+    @DubboReference
     private RemoteEventHandlingService remoteEventHandlingService;
 
     @Autowired
     private RemoteUserService remoteUserService;
 
-    @PostMapping("/findByPage")
+    @PostMapping("/list")
     public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v)
             throws MsgEmbeddedException {
-        EventHandlingType type = EnumUtils.parse(v.getType(), EventHandlingType.class);
-        ValidUtils.requireNonNull(type);
-        EventHandlingStatus status = EnumUtils.parse(v.getStatus(), EventHandlingStatus.class);
-        ValidUtils.requireNonNull(status);
+        if (v.getType() != null) {
+            EventHandlingType type = EnumUtils.parse(v.getType(), EventHandlingType.class);
+            ValidUtils.requireNonNull(type);
+        }
+        if (v.getStatus() != null) {
+            EventHandlingStatus status = EnumUtils.parse(v.getStatus(), EventHandlingStatus.class);
+            ValidUtils.requireNonNull(status);
+        }
 
         PageInfo<EventHandlingVo> pi = remoteEventHandlingService.findEventHandlingByPage(
                 BeanCopyUtils.toType(v, FindEventHandlingByPageReqVo.class)
@@ -82,10 +87,10 @@ public class HandlingEventController {
         EventHandlingType et = EnumUtils.parse(e.getType(), EventHandlingType.class);
 
         if (et.equals(EventHandlingType.REGISTRATION_EVENT)) {
-            String username = remoteUserService.findUsernameById(Integer.parseInt(wv.getBody()));
+            String username = remoteUserService.findUsernameById(Integer.parseInt(e.getBody()));
             if (username == null)
                 username = "";
-            wv.setDescription(String.format("User '%s' request registration approval", username));
+            wv.setDescription(String.format("User '%s' requests registration approval", username));
         }
         return wv;
     }

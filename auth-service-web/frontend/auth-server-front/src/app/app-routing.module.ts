@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AccessLogComponent } from "./access-log/access-log.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
+import { EventComponent } from "./event/event.component";
 import { LoginComponent } from "./login/login.component";
 import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
 import { ManagerUserComponent } from "./manager-user/manager-user.component";
@@ -32,6 +33,10 @@ const routes: Routes = [
   {
     path: "manage-task",
     component: ManageTasksComponent,
+  },
+  {
+    path: "event",
+    component: EventComponent,
   },
   {
     path: "register",

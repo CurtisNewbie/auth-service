@@ -15,6 +15,7 @@ import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
+import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -57,8 +58,10 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     @Override
     public PageInfo<EventHandlingVo> findEventHandlingByPage(@NotNull FindEventHandlingByPageReqVo vo) {
         final EventHandling eventHandling = BeanCopyUtils.toType(vo, EventHandling.class);
-        validateStatus(eventHandling.getStatus());
-        validateType(eventHandling.getType());
+        if (eventHandling.getStatus() != null)
+            validateStatus(eventHandling.getStatus());
+        if (eventHandling.getType() != null)
+            validateType(eventHandling.getType());
         Objects.requireNonNull(vo.getPagingVo(), "pagingVo == null");
 
         PageHelper.startPage(vo.getPagingVo().getPage(), vo.getPagingVo().getLimit());
@@ -84,7 +87,10 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
 
         // send to workers
         messagingService.send(MessagingParam.builder()
-                .payload(eh)
+                .payload(HandleEventInfoVo.builder()
+                        .record(eh)
+                        .result(vo.getResult())
+                        .build())
                 .exchange(EventHandler.EVENT_HANDLER_EXCHANGE)
                 .routingKey(routingKey)
                 .deliveryMode(MessageDeliveryMode.NON_PERSISTENT)

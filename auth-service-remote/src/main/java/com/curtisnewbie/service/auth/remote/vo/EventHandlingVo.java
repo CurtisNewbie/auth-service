@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * @author yongjie.zhuang
  */
 @Data
-public class EventHandlingVo {
+public class EventHandlingVo implements Serializable {
 
     /** primary key */
     private Integer id;

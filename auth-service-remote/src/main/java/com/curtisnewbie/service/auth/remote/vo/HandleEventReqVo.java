@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
  * @author yongjie.zhuang
  */
 @Data
-public class HandleEventReqVo {
+public class HandleEventReqVo implements Serializable {
 
     /** primary key */
     private int id;
