@@ -31,6 +31,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "./dialog/confirm/confirm-dialog.component";
 import { OperateHistoryComponent } from "./operate-history/operate-history.component";
 import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   exports: [],
@@ -44,6 +45,7 @@ import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
     ConfirmDialogComponent,
     OperateHistoryComponent,
     ManageTasksComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

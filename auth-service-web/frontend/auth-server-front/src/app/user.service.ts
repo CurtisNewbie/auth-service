@@ -69,6 +69,16 @@ export class UserService {
   }
 
   /**
+   * Register user
+   * @param username
+   * @param password
+   * @returns
+   */
+  public register(username: string, password: string): Observable<Resp<any>> {
+    return this.httpClient.register({ username, password });
+  }
+
+  /**
    * Fetch user info
    */
   public fetchUserInfo(): void {

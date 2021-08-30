@@ -73,6 +73,16 @@ export interface AddUserParam {
 }
 
 /**
+ * Parameters for registration
+ */
+export interface RegisterUserParam {
+  /** username */
+  username: string;
+  /** password */
+  password: string;
+}
+
+/**
  * Parameters for changing password
  */
 export interface ChangePasswordParam {

@@ -7,6 +7,7 @@ import {
   ChangePasswordParam,
   FetchUserInfoParam,
   FetchUserInfoResp,
+  RegisterUserParam,
   UserInfo,
 } from "src/models/user-info";
 import {
@@ -83,6 +84,19 @@ export class HttpClientService {
   public addUser(param: AddUserParam): Observable<Resp<any>> {
     return this.http.post<Resp<any>>(
       buildApiPath("/user/register"),
+      param,
+      headers
+    );
+  }
+
+  /**
+   * Register user
+   * @param username
+   * @param password
+   */
+  public register(param: RegisterUserParam): Observable<Resp<any>> {
+    return this.http.post<Resp<any>>(
+      buildApiPath("/user/register/request"),
       param,
       headers
     );

@@ -21,4 +21,5 @@ export enum NavType {
   CHANGE_PASSWORD = "change-password",
   OPERATE_HISTORY = "operate-history",
   MANAGE_TASKS = "manage-task",
+  REGISTER_PAGE = "register",
 }
