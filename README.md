@@ -1,6 +1,6 @@
 # auth-service
 
-Service for managing users, access log and operation log, it internally uses Dubbo RPC framework. The API layer for Dubbo is under **`/auth-service-remote`**, and the exposed routing infomation for messaging/MQ is under **`/auth-service-messaging`**.
+Service for managing users, access log and operation log, it internally uses Dubbo RPC framework. The API layer for Dubbo is under **`/auth-service-remote`**, and the exposed routing information for messaging/MQ is under **`/auth-service-messaging`**.
 
 ## Middlewares
 
@@ -38,6 +38,11 @@ This project depends on the following modules that you must manually install (us
     - description: for user authentication, security and integration with auth-service (this is used by `auth-service-web`) 
     - url: https://github.com/CurtisNewbie/auth-module
     - branch: main 
+
+- distributed-task-module
+    - description: for distributed task scheduling
+    - url: https://github.com/CurtisNewbie/distributed-task-module
+    - branch: main
 
 ## Projects that uses this service (examples)
 
