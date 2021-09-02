@@ -13,6 +13,7 @@ import {
   FetchUserInfoParam,
   UserInfo,
   UserIsDisabledEnum,
+  UserRoleEnum,
   USER_IS_DISABLED_OPTIONS,
   USER_ROLE_OPTIONS,
 } from "src/models/user-info";
@@ -49,6 +50,7 @@ export class ManagerUserComponent implements OnInit {
   expandedElement: UserInfo = null;
   searchParam: FetchUserInfoParam = emptyFetchUserInfoParam();
   pagingController: PagingController = new PagingController();
+  updateRoleEnum: UserRoleEnum = UserRoleEnum.GUEST;
 
   constructor(
     private userService: UserService,
@@ -137,5 +139,20 @@ export class ManagerUserComponent implements OnInit {
   handle(e: PageEvent): void {
     this.pagingController.handle(e);
     this.fetchUserInfoList();
+  }
+
+  updateRole(id: number): void {
+    this.userService
+      .changeUserRole({
+        id: id,
+        role: this.updateRoleEnum,
+      })
+      .subscribe({
+        complete: () => {
+          // default update user role
+          this.updateRoleEnum = UserRoleEnum.GUEST;
+          this.fetchUserInfoList();
+        },
+      });
   }
 }

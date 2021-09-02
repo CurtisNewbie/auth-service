@@ -125,5 +125,10 @@ public interface RemoteUserService {
     /**
      * Change user's role and enable the user
      */
-    void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String handlerName);
+    void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy);
+
+    /**
+     * Update user role
+     */
+    void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy);
 }

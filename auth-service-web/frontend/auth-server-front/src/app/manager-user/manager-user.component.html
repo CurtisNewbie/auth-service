@@ -122,11 +122,25 @@
         <ng-container matColumnDef="expandedElement">
             <td mat-cell *matCellDef="let u" [attr.colspan]="COLUMNS_TO_BE_DISPLAYED.length">
                 <div class="element-detail" [@detailExpand]="u === expandedElement ? 'expanded' : 'collapsed'">
-                    <div class="p-2 d-flex w-100 justify-content-end">
-                        <button [hidden]="u.isDisabled === USER_IS_DISABLED" class="btn btn-outline-secondary btn-sm"
-                            (click)="disableUserById(u.id)" mat-raised-button color="warn">Disable</button>
-                        <button [hidden]="u.isDisabled === USER_IS_NORMAL" class="btn btn-outline-secondary btn-sm"
-                            (click)="enableUserById(u.id)" mat-raised-button>Enable</button>
+
+                    <div class="row row-cols-lg-auto g-3 align-items-center ">
+                        <div class="col-12">
+                            <button *ngIf="u.isDisabled !== USER_IS_DISABLED" class="m-2"
+                                (click)="disableUserById(u.id)" mat-raised-button>Disable</button>
+                            <button *ngIf="u.isDisabled !== USER_IS_NORMAL" class="m-2" (click)="enableUserById(u.id)"
+                                mat-raised-button>Enable</button>
+
+                            <mat-form-field appearance="fill" class="m-2">
+                                <mat-label>User Role</mat-label>
+                                <mat-select [(value)]="updateRoleEnum">
+                                    <mat-option [value]="option.value" *ngFor="let option of USER_ROLE_OPTS">
+                                        {{option.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <button class="m-2" (click)="updateRole(u.id)" mat-raised-button>Update Role</button>
+                        </div>
                     </div>
                 </div>
             </td>

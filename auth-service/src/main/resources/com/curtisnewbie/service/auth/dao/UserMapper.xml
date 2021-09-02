@@ -32,6 +32,13 @@
     where id = #{userId}
   </update>
 
+  <update id="updateRole">
+    update user
+    set role = #{role},
+    update_by = #{updatedBy}
+    where id = #{userId}
+  </update>
+
   <select id="findByUsername" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
     SELECT *
     FROM user

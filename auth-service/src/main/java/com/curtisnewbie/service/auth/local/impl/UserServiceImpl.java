@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
@@ -70,6 +71,11 @@ public class UserServiceImpl implements LocalUserService {
     @Override
     public void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String handlerName) {
         userMapper.updateRoleAndIsEnabled(userId, role.getValue(), UserIsDisabled.NORMAL.getValue(), handlerName);
+    }
+
+    @Override
+    public void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy) {
+        userMapper.updateRole(id, role.getValue(), updatedBy);
     }
 
     @Override

@@ -134,3 +134,15 @@ export function emptyFetchUserInfoParam(): FetchUserInfoParam {
     pagingVo: null,
   };
 }
+
+export interface ChangeUserRoleReqVo {
+  /**
+   * User id
+   */
+  id: number;
+
+  /**
+   * User role
+   */
+  role: string;
+}

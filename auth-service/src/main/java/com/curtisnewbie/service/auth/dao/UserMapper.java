@@ -2,6 +2,7 @@ package com.curtisnewbie.service.auth.dao;
 
 import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Date;
 import java.util.List;
@@ -93,4 +94,9 @@ public interface UserMapper {
      */
     void updateRoleAndIsEnabled(@Param("userId") int userId, @Param("role") String role, @Param("isDisabled") int isDisabled,
                                 @Param("updateBy") String updateBy);
+
+    /**
+     * Update role by id
+     */
+    void updateRole(@Param("userId") int id, @Param("role") String role, @Param("updatedBy") String updatedBy);
 }

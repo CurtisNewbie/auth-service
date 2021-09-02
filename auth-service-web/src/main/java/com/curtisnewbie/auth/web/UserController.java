@@ -146,6 +146,20 @@ public class UserController {
         return Result.ok();
     }
 
+    @LogOperation(name = "/user/role/change", description = "change user role")
+    @PreAuthorize("hasAuthority('admin')")
+    @PostMapping("/role/change")
+    public Result<Void> changeUserRole(@RequestBody ChangeUserRoleReqVo param) throws MsgEmbeddedException, InvalidAuthenticationException {
+        ValidUtils.requireNonNull(param.getId());
+        if (Objects.equals(param.getId(), AuthUtil.getUser().getId())) {
+            throw new MsgEmbeddedException("You cannot update yourself");
+        }
+        UserRole role = EnumUtils.parse(param.getRole(), UserRole.class);
+        ValidUtils.requireNonNull(role, "user_role value illegal");
+        userService.updateRole(param.getId(), role, AuthUtil.getUsername());
+        return Result.ok();
+    }
+
     @LogOperation(name = "/user/info", description = "get user info", enabled = false)
     @GetMapping("/info")
     public Result<UserWebVo> getUserInfo() throws InvalidAuthenticationException {
