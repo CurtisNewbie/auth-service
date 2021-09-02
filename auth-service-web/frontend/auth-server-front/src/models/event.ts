@@ -1,5 +1,5 @@
 import { Paging } from "./paging";
-import { UserRoleEnum, UserRoleOption } from "./user-info";
+import { UserRoleEnum } from "./user-info";
 
 export interface FindEventHandlingByPageReqVo {
   /** type of event, 1-registration */

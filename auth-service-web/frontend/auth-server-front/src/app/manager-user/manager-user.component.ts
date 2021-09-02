@@ -44,7 +44,7 @@ export class ManagerUserComponent implements OnInit {
 
   usernameToBeAdded: string = null;
   passswordToBeAdded: string = null;
-  userRoleOfAddedUser: string = null;
+  userRoleOfAddedUser: string = UserRoleEnum.GUEST;
   userInfoList: UserInfo[] = [];
   addUserPanelDisplayed: boolean = false;
   expandedElement: UserInfo = null;
@@ -78,10 +78,12 @@ export class ManagerUserComponent implements OnInit {
       .subscribe({
         next: (resp) => {
           console.log("Successfully added guest:", this.usernameToBeAdded);
-          this.usernameToBeAdded = null;
-          this.passswordToBeAdded = null;
         },
         complete: () => {
+          this.userRoleOfAddedUser = UserRoleEnum.GUEST;
+          this.usernameToBeAdded = null;
+          this.passswordToBeAdded = null;
+          this.addUserPanelDisplayed = false;
           this.fetchUserInfoList();
         },
       });
@@ -111,10 +113,6 @@ export class ManagerUserComponent implements OnInit {
         this.fetchUserInfoList();
       },
     });
-  }
-
-  setUserRole(userRole: string): void {
-    this.userRoleOfAddedUser = userRole;
   }
 
   searchNameInputKeyPressed(event: any): void {
