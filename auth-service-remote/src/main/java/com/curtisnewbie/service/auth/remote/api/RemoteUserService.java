@@ -1,5 +1,7 @@
 package com.curtisnewbie.service.auth.remote.api;
 
+import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
@@ -119,4 +121,9 @@ public interface RemoteUserService {
      * Find username by id
      */
     String findUsernameById(int id);
+
+    /**
+     * Change user's role and enable the user
+     */
+    void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String handlerName);
 }

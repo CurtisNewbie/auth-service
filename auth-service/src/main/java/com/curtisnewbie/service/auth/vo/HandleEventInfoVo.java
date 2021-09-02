@@ -25,10 +25,16 @@ public class HandleEventInfoVo {
      */
     private EventHandlingResult result;
 
+    /**
+     * extra
+     */
+    private String extra;
+
     @Builder
-    public HandleEventInfoVo(EventHandling record, EventHandlingResult result) {
+    public HandleEventInfoVo(EventHandling record, EventHandlingResult result, String extra) {
         this.record = record;
         this.result = result;
+        this.extra = extra;
     }
 
 }

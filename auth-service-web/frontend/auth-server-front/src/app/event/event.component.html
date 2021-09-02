@@ -69,10 +69,22 @@
         <td mat-cell *matCellDef="let u" [attr.colspan]="COLUMNS_TO_BE_DISPLAYED.length">
             <div class="element-detail" [@detailExpand]="idEquals(u, expandedElement) ? 'expanded' : 'collapsed'">
                 <ng-container *ngIf="expandedElement != null && expandedElement.status === TO_BE_HANDLED_STATUS">
-                    <button mat-raised-button class="m-2"
-                        (click)="handleEvent(expandedElement, ACCEPT_RESULT)">Accept</button>
-                    <button mat-raised-button class="m-2"
-                        (click)="handleEvent(expandedElement, REJECT_RESULT)">Reject</button>
+                    <div class="row row-cols-lg-auto g-3 align-items-center ">
+                        <div class="col-12">
+                            <button mat-raised-button class="m-2"
+                                (click)="handleEvent(expandedElement, ACCEPT_RESULT)">Accept</button>
+                            <button mat-raised-button class="m-2"
+                                (click)="handleEvent(expandedElement, REJECT_RESULT)">Reject</button>
+                            <mat-form-field appearance="fill" class="m-2">
+                                <mat-label>User Role</mat-label>
+                                <mat-select [value]="handleRole">
+                                    <mat-option [value]="option.value" *ngFor="let option of HANDLE_USER_ROLE_OPTIONS">
+                                        {{option.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
                 </ng-container>
             </div>
         </td>

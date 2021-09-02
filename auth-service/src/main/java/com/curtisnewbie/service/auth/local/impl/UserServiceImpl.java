@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,6 +65,11 @@ public class UserServiceImpl implements LocalUserService {
     @Override
     public String findUsernameById(int id) {
         return userMapper.findUsernameById(id);
+    }
+
+    @Override
+    public void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String handlerName) {
+        userMapper.updateRoleAndIsEnabled(userId, role.getValue(), UserIsDisabled.NORMAL.getValue(), handlerName);
     }
 
     @Override

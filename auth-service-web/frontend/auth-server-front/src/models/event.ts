@@ -1,4 +1,5 @@
 import { Paging } from "./paging";
+import { UserRoleEnum, UserRoleOption } from "./user-info";
 
 export interface FindEventHandlingByPageReqVo {
   /** type of event, 1-registration */
@@ -43,6 +44,9 @@ export interface HandleEventReqVo {
 
   /** handling result */
   result: number;
+
+  /** user role */
+  extra: UserRoleEnum;
 }
 
 export enum EventHandlingType {

@@ -24,6 +24,14 @@
     WHERE id = #{id} AND is_disabled = 1
   </update>
 
+  <update id="updateRoleAndIsEnabled">
+    update user
+    set role = #{role},
+    is_disabled = #{isDisabled},
+    update_by = #{updateBy}
+    where id = #{userId}
+  </update>
+
   <select id="findByUsername" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
     SELECT *
     FROM user

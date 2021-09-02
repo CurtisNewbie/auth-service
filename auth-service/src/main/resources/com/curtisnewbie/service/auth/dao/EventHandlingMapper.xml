@@ -80,6 +80,7 @@
         and type = #{type}
       </if>
     </where>
+    order by id desc
   </select>
   <select id="selectTypeById" resultType="java.lang.Integer">
     select type

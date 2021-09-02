@@ -77,6 +77,7 @@ public class HandlingEventController {
         remoteEventHandlingService.handleEvent(HandleEventReqVo.builder()
                 .id(v.getId())
                 .result(result)
+                .extra(v.getExtra())
                 .handlerId(AuthUtil.getUserId())
                 .build());
         return Result.ok();

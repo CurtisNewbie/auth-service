@@ -26,11 +26,15 @@ public class HandleEventReqVo implements Serializable {
     /** handling result */
     private EventHandlingResult result;
 
+    /** extra */
+    private String extra;
+
     @Builder
-    public HandleEventReqVo(int id, int handlerId, EventHandlingResult result) {
+    public HandleEventReqVo(int id, int handlerId, EventHandlingResult result, String extra) {
         this.id = id;
         this.handlerId = handlerId;
         this.result = result;
+        this.extra = extra;
     }
 
     public HandleEventReqVo() {

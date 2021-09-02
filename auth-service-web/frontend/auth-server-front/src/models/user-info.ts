@@ -1,4 +1,5 @@
 import { Paging } from "./paging";
+import { Option } from "./select-util";
 
 export interface UserInfo {
   /** id */
@@ -49,15 +50,10 @@ export const USER_IS_DISABLED_OPTIONS: UserIsDisabledOption[] = [
   { name: "disabled", value: UserIsDisabledEnum.IS_DISABLED },
 ];
 
-export interface UserRoleOption {
-  name: string;
-  value: string;
-}
-
-export const USER_ROLE_OPTIONS: UserRoleOption[] = [
-  { name: "admin", value: UserRoleEnum.ADMIN },
-  { name: "user", value: UserRoleEnum.USER },
-  { name: "guest", value: UserRoleEnum.GUEST },
+export const USER_ROLE_OPTIONS: Option<UserRoleEnum>[] = [
+  { name: "Admin", value: UserRoleEnum.ADMIN },
+  { name: "User", value: UserRoleEnum.USER },
+  { name: "Guest", value: UserRoleEnum.GUEST },
 ];
 
 /**

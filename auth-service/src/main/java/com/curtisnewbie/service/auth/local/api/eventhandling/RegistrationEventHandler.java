@@ -1,10 +1,12 @@
 package com.curtisnewbie.service.auth.local.api.eventhandling;
 
 
+import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 import lombok.extern.slf4j.Slf4j;
@@ -61,10 +63,25 @@ public class RegistrationEventHandler implements EventHandler {
                             .handleTime(info.getRecord().getHandleTime())
                             .build()
             )) {
-                log.info("Handled event {}, result: {}", info.getRecord(), info.getResult());
+                String extra = info.getExtra();
+                log.info("Handled event {}, result: {}, extra: {}", info.getRecord(), info.getResult(), extra);
+
                 if (info.getResult().equals(EventHandlingResult.ACCEPT)) {
+                    // default user role is guest
+                    UserRole role = UserRole.GUEST;
+                    if (extra != null) {
+                        UserRole parsedRole = EnumUtils.parse(extra, UserRole.class);
+                        if (parsedRole != null) {
+                            log.info("Found extra value for user_role, using parsed user_role: {}", parsedRole);
+                            role = parsedRole;
+                        } else {
+                            log.info("Found extra value for user_role, but value '{}' illegal, fallback to default role: {}",
+                                    extra, role);
+                        }
+                    }
+
                     // enable user
-                    localUserService.enableUserById(registeredUserid, handlerName);
+                    localUserService.changeRoleAndEnableUser(registeredUserid, role, handlerName);
                 }
             }
         } catch (Exception e) {

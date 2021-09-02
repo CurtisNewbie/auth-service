@@ -87,4 +87,10 @@ public interface UserMapper {
      * Select username
      */
     String findUsernameById(int id);
+
+    /**
+     * Update role, is_disabled by id
+     */
+    void updateRoleAndIsEnabled(@Param("userId") int userId, @Param("role") String role, @Param("isDisabled") int isDisabled,
+                                @Param("updateBy") String updateBy);
 }

@@ -9,6 +9,7 @@ import {
 } from "src/models/event";
 import { PagingController } from "src/models/paging";
 import { Option } from "src/models/select-util";
+import { UserRoleEnum, USER_ROLE_OPTIONS } from "src/models/user-info";
 import { EventHandlingService } from "../event-handling.service";
 
 @Component({
@@ -40,12 +41,14 @@ export class EventComponent implements OnInit {
   readonly HANDLE_TYPE_OPTIONS: Option<EventHandlingType>[] = [
     { name: "Registration", value: EventHandlingType.REGISTRATION },
   ];
+  readonly HANDLE_USER_ROLE_OPTIONS: Option<UserRoleEnum>[] = USER_ROLE_OPTIONS;
 
   events: EventHandling[] = [];
   pagingController: PagingController = new PagingController();
   searchStatus: EventHandlingStatus;
   searchType: EventHandlingType;
   expandedElement: EventHandling;
+  handleRole: UserRoleEnum = UserRoleEnum.GUEST;
 
   constructor(private eventHandlingService: EventHandlingService) {}
 
@@ -97,10 +100,12 @@ export class EventComponent implements OnInit {
       .handle({
         id: e.id,
         result: res,
+        extra: this.handleRole,
       })
       .subscribe({
         complete: () => {
           this.expandedElement = null;
+          this.handleRole = UserRoleEnum.GUEST;
           this.fetchEventList();
         },
       });

@@ -89,6 +89,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
         messagingService.send(MessagingParam.builder()
                 .payload(HandleEventInfoVo.builder()
                         .record(eh)
+                        .extra(vo.getExtra())
                         .result(vo.getResult())
                         .build())
                 .exchange(EventHandler.EVENT_HANDLER_EXCHANGE)

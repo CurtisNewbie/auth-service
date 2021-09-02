@@ -1,5 +1,7 @@
 package com.curtisnewbie.service.auth.dao;
 
+import lombok.Data;
+
 import java.util.Date;
 
 /**
@@ -7,6 +9,7 @@ import java.util.Date;
  *
  * @author yongjie.zhuang
  */
+@Data
 public class EventHandling {
     /** primary key */
     private Integer id;
@@ -25,52 +28,4 @@ public class EventHandling {
 
     /** when the event is handled */
     private Date handleTime;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body == null ? null : body.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getHandlerId() {
-        return handlerId;
-    }
-
-    public void setHandlerId(Integer handlerId) {
-        this.handlerId = handlerId;
-    }
-
-    public Date getHandleTime() {
-        return handleTime;
-    }
-
-    public void setHandleTime(Date handleTime) {
-        this.handleTime = handleTime;
-    }
 }

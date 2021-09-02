@@ -91,8 +91,8 @@ public class UserController {
         if (vo.getPassword().length() < PASSWORD_LENGTH)
             return Result.error("Password must have at least " + PASSWORD_LENGTH + " characters");
 
-        // role will always be User only
-        vo.setRole(UserRole.USER);
+        // by default role is guest
+        vo.setRole(UserRole.GUEST);
         // created by this user himself/herself
         vo.setCreateBy(vo.getUsername());
 

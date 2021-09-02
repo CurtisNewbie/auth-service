@@ -17,10 +17,14 @@ public class HandleEventReqWebVo {
     /** handling result */
     private Integer result;
 
+    /** extra param */
+    private String extra;
+
     @Builder
-    public HandleEventReqWebVo(Integer id, Integer result) {
+    public HandleEventReqWebVo(Integer id, Integer result, String extra) {
         this.id = id;
         this.result = result;
+        this.extra = extra;
     }
 
     public HandleEventReqWebVo() {
