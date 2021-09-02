@@ -6,6 +6,28 @@
     <button mat-raised-button class="m-2" (click)="fetchEventList()">Fetch</button>
 </div>
 
+<ng-container>
+    <mat-form-field appearance="fill" class="m-2">
+        <mat-label>Status</mat-label>
+        <mat-select [(value)]="searchStatus">
+            <mat-option value="">ALL</mat-option>
+            <mat-option [value]="option.value" *ngFor="let option of HANDLE_STATUS_OPTIONS">
+                {{option.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="m-2">
+        <mat-label>Type</mat-label>
+        <mat-select [(value)]="searchType">
+            <mat-option value="">ALL</mat-option>
+            <mat-option [value]="option.value" *ngFor="let option of HANDLE_TYPE_OPTIONS">
+                {{option.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</ng-container>
+
 <!-- table -->
 <table mat-table [dataSource]="events" class="mat-elevation-z8 mb-4" style="width: 100%;" multiTemplateDataRows>
     <ng-container matColumnDef="id">

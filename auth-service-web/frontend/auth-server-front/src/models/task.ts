@@ -114,15 +114,16 @@ export enum TaskConcurrentEnabledEnum {
   ENABLED = 1,
 }
 
-export const TASK_ENABLED_OPTIONS: Option[] = [
+export const TASK_ENABLED_OPTIONS: Option<TaskEnabledEnum>[] = [
   { name: "Disabled", value: TaskEnabledEnum.DISABLED },
   { name: "Enabled", value: TaskEnabledEnum.ENABLED },
 ];
 
-export const TASK_CONCURRENT_ENABLED_OPTIONS: Option[] = [
-  { name: "Disabled", value: TaskConcurrentEnabledEnum.DISABLED },
-  { name: "Enabled", value: TaskConcurrentEnabledEnum.ENABLED },
-];
+export const TASK_CONCURRENT_ENABLED_OPTIONS: Option<TaskConcurrentEnabledEnum>[] =
+  [
+    { name: "Disabled", value: TaskConcurrentEnabledEnum.DISABLED },
+    { name: "Enabled", value: TaskConcurrentEnabledEnum.ENABLED },
+  ];
 
 export interface TriggerTaskReqVo {
   id: number;

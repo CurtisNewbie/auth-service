@@ -23,8 +23,8 @@ import { TaskService } from "../task.service";
   animations: [animateElementExpanding()],
 })
 export class ManageTasksComponent implements OnInit {
-  readonly TASKS_ENABLED_OPTS: Option[] = TASK_ENABLED_OPTIONS;
-  readonly TASKS_CONCURRENT_ENABLED_OPTS: Option[] =
+  readonly TASKS_ENABLED_OPTS: Option<TaskEnabledEnum>[] = TASK_ENABLED_OPTIONS;
+  readonly TASKS_CONCURRENT_ENABLED_OPTS: Option<TaskConcurrentEnabledEnum>[] =
     TASK_CONCURRENT_ENABLED_OPTIONS;
   readonly TASK_ENABLED = TaskEnabledEnum.ENABLED;
   readonly TASK_DISABLED = TaskEnabledEnum.DISABLED;

@@ -8,6 +8,7 @@ import {
   HandleResult,
 } from "src/models/event";
 import { PagingController } from "src/models/paging";
+import { Option } from "src/models/select-util";
 import { EventHandlingService } from "../event-handling.service";
 
 @Component({
@@ -31,11 +32,19 @@ export class EventComponent implements OnInit {
   ];
   readonly ACCEPT_RESULT = HandleResult.ACCEPT;
   readonly REJECT_RESULT = HandleResult.REJECT;
+  readonly HANDLE_STATUS_OPTIONS: Option<EventHandlingStatus>[] = [
+    { name: "To Be Handled", value: EventHandlingStatus.TO_BE_HANDLED },
+    { name: "Handled", value: EventHandlingStatus.HANDLED },
+    { name: "No Need To Handle", value: EventHandlingStatus.NO_NEED_TO_HANDLE },
+  ];
+  readonly HANDLE_TYPE_OPTIONS: Option<EventHandlingType>[] = [
+    { name: "Registration", value: EventHandlingType.REGISTRATION },
+  ];
 
   events: EventHandling[] = [];
   pagingController: PagingController = new PagingController();
-  searchStatus: number;
-  searchType: number;
+  searchStatus: EventHandlingStatus;
+  searchType: EventHandlingType;
   expandedElement: EventHandling;
 
   constructor(private eventHandlingService: EventHandlingService) {}
