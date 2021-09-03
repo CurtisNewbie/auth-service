@@ -4,6 +4,7 @@ import com.curtisnewbie.common.util.JsonUtils;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.config.AuthenticationFailureHandlerExtender;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +20,13 @@ import java.io.IOException;
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandlerExtender {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
             throws IOException, ServletException {
         String errorMsg = "Incorrect credentials";
-        if (exception instanceof DisabledException) {
+        if (e instanceof DisabledException) {
             errorMsg = "User is disabled";
+        } else if (e instanceof InsufficientAuthenticationException) {
+            errorMsg = "Only admin is allowed";
         }
         response.getWriter().write(JsonUtils.writeValueAsString(Result.error(errorMsg)));
     }
