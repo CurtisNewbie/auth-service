@@ -16,6 +16,7 @@ import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationExcep
 import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +27,7 @@ import java.util.Objects;
 /**
  * @author yongjie.zhuang
  */
+@Slf4j
 @RestController
 @RequestMapping("${web.base-path}/user")
 public class UserController {
@@ -108,6 +110,17 @@ public class UserController {
         resp.setPagingVo(new PagingVo().ofTotal(voPageInfo.getTotal()));
         return Result.of(resp);
     }
+
+    @LogOperation(name = "/user/delete", description = "delete user")
+    @PreAuthorize("hasAuthority('admin')")
+    @PostMapping("/delete")
+    public Result<Void> deleteUser(@RequestBody DeleteUserReqVo reqVo) throws InvalidAuthenticationException {
+        final String deletedBy = AuthUtil.getUsername();
+        log.info("Delete user {} by {}", reqVo.getId(), deletedBy);
+        userService.deleteUser(reqVo.getId(), deletedBy);
+        return Result.ok();
+    }
+
 
     private static FindUserInfoVo toFindUserInfoVo(GetUserListReqVo reqVo) {
         FindUserInfoVo infoVo = new FindUserInfoVo();

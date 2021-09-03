@@ -75,4 +75,14 @@ public interface UserMapper {
      * Update role, is_disabled, update_by, update_time
      */
     void updateUser(UserEntity ue);
+
+    /**
+     * Move disabled user to deleted_user
+     */
+    int moveDisabledUser(@Param("id") int id, @Param("deletedBy") String deletedBy);
+
+    /**
+     * Delete record
+     */
+    void deleteUser(@Param("id") int id);
 }

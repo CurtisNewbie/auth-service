@@ -6,6 +6,7 @@ import {
   trigger,
 } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material";
 import { PageEvent } from "@angular/material/paginator";
 import { animateElementExpanding } from "src/animate/animate-util";
 import { PagingConst, PagingController } from "src/models/paging";
@@ -19,6 +20,7 @@ import {
   USER_IS_DISABLED_OPTIONS,
   USER_ROLE_OPTIONS,
 } from "src/models/user-info";
+import { ConfirmDialogComponent } from "../dialog/confirm/confirm-dialog.component";
 import { NotificationService } from "../notification.service";
 import { UserService } from "../user.service";
 
@@ -55,7 +57,8 @@ export class ManagerUserComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private notifi: NotificationService
+    private notifi: NotificationService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -131,5 +134,35 @@ export class ManagerUserComponent implements OnInit {
           this.fetchUserInfoList();
         },
       });
+  }
+
+  /**
+   * Delete disabled user
+   * @param id
+   */
+  deleteUser(): void {
+    const dialogRef: MatDialogRef<ConfirmDialogComponent, boolean> =
+      this.dialog.open(ConfirmDialogComponent, {
+        width: "500px",
+        data: {
+          msg: [
+            `You sure you want to delete user '${this.expandedElement.username}'`,
+          ],
+        },
+      });
+
+    dialogRef.afterClosed().subscribe((confirm) => {
+      console.log(confirm);
+      if (confirm) {
+        this.userService
+          .deleteDisabledUser({ id: this.expandedElement.id })
+          .subscribe({
+            complete: () => {
+              this.expandedElement = null;
+              this.fetchUserInfoList();
+            },
+          });
+      }
+    });
   }
 }

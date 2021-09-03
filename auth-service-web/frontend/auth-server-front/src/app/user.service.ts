@@ -165,12 +165,21 @@ export class UserService {
 
   /**
    * Update user info (only admin is allowed)
-   * @param param
-   * @returns
    */
   public updateUserInfo(param: UpdateUserInfoParam): Observable<Resp<void>> {
     return this.http.post<Resp<void>>(
       buildApiPath("/user/info/update"),
+      param,
+      headers
+    );
+  }
+
+  /**
+   * Delete a disabled user (only admin is allowed)
+   */
+  public deleteDisabledUser(param: { id: number }): Observable<Resp<void>> {
+    return this.http.post<Resp<void>>(
+      buildApiPath("/user/delete"),
       param,
       headers
     );

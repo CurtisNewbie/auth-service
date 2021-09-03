@@ -131,6 +131,20 @@ public interface RemoteUserService {
     void updateUser(@NotNull UpdateUserVo param);
 
     /**
+     * Delete user
+     * <p>
+     * Move user to table 'deleted_user'
+     * </p>
+     * <p>
+     * Only the disabled user can be deleted
+     * </p>
+     *
+     * @param userId user's id
+     * @param deletedBy deleted by
+     */
+    void deleteUser(int userId, @NotEmpty String deletedBy);
+
+    /**
      * Update user role
      */
     void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy);

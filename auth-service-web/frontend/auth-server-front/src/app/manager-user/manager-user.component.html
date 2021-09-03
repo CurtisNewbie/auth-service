@@ -156,7 +156,9 @@
                             </mat-form-field>
                         </div>
                         <div class="col-12">
-                            <button mat-raised-button (click)="updateUserInfo()">Update</button>
+                            <button mat-raised-button class="m-2" (click)="updateUserInfo()">Update</button>
+                            <button mat-raised-button class="m-2" *ngIf="u.isDisabled === USER_IS_DISABLED"
+                                (click)="deleteUser()">Delete</button>
                         </div>
                     </div>
                 </div>

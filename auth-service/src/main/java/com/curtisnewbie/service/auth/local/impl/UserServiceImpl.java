@@ -93,6 +93,14 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    public void deleteUser(final int userId, @NotEmpty String deletedBy) {
+        int c = userMapper.moveDisabledUser(userId, deletedBy);
+        if (c > 0) {
+            userMapper.deleteUser(userId);
+        }
+    }
+
+    @Override
     public void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy) {
         updateUser(UpdateUserVo.builder()
                 .id(id)
