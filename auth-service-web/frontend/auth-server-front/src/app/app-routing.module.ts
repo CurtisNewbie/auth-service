@@ -8,6 +8,7 @@ import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
 import { ManagerUserComponent } from "./manager-user/manager-user.component";
 import { OperateHistoryComponent } from "./operate-history/operate-history.component";
 import { RegisterComponent } from "./register/register.component";
+import { TaskHistoryComponent } from "./task-history/task-history.component";
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: "manage-task",
     component: ManageTasksComponent,
+  },
+  {
+    path: "task-history",
+    component: TaskHistoryComponent,
   },
   {
     path: "event",

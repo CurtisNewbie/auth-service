@@ -15,6 +15,7 @@ import { Option } from "src/models/select-util";
 import { PageEvent } from "@angular/material/paginator";
 import { NotificationService } from "../notification.service";
 import { TaskService } from "../task.service";
+import { NavigationService, NavType } from "../navigation.service";
 
 @Component({
   selector: "app-manage-tasks",
@@ -53,7 +54,8 @@ export class ManageTasksComponent implements OnInit {
 
   constructor(
     private taskService: TaskService,
-    private notifi: NotificationService
+    private notifi: NotificationService,
+    private navi: NavigationService
   ) {}
 
   ngOnInit() {
@@ -114,5 +116,9 @@ export class ManageTasksComponent implements OnInit {
           this.notifi.toast("Task triggered");
         },
       });
+  }
+
+  viewHistory(task: Task): void {
+    this.navi.navigateTo(NavType.TASK_HISTORY, [{ taskId: task.id }]);
   }
 }

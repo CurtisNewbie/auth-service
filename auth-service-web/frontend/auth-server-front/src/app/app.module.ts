@@ -27,12 +27,15 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "./dialog/confirm/confirm-dialog.component";
 import { OperateHistoryComponent } from "./operate-history/operate-history.component";
 import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
-import { RegisterComponent } from './register/register.component';
-import { EventComponent } from './event/event.component';
+import { RegisterComponent } from "./register/register.component";
+import { EventComponent } from "./event/event.component";
+import { TaskHistoryComponent } from "./task-history/task-history.component";
 
 @NgModule({
   exports: [],
@@ -48,12 +51,15 @@ import { EventComponent } from './event/event.component';
     ManageTasksComponent,
     RegisterComponent,
     EventComponent,
+    TaskHistoryComponent,
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     FormsModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,

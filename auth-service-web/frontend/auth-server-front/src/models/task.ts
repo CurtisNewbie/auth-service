@@ -128,3 +128,53 @@ export const TASK_CONCURRENT_ENABLED_OPTIONS: Option<TaskConcurrentEnabledEnum>[
 export interface TriggerTaskReqVo {
   id: number;
 }
+
+export interface ListTaskHistoryReqVo {
+  pagingVo: Paging;
+  /**
+   * Task id
+   */
+  taskId: number;
+
+  /**
+   * Task's name
+   */
+  jobName: string;
+
+  /** start time */
+  startTime: number;
+
+  /** end time */
+  endTime: number;
+
+  /** task triggered by */
+  runBy: string;
+}
+
+export interface ListTaskHistoryRespVo {
+  list: TaskHistory[];
+  pagingVo: Paging;
+}
+
+export interface TaskHistory {
+  /** id */
+  id: number;
+
+  /** task's id */
+  taskId: number;
+
+  /** task's name */
+  jobName: string;
+
+  /** start time */
+  startTime: string;
+
+  /** end time */
+  endTime: string;
+
+  /** task triggered by */
+  runBy: string;
+
+  /** result of last execution */
+  runResult: string;
+}

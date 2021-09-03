@@ -1,9 +1,6 @@
 package com.curtisnewbie.auth.web;
 
-import com.curtisnewbie.auth.vo.ListTaskByPageReqAsVo;
-import com.curtisnewbie.auth.vo.ListTaskByPageRespAsVo;
-import com.curtisnewbie.auth.vo.TaskAsVo;
-import com.curtisnewbie.auth.vo.TriggerTaskReqAsVo;
+import com.curtisnewbie.auth.vo.*;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
@@ -16,11 +13,9 @@ import com.curtisnewbie.module.task.constants.TaskConcurrentEnabled;
 import com.curtisnewbie.module.task.constants.TaskEnabled;
 import com.curtisnewbie.module.task.scheduling.JobUtils;
 import com.curtisnewbie.module.task.service.NodeCoordinationService;
+import com.curtisnewbie.module.task.service.TaskHistoryService;
 import com.curtisnewbie.module.task.service.TaskService;
-import com.curtisnewbie.module.task.vo.ListTaskByPageReqVo;
-import com.curtisnewbie.module.task.vo.ListTaskByPageRespVo;
-import com.curtisnewbie.module.task.vo.TaskVo;
-import com.curtisnewbie.module.task.vo.UpdateTaskReqVo;
+import com.curtisnewbie.module.task.vo.*;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +36,9 @@ public class TaskController {
     private TaskService taskService;
 
     @Autowired
+    private TaskHistoryService taskHistoryService;
+
+    @Autowired
     private NodeCoordinationService nodeCoordinationService;
 
     @LogOperation(name = "/task/list", description = "list tasks")
@@ -53,6 +51,18 @@ public class TaskController {
         ListTaskByPageRespAsVo resp = new ListTaskByPageRespAsVo();
         resp.setPagingVo(new PagingVo().ofTotal(pi.getTotal()));
         resp.setList(BeanCopyUtils.toTypeList(pi.getList(), TaskAsVo.class));
+        return Result.of(resp);
+    }
+
+    @LogOperation(name = "/task/history", description = "list task history")
+    @PreAuthorize("hasAuthority('admin')")
+    @PostMapping("/history")
+    public Result<ListTaskHistoryByPageRespWebVo> listTaskHistoryByPage(@RequestBody ListTaskHistoryByPageReqWebVo reqVo)
+            throws MsgEmbeddedException {
+        PageInfo<ListTaskHistoryByPageRespVo> pi = taskHistoryService.findByPage(BeanCopyUtils.toType(reqVo, ListTaskHistoryByPageReqVo.class));
+        ListTaskHistoryByPageRespWebVo resp = new ListTaskHistoryByPageRespWebVo();
+        resp.setList(BeanCopyUtils.toTypeList(pi.getList(), TaskHistoryWebVo.class));
+        resp.setPagingVo(new PagingVo().ofTotal(pi.getTotal()));
         return Result.of(resp);
     }
 

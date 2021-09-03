@@ -5,6 +5,9 @@ import { Resp } from "src/models/resp";
 import {
   ListTaskByPageReqVo,
   ListTaskByPageRespVo,
+  ListTaskHistoryReqVo,
+  ListTaskHistoryRespVo,
+  TaskHistory,
   TriggerTaskReqVo,
   UpdateTaskReqVo,
 } from "src/models/task";
@@ -56,6 +59,20 @@ export class TaskService {
   public triggerTask(param: TriggerTaskReqVo): Observable<Resp<void>> {
     return this.http.post<Resp<void>>(
       buildApiPath("/task/trigger"),
+      param,
+      headers
+    );
+  }
+
+  /**
+   * Fetch task history
+   * @param param
+   */
+  public fetchTaskHistory(
+    param: ListTaskHistoryReqVo
+  ): Observable<Resp<ListTaskHistoryRespVo>> {
+    return this.http.post<Resp<ListTaskHistoryRespVo>>(
+      buildApiPath("/task/history"),
       param,
       headers
     );

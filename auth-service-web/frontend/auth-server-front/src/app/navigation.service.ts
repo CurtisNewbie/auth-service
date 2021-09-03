@@ -8,8 +8,10 @@ export class NavigationService {
   constructor(private router: Router) {}
 
   /** Navigate to using Router*/
-  public navigateTo(nt: NavType): void {
-    this.router.navigate([nt]);
+  public navigateTo(nt: NavType, extra?: any[]): void {
+    let arr: any[] = [nt];
+    if (extra != null) arr = arr.concat(extra);
+    this.router.navigate(arr);
   }
 }
 
@@ -22,4 +24,5 @@ export enum NavType {
   OPERATE_HISTORY = "operate-history",
   MANAGE_TASKS = "manage-task",
   REGISTER_PAGE = "register",
+  TASK_HISTORY = "task-history",
 }

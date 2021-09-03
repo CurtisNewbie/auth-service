@@ -14,6 +14,9 @@
                 <a class="nav-link" routerLink="/manage-task" routerLinkActive="active">Manage Tasks</a>
             </li>
             <li class="nav-item" [hidden]="!isAdmin">
+                <a class="nav-link" routerLink="/task-history" routerLinkActive="active">Task History</a>
+            </li>
+            <li class="nav-item" [hidden]="!isAdmin">
                 <a class="nav-link" routerLink="/event" routerLinkActive="active">Event Handling</a>
             </li>
             <li class="nav-item">
