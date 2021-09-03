@@ -12,8 +12,7 @@ import java.io.Serializable;
  * @author yongjie.zhuang
  */
 @Data
-@AllArgsConstructor
 public class GetUserListRespVo extends PageableVo implements Serializable {
 
-    private Iterable<UserInfoWebVo> fileInfoList;
+    private Iterable<UserInfoWebVo> list;
 }

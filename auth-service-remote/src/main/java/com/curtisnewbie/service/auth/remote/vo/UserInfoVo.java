@@ -1,12 +1,16 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import lombok.Data;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Basic info of user
  *
  * @author yongjie.zhuang
  */
+@Data
 public class UserInfoVo implements Serializable {
 
     private Integer id;
@@ -24,35 +28,15 @@ public class UserInfoVo implements Serializable {
     /** whether the user is disabled, 0-normal, 1-disabled */
     private Integer isDisabled;
 
-    public Integer getId() {
-        return id;
-    }
+    /** when the user is created */
+    private Date createTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    /** when the user is updated */
+    private Date updateTime;
 
-    public String getUsername() {
-        return username;
-    }
+    /** who updated this user */
+    private String updateBy;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Integer getIsDisabled() {
-        return isDisabled;
-    }
-
-    public void setIsDisabled(Integer isDisabled) {
-        this.isDisabled = isDisabled;
-    }
+    /** who created this user */
+    private String createBy;
 }

@@ -7,6 +7,7 @@ import {
 } from "@angular/animations";
 import { Component, OnInit } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
+import { animateElementExpanding } from "src/animate/animate-util";
 import { PagingConst, PagingController } from "src/models/paging";
 import {
   emptyFetchUserInfoParam,
@@ -24,21 +25,21 @@ import { UserService } from "../user.service";
   selector: "app-manager-user",
   templateUrl: "./manager-user.component.html",
   styleUrls: ["./manager-user.component.css"],
-  animations: [
-    trigger("detailExpand", [
-      state("collapsed", style({ height: "0px", minHeight: "0" })),
-      state("expanded", style({ height: "*" })),
-      transition(
-        "expanded <=> collapsed",
-        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
-      ),
-    ]),
-  ],
+  animations: [animateElementExpanding()],
 })
 export class ManagerUserComponent implements OnInit {
   readonly USER_IS_NORMAL = UserIsDisabledEnum.NORMAL;
   readonly USER_IS_DISABLED = UserIsDisabledEnum.IS_DISABLED;
-  readonly COLUMNS_TO_BE_DISPLAYED = ["id", "name", "role", "status"];
+  readonly COLUMNS_TO_BE_DISPLAYED = [
+    "id",
+    "name",
+    "role",
+    "status",
+    "createBy",
+    "createTime",
+    "updateBy",
+    "updateTime",
+  ];
   readonly USER_IS_DISABLED_OPTS = USER_IS_DISABLED_OPTIONS;
   readonly USER_ROLE_OPTS = USER_ROLE_OPTIONS;
 
@@ -93,7 +94,7 @@ export class ManagerUserComponent implements OnInit {
     this.searchParam.pagingVo = this.pagingController.paging;
     this.userService.fetchUserList(this.searchParam).subscribe({
       next: (resp) => {
-        this.userInfoList = resp.data.fileInfoList;
+        this.userInfoList = resp.data.list;
         this.pagingController.updatePages(resp.data.pagingVo.total);
       },
     });

@@ -80,14 +80,14 @@ public interface UserMapper {
     UserEntity findById(@Param("id") long id);
 
     /**
-     * Select id, username, role, is_disabled
+     * Select id, username, role, is_disabled, create_time, update_time, create_by, update_by
      */
     List<UserEntity> findUserInfoBy(UserEntity ue);
 
     /**
      * Select username
      */
-    String findUsernameById(int id);
+    String findUsernameById(@Param("id") int id);
 
     /**
      * Update role, is_disabled by id

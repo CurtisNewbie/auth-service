@@ -10,10 +10,22 @@ export interface UserInfo {
   role: string;
   /** whether the user is disabled, 0-normal, 1-disabled */
   isDisabled: number;
+
+  /** when the user is created */
+  createTime: string;
+
+  /** when the user is updated */
+  updateTime: string;
+
+  /** who updated this user */
+  updateBy: string;
+
+  /** who created this user */
+  createBy: string;
 }
 
 export interface FetchUserInfoResp {
-  fileInfoList: UserInfo[];
+  list: UserInfo[];
   pagingVo: Paging;
 }
 

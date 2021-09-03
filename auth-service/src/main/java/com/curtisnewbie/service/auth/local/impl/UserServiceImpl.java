@@ -69,8 +69,8 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String handlerName) {
-        userMapper.updateRoleAndIsEnabled(userId, role.getValue(), UserIsDisabled.NORMAL.getValue(), handlerName);
+    public void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy) {
+        userMapper.updateRoleAndIsEnabled(userId, role.getValue(), UserIsDisabled.NORMAL.getValue(), updatedBy);
     }
 
     @Override
@@ -191,13 +191,13 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<UserInfoVo> findNormalUserInfoList() {
+    public @NotNull List<UserInfoVo> findNormalUserInfoList() {
         return BeanCopyUtils.toTypeList(userMapper.findNormalUserInfoList(), UserInfoVo.class);
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public List<UserInfoVo> findAllUserInfoList() {
+    public @NotNull List<UserInfoVo> findAllUserInfoList() {
         return BeanCopyUtils.toTypeList(userMapper.findAllUserInfoList(), UserInfoVo.class);
     }
 

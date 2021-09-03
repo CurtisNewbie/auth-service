@@ -106,7 +106,8 @@ public class UserController {
     public Result<GetUserListRespVo> getUserList(@RequestBody GetUserListReqVo reqVo) {
         FindUserInfoVo searchParam = toFindUserInfoVo(reqVo);
         PageInfo<UserInfoVo> voPageInfo = userService.findUserInfoByPage(searchParam);
-        GetUserListRespVo resp = new GetUserListRespVo(BeanCopyUtils.toTypeList(voPageInfo.getList(), UserInfoWebVo.class));
+        GetUserListRespVo resp = new GetUserListRespVo();
+        resp.setList(BeanCopyUtils.toTypeList(voPageInfo.getList(), UserInfoWebVo.class));
         resp.setPagingVo(new PagingVo().ofTotal(voPageInfo.getTotal()));
         return Result.of(resp);
     }

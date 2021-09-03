@@ -78,7 +78,7 @@
     WHERE id = #{id}
   </select>
   <select id="findUserInfoBy" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
-    Select id, username, role, is_disabled
+    Select id, username, role, is_disabled, create_by, create_time, update_by, update_time
     FROM user
     <where>
       <if test="username != null and username != ''">

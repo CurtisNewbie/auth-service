@@ -51,7 +51,7 @@ public class RegistrationEventHandler implements EventHandler {
     public void handle(HandleEventInfoVo info) {
         try {
             final int registeredUserid = Integer.parseInt(info.getRecord().getBody());
-            final String handlerName = localUserService.findUsernameById(info.getRecord().getId());
+            final String handlerName = localUserService.findUsernameById(info.getRecord().getHandlerId());
 
             // mark the event as handled, semantic lock is used here
             if (localEventHandlingService.updateHandleStatus(
