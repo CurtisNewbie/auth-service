@@ -2,12 +2,28 @@
 
 Service for managing users, access log and operation log, it internally uses Dubbo RPC framework. The API layer for Dubbo is under **`/auth-service-remote`**, and the exposed routing information for messaging/MQ is under **`/auth-service-messaging`**.
 
-## Middlewares
+## Middleware
 
 - MySQL
 - Nacos (or others, e.g., zookeeper)
 - RabbitMQ
 - Redis
+
+## Task Scheduling  
+
+Task scheduling in this app is supported by `Quartz` and `distributed-task-module`. Two task implementation beans are already written for this application, you may create two records in table `task` as follows to use it: 
+
+The task implementation beans: 
+
+- com.curtisnewbie.service.auth.job.MoveAccessLogHistoryJob
+- com.curtisnewbie.service.auth.job.MoveOperateLogHistoryJob
+
+In table `task`:
+
+|id |job_name      |target_bean |cron_expr    |app_group   |enabled|concurrent_enabled|
+|---|--------------|------------|-------------|------------|-------|------------------|
+|1  |AccessLogHistoryJob |moveAccessLogHistoryJob |0 0 1 ? * *|auth-service|1     |0 |
+|2  |OperateLogHistoryJob|moveOperateLogHistoryJob|0 0 1 ? * *|auth-service|1     |0|
 
 ## Modules and Dependencies
 
