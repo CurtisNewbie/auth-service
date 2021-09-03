@@ -2,6 +2,8 @@ package com.curtisnewbie.service.auth.job;
 
 import com.curtisnewbie.common.util.DateUtils;
 import com.curtisnewbie.common.vo.PagingVo;
+import com.curtisnewbie.module.task.scheduling.AbstractJob;
+import com.curtisnewbie.module.task.vo.TaskVo;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +25,13 @@ import java.util.Date;
  */
 @Slf4j
 @Component
-public class MoveAccessLogHistoryJob implements Job {
+public class MoveAccessLogHistoryJob extends AbstractJob {
 
     @Autowired
     private LocalAccessLogService accessLogService;
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
+    protected void executeInternal(TaskVo task) throws JobExecutionException {
         final Date oneMonthBefore = DateUtils.dateOf(LocalDateTime.now().minusMonths(1));
 
         log.info("Finding access_log records before '{}'", oneMonthBefore);
