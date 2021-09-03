@@ -122,4 +122,9 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
                 vo.getHandlerId(),
                 vo.getHandleTime()) == 1;
     }
+
+    @Override
+    public EventHandlingVo findById(int id) {
+        return BeanCopyUtils.toType(mapper.selectByPrimaryKey(id), EventHandlingVo.class);
+    }
 }

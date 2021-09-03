@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.service.auth.dao.UserEntity;
+import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
@@ -27,7 +28,6 @@ public class TestLocalUserService {
     private static final String NEW_PASSWORD = "456456456test";
     private static final UserRole ROLE = UserRole.USER;
     private static final String CREATE_BY = "test case";
-
 
     @Autowired
     LocalUserService userService;
@@ -124,12 +124,29 @@ public class TestLocalUserService {
         Assertions.assertNotNull(e.getId());
     }
 
+    @Test
+    public void shouldRequestRegistrationApproval() throws UsernameNotFoundException {
+        Assertions.assertDoesNotThrow(() -> {
+            userService.requestRegistrationApproval(getRegisterUser());
+        });
+
+        UserEntity e = userService.loadUserByUsername(USERNAME);
+        Assertions.assertNotNull(e);
+        Assertions.assertNotNull(e.getId());
+        Assertions.assertEquals(e.getIsDisabled(), UserIsDisabled.DISABLED.getValue());
+    }
+
     private void registerTestUser() throws UserRegisteredException, ExceededMaxAdminCountException {
+        userService.register(getRegisterUser());
+    }
+
+    private RegisterUserVo getRegisterUser() {
         RegisterUserVo v = new RegisterUserVo();
         v.setUsername(USERNAME);
         v.setPassword(PASSWORD);
         v.setRole(ROLE);
         v.setCreateBy(CREATE_BY);
-        userService.register(v);
+        return v;
     }
+
 }
