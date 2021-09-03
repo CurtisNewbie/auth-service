@@ -6,10 +6,14 @@ import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Rollback
 @Transactional
 @SpringBootTest
+@Slf4j
 public class TestLocalUserService {
 
     private static final String USERNAME = "test_yongjie.zhuang";
@@ -31,6 +36,9 @@ public class TestLocalUserService {
 
     @Autowired
     LocalUserService userService;
+
+    @MockBean
+    LocalEventHandlingService eventHandlingServiceMock;
 
     @Test
     public void shouldRegister() {
@@ -126,6 +134,12 @@ public class TestLocalUserService {
 
     @Test
     public void shouldRequestRegistrationApproval() throws UsernameNotFoundException {
+        // mock the createEvent method, return random id
+        Mockito.when(eventHandlingServiceMock.createEvent(Mockito.any())).thenAnswer(invok -> {
+            log.info("Mocked LocalEventHandlingService.createEvent(...) method");
+            return 1;
+        });
+
         Assertions.assertDoesNotThrow(() -> {
             userService.requestRegistrationApproval(getRegisterUser());
         });
