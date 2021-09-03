@@ -18,8 +18,9 @@
         is_disabled = #{isDisabled},
       </if>
       <if test="updateBy != null and updateBy != ''">
-        update_by = #{updateBy}
+        update_by = #{updateBy},
       </if>
+      update_time = #{updateTime}
     </set>
     where id = #{id}
   </update>

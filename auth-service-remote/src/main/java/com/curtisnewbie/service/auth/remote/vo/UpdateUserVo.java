@@ -8,13 +8,14 @@ import lombok.Data;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * @author yongjie.zhuang
  */
 @Valid
 @Data
-public class UpdateUserVo {
+public class UpdateUserVo implements Serializable {
 
     /** primary key */
     private int id;

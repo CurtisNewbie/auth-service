@@ -53,7 +53,7 @@
         <div class="col-12">
             <mat-form-field appearance="fill">
                 <mat-label>Role</mat-label>
-                <mat-select (valueChange)="setSearchRole($event)" [(value)]="searchParam.role">
+                <mat-select [(value)]="searchParam.role">
                     <mat-option value="">ALL</mat-option>
                     <mat-option [value]="option.value" *ngFor="let option of USER_ROLE_OPTS">
                         {{option.name}}
@@ -65,7 +65,7 @@
         <div class="col-12">
             <mat-form-field appearance="fill">
                 <mat-label>Status</mat-label>
-                <mat-select (valueChange)="setSearchIsDisabled($event)" [(value)]="searchParam.isDisabled"
+                <mat-select [(value)]="searchParam.isDisabled"
                     matTooltip="Fetch all the files or only the files that you uploaded">
 
                     <mat-option value="">ALL</mat-option>
@@ -133,24 +133,30 @@
         <ng-container matColumnDef="expandedElement">
             <td mat-cell *matCellDef="let u" [attr.colspan]="COLUMNS_TO_BE_DISPLAYED.length">
                 <div class="element-detail" [@detailExpand]="u === expandedElement ? 'expanded' : 'collapsed'">
-
-                    <div class="row row-cols-lg-auto g-3 align-items-center ">
+                    <div class="row row-cols-lg-auto g-3 align-items-center">
                         <div class="col-12">
-                            <button *ngIf="u.isDisabled !== USER_IS_DISABLED" class="m-2"
-                                (click)="disableUserById(u.id)" mat-raised-button>Disable</button>
-                            <button *ngIf="u.isDisabled !== USER_IS_NORMAL" class="m-2" (click)="enableUserById(u.id)"
-                                mat-raised-button>Enable</button>
-
-                            <mat-form-field appearance="fill" class="m-2">
-                                <mat-label>User Role</mat-label>
-                                <mat-select [(value)]="updateRoleEnum">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Role</mat-label>
+                                <mat-select [(value)]="u.role">
                                     <mat-option [value]="option.value" *ngFor="let option of USER_ROLE_OPTS">
                                         {{option.name}}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
+                        </div>
 
-                            <button class="m-2" (click)="updateRole(u.id)" mat-raised-button>Update Role</button>
+                        <div class="col-12">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Status</mat-label>
+                                <mat-select [(value)]="u.isDisabled">
+                                    <mat-option [value]="option.value" *ngFor="let option of USER_IS_DISABLED_OPTS">
+                                        {{option.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-12">
+                            <button mat-raised-button (click)="updateUserInfo()">Update</button>
                         </div>
                     </div>
                 </div>

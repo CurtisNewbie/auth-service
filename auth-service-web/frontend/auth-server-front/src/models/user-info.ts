@@ -147,7 +147,7 @@ export function emptyFetchUserInfoParam(): FetchUserInfoParam {
   };
 }
 
-export interface ChangeUserRoleReqVo {
+export interface UpdateUserInfoParam {
   /**
    * User id
    */
@@ -157,4 +157,9 @@ export interface ChangeUserRoleReqVo {
    * User role
    */
   role: string;
+
+  /**
+   * User's is_disabled status
+   */
+  isDisabled: number;
 }

@@ -3,9 +3,9 @@ import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { Resp } from "src/models/resp";
 import {
-  ChangeUserRoleReqVo,
   FetchUserInfoParam,
   FetchUserInfoResp as FetchUserInfoResp,
+  UpdateUserInfoParam,
   UserInfo,
 } from "src/models/user-info";
 import { NavigationService, NavType } from "./navigation.service";
@@ -164,39 +164,13 @@ export class UserService {
   }
 
   /**
-   * Disable user by id (only admin is allowed)
-   * @param id
+   * Update user info (only admin is allowed)
+   * @param param
+   * @returns
    */
-  public disableUserById(id: number): Observable<Resp<any>> {
-    return this.http.post<Resp<any>>(
-      buildApiPath("/user/disable"),
-      {
-        id: id,
-      },
-      headers
-    );
-  }
-
-  /**
-   * Enable user by id (only admin is allowed)
-   * @param id
-   */
-  public enableUserById(id: number): Observable<Resp<any>> {
-    return this.http.post<Resp<any>>(
-      buildApiPath("/user/enable"),
-      {
-        id: id,
-      },
-      headers
-    );
-  }
-
-  /**
-   * Change user's role (only admin is allowed)
-   */
-  public changeUserRole(param: ChangeUserRoleReqVo): Observable<Resp<void>> {
+  public updateUserInfo(param: UpdateUserInfoParam): Observable<Resp<void>> {
     return this.http.post<Resp<void>>(
-      buildApiPath("/user/role/change"),
+      buildApiPath("/user/info/update"),
       param,
       headers
     );

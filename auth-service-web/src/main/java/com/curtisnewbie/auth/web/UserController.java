@@ -120,46 +120,35 @@ public class UserController {
         return infoVo;
     }
 
-    //todo merge
-    @LogOperation(name = "/user/disable", description = "disable user")
+    @LogOperation(name = "/user/info/update", description = "update user info")
     @PreAuthorize("hasAuthority('admin')")
-    @PostMapping("/disable")
-    public Result<Void> disableUserById(@RequestBody DisableUserById param) throws MsgEmbeddedException, InvalidAuthenticationException {
-        ValidUtils.requireNonNull(param.getId());
-        if (Objects.equals(param.getId(), AuthUtil.getUser().getId())) {
-            throw new MsgEmbeddedException("You cannot disable yourself");
-        }
-        userService.disableUserById(param.getId(), AuthUtil.getUsername());
-        return Result.ok();
-    }
-
-    //todo merge
-    @LogOperation(name = "/user/enable", description = "enable user")
-    @PreAuthorize("hasAuthority('admin')")
-    @PostMapping("/enable")
-    public Result<Void> enableUserById(@RequestBody DisableUserById param) throws MsgEmbeddedException, InvalidAuthenticationException {
-        ValidUtils.requireNonNull(param.getId());
-        if (Objects.equals(param.getId(), AuthUtil.getUser().getId())) {
-            throw new MsgEmbeddedException("You cannot enable yourself");
-        }
-        userService.enableUserById(param.getId(), AuthUtil.getUsername());
-        return Result.ok();
-    }
-
-    // todo merge
-    @LogOperation(name = "/user/role/change", description = "change user role")
-    @PreAuthorize("hasAuthority('admin')")
-    @PostMapping("/role/change")
-    public Result<Void> changeUserRole(@RequestBody ChangeUserRoleReqVo param) throws MsgEmbeddedException, InvalidAuthenticationException {
+    @PostMapping("/info/update")
+    public Result<Void> changeUserRole(@RequestBody UpdateUserInfoReqVo param) throws MsgEmbeddedException, InvalidAuthenticationException {
         ValidUtils.requireNonNull(param.getId());
         if (Objects.equals(param.getId(), AuthUtil.getUser().getId())) {
             throw new MsgEmbeddedException("You cannot update yourself");
         }
-        UserRole role = EnumUtils.parse(param.getRole(), UserRole.class);
-        ValidUtils.requireNonNull(role, "user_role value illegal");
-        userService.updateRole(param.getId(), role, AuthUtil.getUsername());
+
+        UserRole role = null;
+        UserIsDisabled isDisabled = null;
+
+        if (param.getRole() != null)
+            role = EnumUtils.parse(param.getRole(), UserRole.class);
+        if (param.getIsDisabled() != null)
+            isDisabled = EnumUtils.parse(param.getIsDisabled(), UserIsDisabled.class);
+
+        if (role == null && isDisabled == null)
+            return Result.error("Must have something to update, either role or is_disabled");
+
+        userService.updateUser(UpdateUserVo.builder()
+                .id(param.getId())
+                .isDisabled(isDisabled)
+                .role(role)
+                .updateBy(AuthUtil.getUsername())
+                .build());
         return Result.ok();
     }
+
 
     @LogOperation(name = "/user/info", description = "get user info", enabled = false)
     @GetMapping("/info")

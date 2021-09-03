@@ -72,7 +72,7 @@ public interface UserMapper {
     String findUsernameById(@Param("id") int id);
 
     /**
-     * Update role, is_disabled
+     * Update role, is_disabled, update_by, update_time
      */
     void updateUser(UserEntity ue);
 }

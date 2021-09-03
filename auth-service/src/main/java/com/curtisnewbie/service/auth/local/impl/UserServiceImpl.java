@@ -88,6 +88,7 @@ public class UserServiceImpl implements LocalUserService {
         if (param.getRole() != null)
             ue.setRole(param.getRole().getValue());
         ue.setUpdateBy(param.getUpdateBy());
+        ue.setUpdateTime(new Date());
         userMapper.updateUser(ue);
     }
 

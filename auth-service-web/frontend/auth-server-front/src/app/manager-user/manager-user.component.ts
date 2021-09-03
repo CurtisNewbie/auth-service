@@ -12,6 +12,7 @@ import { PagingConst, PagingController } from "src/models/paging";
 import {
   emptyFetchUserInfoParam,
   FetchUserInfoParam,
+  UpdateUserInfoParam,
   UserInfo,
   UserIsDisabledEnum,
   UserRoleEnum,
@@ -51,7 +52,6 @@ export class ManagerUserComponent implements OnInit {
   expandedElement: UserInfo = null;
   searchParam: FetchUserInfoParam = emptyFetchUserInfoParam();
   pagingController: PagingController = new PagingController();
-  updateRoleEnum: UserRoleEnum = UserRoleEnum.GUEST;
 
   constructor(
     private userService: UserService,
@@ -100,34 +100,10 @@ export class ManagerUserComponent implements OnInit {
     });
   }
 
-  disableUserById(id: number): void {
-    this.userService.disableUserById(id).subscribe({
-      next: (resp) => {
-        this.fetchUserInfoList();
-      },
-    });
-  }
-
-  enableUserById(id: number): void {
-    this.userService.enableUserById(id).subscribe({
-      next: (resp) => {
-        this.fetchUserInfoList();
-      },
-    });
-  }
-
   searchNameInputKeyPressed(event: any): void {
     if (event.key === "Enter") {
       this.fetchUserInfoList();
     }
-  }
-
-  setSearchIsDisabled(isDisabled: number): void {
-    this.searchParam.isDisabled = isDisabled;
-  }
-
-  setSearchRole(role: string): void {
-    this.searchParam.role = role;
   }
 
   resetSearchParam(): void {
@@ -140,16 +116,18 @@ export class ManagerUserComponent implements OnInit {
     this.fetchUserInfoList();
   }
 
-  updateRole(id: number): void {
+  /**
+   * Update user info (only admin is allowed)
+   */
+  updateUserInfo(): void {
     this.userService
-      .changeUserRole({
-        id: id,
-        role: this.updateRoleEnum,
+      .updateUserInfo({
+        id: this.expandedElement.id,
+        role: this.expandedElement.role,
+        isDisabled: this.expandedElement.isDisabled,
       })
       .subscribe({
         complete: () => {
-          // default update user role
-          this.updateRoleEnum = UserRoleEnum.GUEST;
           this.fetchUserInfoList();
         },
       });

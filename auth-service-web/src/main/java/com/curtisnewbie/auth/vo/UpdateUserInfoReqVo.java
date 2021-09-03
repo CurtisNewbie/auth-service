@@ -6,7 +6,7 @@ import lombok.Data;
  * @author yongjie.zhuang
  */
 @Data
-public class ChangeUserRoleReqVo {
+public class UpdateUserInfoReqVo {
 
     /**
      * User id
@@ -17,4 +17,9 @@ public class ChangeUserRoleReqVo {
      * User role
      */
     private String role;
+
+    /**
+     * is_disabled
+     */
+    private Integer isDisabled;
 }
