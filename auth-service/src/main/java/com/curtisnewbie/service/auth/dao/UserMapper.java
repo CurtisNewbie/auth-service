@@ -55,24 +55,6 @@ public interface UserMapper {
     List<UserEntity> findAllUserInfoList();
 
     /**
-     * Set user disabled
-     *
-     * @param id          id
-     * @param disabledBy  who disabled this user
-     * @param disableTime the time when this user is disabled
-     */
-    void disableUserById(@Param("id") int id, @Param("disabledBy") String disabledBy, @Param("disableTime") Date disableTime);
-
-    /**
-     * Set user enabled
-     *
-     * @param id         id
-     * @param enabledBy  who disabled this user
-     * @param enableTime the time when this user is disabled
-     */
-    void enableUserById(@Param("id") int id, @Param("enabledBy") String enabledBy, @Param("enableTime") Date enableTime);
-
-    /**
      * Select *
      *
      * @param id id
@@ -90,13 +72,7 @@ public interface UserMapper {
     String findUsernameById(@Param("id") int id);
 
     /**
-     * Update role, is_disabled by id
+     * Update role, is_disabled
      */
-    void updateRoleAndIsEnabled(@Param("userId") int userId, @Param("role") String role, @Param("isDisabled") int isDisabled,
-                                @Param("updateBy") String updateBy);
-
-    /**
-     * Update role by id
-     */
-    void updateRole(@Param("userId") int id, @Param("role") String role, @Param("updatedBy") String updatedBy);
+    void updateUser(UserEntity ue);
 }

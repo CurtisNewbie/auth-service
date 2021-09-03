@@ -29,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
@@ -70,12 +69,35 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     public void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy) {
-        userMapper.updateRoleAndIsEnabled(userId, role.getValue(), UserIsDisabled.NORMAL.getValue(), updatedBy);
+        updateUser(UpdateUserVo.builder()
+                .id(userId)
+                .role(role)
+                .isDisabled(UserIsDisabled.NORMAL)
+                .updateBy(updatedBy)
+                .build());
+    }
+
+    @Override
+    public void updateUser(@NotNull UpdateUserVo param) {
+        UserEntity ue = new UserEntity();
+        ue.setId(param.getId());
+        if (param.getIsDisabled() == null && param.getRole() == null)
+            throw new IllegalArgumentException("Nothing to update");
+        if (param.getIsDisabled() != null)
+            ue.setIsDisabled(param.getIsDisabled().getValue());
+        if (param.getRole() != null)
+            ue.setRole(param.getRole().getValue());
+        ue.setUpdateBy(param.getUpdateBy());
+        userMapper.updateUser(ue);
     }
 
     @Override
     public void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy) {
-        userMapper.updateRole(id, role.getValue(), updatedBy);
+        updateUser(UpdateUserVo.builder()
+                .id(id)
+                .role(role)
+                .updateBy(updatedBy)
+                .build());
     }
 
     @Override
@@ -217,12 +239,20 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     public void disableUserById(int id, String disabledBy) {
-        userMapper.disableUserById(id, disabledBy, new Date());
+        updateUser(UpdateUserVo.builder()
+                .id(id)
+                .isDisabled(UserIsDisabled.DISABLED)
+                .updateBy(disabledBy)
+                .build());
     }
 
     @Override
     public void enableUserById(int id, String enabledBy) {
-        userMapper.enableUserById(id, enabledBy, new Date());
+        updateUser(UpdateUserVo.builder()
+                .id(id)
+                .isDisabled(UserIsDisabled.NORMAL)
+                .updateBy(enabledBy)
+                .build());
     }
 
     private UserEntity toUserEntity(RegisterUserVo registerUserVo) {

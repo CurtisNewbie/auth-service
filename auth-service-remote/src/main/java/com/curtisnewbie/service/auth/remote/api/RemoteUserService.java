@@ -3,10 +3,7 @@ package com.curtisnewbie.service.auth.remote.api;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
-import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
-import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.UserVo;
+import com.curtisnewbie.service.auth.remote.vo.*;
 import com.github.pagehelper.PageInfo;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
@@ -116,7 +113,6 @@ public interface RemoteUserService {
      */
     void enableUserById(int id, @Nullable String enabledBy);
 
-
     /**
      * Find username by id
      */
@@ -126,6 +122,13 @@ public interface RemoteUserService {
      * Change user's role and enable the user
      */
     void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy);
+
+    /**
+     * Update user
+     *
+     * @param param param
+     */
+    void updateUser(@NotNull UpdateUserVo param);
 
     /**
      * Update user role

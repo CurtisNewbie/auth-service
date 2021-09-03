@@ -8,35 +8,20 @@
     WHERE id = #{id}
   </update>
 
-  <update id="disableUserById">
-    UPDATE user
-    SET is_disabled = 1,
-    update_by = #{disabledBy},
-    update_time = #{disableTime}
-    WHERE id = #{id} AND is_disabled = 0
-  </update>
-
-  <update id="enableUserById">
-    UPDATE user
-    SET is_disabled = 0,
-    update_by = #{enabledBy},
-    update_time = #{enableTime}
-    WHERE id = #{id} AND is_disabled = 1
-  </update>
-
-  <update id="updateRoleAndIsEnabled">
+  <update id="updateUser">
     update user
-    set role = #{role},
-    is_disabled = #{isDisabled},
-    update_by = #{updateBy}
-    where id = #{userId}
-  </update>
-
-  <update id="updateRole">
-    update user
-    set role = #{role},
-    update_by = #{updatedBy}
-    where id = #{userId}
+    <set>
+      <if test="role != null and role != ''">
+        role = #{role},
+      </if>
+      <if test="isDisabled != null">
+        is_disabled = #{isDisabled},
+      </if>
+      <if test="updateBy != null and updateBy != ''">
+        update_by = #{updateBy}
+      </if>
+    </set>
+    where id = #{id}
   </update>
 
   <select id="findByUsername" resultType="com.curtisnewbie.service.auth.dao.UserEntity">

@@ -14,10 +14,7 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
-import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
-import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.UserVo;
+import com.curtisnewbie.service.auth.remote.vo.*;
 import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
@@ -123,6 +120,7 @@ public class UserController {
         return infoVo;
     }
 
+    //todo merge
     @LogOperation(name = "/user/disable", description = "disable user")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/disable")
@@ -135,6 +133,7 @@ public class UserController {
         return Result.ok();
     }
 
+    //todo merge
     @LogOperation(name = "/user/enable", description = "enable user")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/enable")
@@ -147,6 +146,7 @@ public class UserController {
         return Result.ok();
     }
 
+    // todo merge
     @LogOperation(name = "/user/role/change", description = "change user role")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/role/change")

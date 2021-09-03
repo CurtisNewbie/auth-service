@@ -7,6 +7,7 @@ import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
+import com.curtisnewbie.service.auth.remote.vo.UpdateUserVo;
 import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 import lombok.extern.slf4j.Slf4j;
@@ -81,7 +82,11 @@ public class RegistrationEventHandler implements EventHandler {
                     }
 
                     // enable user
-                    localUserService.changeRoleAndEnableUser(registeredUserid, role, handlerName);
+                    localUserService.updateUser(UpdateUserVo.builder()
+                            .id(registeredUserid)
+                            .role(role)
+                            .updateBy(handlerName)
+                            .build());
                 }
             }
         } catch (Exception e) {

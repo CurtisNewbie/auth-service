@@ -79,6 +79,10 @@
       <artifactId>distributed-task-module</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+    </dependency>
 <!--    <dependency>-->
 <!--      <groupId>com.curtisnewbie</groupId>-->
 <!--      <artifactId>comment-generator</artifactId>-->
@@ -107,6 +111,14 @@
 <!--          <configurationFile>generatorConfig.xml</configurationFile>-->
 <!--        </configuration>-->
 <!--      </plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <forceJavacCompilerUse>true</forceJavacCompilerUse>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
