@@ -33,7 +33,7 @@ This project depends on the following modules that you must manually install (us
     - description: BOM file for dependency management
     - url: https://github.com/CurtisNewbie/curtisnewbie-bom
     - branch: main
-    - version: micro-0.0.1 (under `/microservce` folder)
+    - under `/microservice` folder
 
 - service-module
     - description: import dependencies for a Dubbo service
@@ -41,7 +41,7 @@ This project depends on the following modules that you must manually install (us
     - branch: main
 
 - log-tracing-module
-    - desription: for log tracing between web endpoints and service layers
+    - description: for log tracing between web endpoints and service layers
     - url: https://github.com/CurtisNewbie/log-tracing-module
     - branch: main
 
