@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-parent</artifactId>
-  <version>0.0.1</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>auth-service-parent</name>
   <description>Authentication Service Parent</description>
@@ -25,17 +25,5 @@
     <module>auth-service-remote</module>
     <module>auth-service-messaging</module>
   </modules>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.curtisnewbie</groupId>
-        <artifactId>curtisnewbie-bom</artifactId>
-        <version>micro-0.0.1</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
 </project>
