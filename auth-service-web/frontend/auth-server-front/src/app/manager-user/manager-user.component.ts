@@ -132,6 +132,7 @@ export class ManagerUserComponent implements OnInit {
       .subscribe({
         complete: () => {
           this.fetchUserInfoList();
+          this.expandedElement = null;
         },
       });
   }
@@ -164,5 +165,23 @@ export class ManagerUserComponent implements OnInit {
           });
       }
     });
+  }
+
+  idEquals(tl: UserInfo, tr: UserInfo): boolean {
+    if (tl == null || tr == null) return false;
+    return tl.id === tr.id;
+  }
+
+  setExpandedElement(row: UserInfo) {
+    if (this.idEquals(row, this.expandedElement)) {
+      this.expandedElement = null;
+      return;
+    }
+    this.expandedElement = this.copy(row);
+  }
+
+  copy(obj: UserInfo): UserInfo {
+    if (obj == null) return null;
+    return { ...obj };
   }
 }
