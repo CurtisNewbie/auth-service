@@ -26,7 +26,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
         if (e instanceof DisabledException) {
             errorMsg = "User is disabled";
         } else if (e instanceof InsufficientAuthenticationException) {
-            errorMsg = "Only admin is allowed";
+            errorMsg = "You are not allowed to use this application";
         }
         response.getWriter().write(JsonUtils.writeValueAsString(Result.error(errorMsg)));
     }
