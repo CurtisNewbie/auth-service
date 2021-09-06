@@ -14,21 +14,21 @@ CREATE TABLE IF NOT EXISTS user (
 
 CREATE TABLE IF NOT EXISTS app (
     id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
-    name VARCHAR (255) NOT NULL COMMENT 'name of the application',
-    create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the record is created',
-    create_by VARCHAR(255) NOT NULL COMMENT 'who created this record',
+    name VARCHAR (255) UNIQUE NOT NULL COMMENT 'name of the application',
+    create_time DATETIME DEFAULT NOW() COMMENT 'when the record is created',
+    create_by VARCHAR(255) COMMENT 'who created this record',
     update_time DATETIME COMMENT 'when the record is updated',
     update_by VARCHAR(255) COMMENT 'who updated this record'
 ) ENGINE=InnoDB COMMENT 'application';
 
 CREATE TABLE IF NOT EXISTS user_app (
-    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
     user_id INT UNSIGNED NOT NULL COMMENT "user's id",
     app_id INT UNSIGNED NOT NULL COMMENT "app's id",
-    create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the record is created',
-    create_by VARCHAR(255) NOT NULL COMMENT 'who created this record',
+    create_time DATETIME DEFAULT NOW() COMMENT 'when the record is created',
+    create_by VARCHAR(255) COMMENT 'who created this record',
     update_time DATETIME COMMENT 'when the record is updated',
-    update_by VARCHAR(255) COMMENT 'who updated this record'
+    update_by VARCHAR(255) COMMENT 'who updated this record',
+    PRIMARY KEY (user_id, app_id)
 ) ENGINE=InnoDB COMMENT 'join table between application and user';
 
 CREATE TABLE IF NOT EXISTS event_handling (

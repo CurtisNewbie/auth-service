@@ -1,6 +1,6 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.service.auth.dao.UserEntity;
+import com.curtisnewbie.service.auth.dao.*;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
@@ -29,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class TestLocalUserService {
 
+    private static final int APP_ID = 1234123123;
+    private static final String APP_NAME = "auth-service";
     private static final String USERNAME = "test_yongjie.zhuang";
     private static final String PASSWORD = "123123test";
     private static final String NEW_PASSWORD = "456456456test";
@@ -37,6 +39,10 @@ public class TestLocalUserService {
 
     @Autowired
     LocalUserService userService;
+    @Autowired
+    AppTestMapper appTestMapper;
+    @Autowired
+    UserAppTestMapper userAppTestMapper;
 
     @MockBean
     LocalEventHandlingService eventHandlingServiceMock;
@@ -55,6 +61,36 @@ public class TestLocalUserService {
             registerTestUser();
 
             UserVo vo = userService.login(USERNAME, PASSWORD);
+            Assertions.assertNotNull(vo);
+            Assertions.assertNotNull(vo.getId());
+            Assertions.assertEquals(vo.getUsername(), USERNAME);
+            Assertions.assertEquals(vo.getRole(), ROLE.getValue());
+        });
+    }
+
+    @Test
+    public void shouldLoginForApp() {
+        Assertions.assertDoesNotThrow(() -> {
+
+            registerTestUser();
+
+            // load the registered user, get it's id
+            UserEntity e = userService.loadUserByUsername(USERNAME);
+            Assertions.assertNotNull(e);
+            Assertions.assertNotNull(e.getId());
+
+            // save app and user_app records for testing
+            App app = new App();
+            app.setId(APP_ID);
+            app.setName(APP_NAME);
+            appTestMapper.insertAppRecord(app);
+
+            UserApp userApp = new UserApp();
+            userApp.setUserId(e.getId());
+            userApp.setAppId(app.getId());
+            userAppTestMapper.insertUserAppRecord(userApp);
+
+            UserVo vo = userService.login(USERNAME, PASSWORD, APP_NAME);
             Assertions.assertNotNull(vo);
             Assertions.assertNotNull(vo.getId());
             Assertions.assertEquals(vo.getUsername(), USERNAME);

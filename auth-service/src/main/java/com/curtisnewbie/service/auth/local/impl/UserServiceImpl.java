@@ -5,6 +5,7 @@ import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.dao.UserEntity;
 import com.curtisnewbie.service.auth.dao.UserMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
+import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
@@ -49,6 +50,8 @@ public class UserServiceImpl implements LocalUserService {
     private UserMapper userMapper;
     @Autowired
     private LocalEventHandlingService eventHandlingService;
+    @Autowired
+    private LocalUserAppService userAppService;
     @Autowired
     private Environment environment;
 
@@ -136,6 +139,20 @@ public class UserServiceImpl implements LocalUserService {
 
         logger.info("User '{}' login successful, user_info returned", username);
         return BeanCopyUtils.toType(ue, UserVo.class);
+    }
+
+    @Override
+    public @NotNull UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName)
+            throws UserRelatedException {
+
+        // validate the credentials first
+        UserVo uv = login(username, password);
+
+        // validate whether current user is allowed to use this application
+        if (!userAppService.isUserAllowedToUseApp(uv.getId(), appName)) {
+            throw new UserNotAllowedToUseApplicationException(appName);
+        }
+        return uv;
     }
 
     @Override

@@ -36,6 +36,27 @@ public interface RemoteUserService {
 
     /**
      * <p>
+     * Login
+     * </p>
+     * <p>
+     * Different from {@link #login(String, String)}, this method takes into the consideration of applications that the
+     * user is allowed to use.
+     * </p>
+     *
+     * @param username username
+     * @param password password
+     * @param appName  application name that the user is trying to use
+     * @return user's info when it was successful
+     * @throws UserDisabledException                   when the user is disabled
+     * @throws UsernameNotFoundException               when the username is not found
+     * @throws PasswordIncorrectException              when the password is incorrect
+     * @throws UserNotAllowedToUseApplicationException when the user is not allowed to use this application
+     */
+    @NotNull
+    UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName) throws UserRelatedException;
+
+    /**
+     * <p>
      * Register user of different role
      * </p>
      * <p>
@@ -139,7 +160,7 @@ public interface RemoteUserService {
      * Only the disabled user can be deleted
      * </p>
      *
-     * @param userId user's id
+     * @param userId    user's id
      * @param deletedBy deleted by
      */
     void deleteUser(int userId, @NotEmpty String deletedBy);

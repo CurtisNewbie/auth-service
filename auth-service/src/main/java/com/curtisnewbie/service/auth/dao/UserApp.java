@@ -13,8 +13,6 @@ import java.util.Date;
  */
 @Data
 public class UserApp {
-    /** primary key */
-    private Integer id;
 
     /** user's id */
     private Integer userId;
