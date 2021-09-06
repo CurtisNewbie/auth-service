@@ -46,4 +46,8 @@ export class RegisterComponent implements OnInit {
         },
       });
   }
+
+  gotoLoginPage(): void {
+    this.nav.navigateTo(NavType.LOGIN_PAGE);
+  }
 }
