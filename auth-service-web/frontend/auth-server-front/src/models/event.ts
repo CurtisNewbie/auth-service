@@ -6,7 +6,10 @@ export interface FindEventHandlingByPageReqVo {
   type: number;
 
   /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
-  status: number;
+  status: EventHandlingStatus;
+
+  /** handle result */
+  handleResult: HandleResult;
 
   pagingVo: Paging;
 }
@@ -25,6 +28,9 @@ export interface EventHandling {
 
   /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
   status: number;
+
+  /** handle result */
+  handleResult: number;
 
   /** id of user who handled the event */
   handlerId: number;

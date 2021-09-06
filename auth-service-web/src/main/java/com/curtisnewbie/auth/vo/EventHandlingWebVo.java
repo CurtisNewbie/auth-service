@@ -27,6 +27,9 @@ public class EventHandlingWebVo {
     /** id of user who handled the event */
     private Integer handlerId;
 
+    /** handle result, 1-accept, 2-reject */
+    private Integer handleResult;
+
     /** when the event is handled */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private Date handleTime;
@@ -37,12 +40,13 @@ public class EventHandlingWebVo {
     private String description;
 
     @Builder
-    public EventHandlingWebVo(Integer id, Integer type, Integer status, Integer handlerId, Date handleTime,
-                              String description) {
+    public EventHandlingWebVo(Integer id, Integer type, Integer status, Integer handlerId, Integer handleResult,
+                              Date handleTime, String description) {
         this.id = id;
         this.type = type;
         this.status = status;
         this.handlerId = handlerId;
+        this.handleResult = handleResult;
         this.handleTime = handleTime;
         this.description = description;
     }

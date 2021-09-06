@@ -29,16 +29,21 @@ public class EventHandlingVo implements Serializable {
     /** id of user who handled the event */
     private Integer handlerId;
 
+    /** handle result, 1-accept, 2-reject */
+    private Integer handleResult;
+
     /** when the event is handled */
     private Date handleTime;
 
     @Builder
-    public EventHandlingVo(Integer id, Integer type, String body, Integer status, Integer handlerId, Date handleTime) {
+    public EventHandlingVo(Integer id, Integer type, String body, Integer status, Integer handlerId,
+                           Integer handleResult, Date handleTime) {
         this.id = id;
         this.type = type;
         this.body = body;
         this.status = status;
         this.handlerId = handlerId;
+        this.handleResult = handleResult;
         this.handleTime = handleTime;
     }
 

@@ -28,6 +28,7 @@ export class EventComponent implements OnInit {
     "type",
     "status",
     "description",
+    "handleResult",
     "handlerId",
     "handleTime",
   ];
@@ -41,12 +42,17 @@ export class EventComponent implements OnInit {
   readonly HANDLE_TYPE_OPTIONS: Option<EventHandlingType>[] = [
     { name: "Registration", value: EventHandlingType.REGISTRATION },
   ];
+  readonly HANDLE_RESULT_OPTIONS: Option<HandleResult>[] = [
+    { name: "Accepted", value: HandleResult.ACCEPT },
+    { name: "Rejected", value: HandleResult.REJECT },
+  ];
   readonly HANDLE_USER_ROLE_OPTIONS: Option<UserRoleEnum>[] = USER_ROLE_OPTIONS;
 
   events: EventHandling[] = [];
   pagingController: PagingController = new PagingController();
   searchStatus: EventHandlingStatus;
   searchType: EventHandlingType;
+  searchHandleResult: HandleResult;
   expandedElement: EventHandling;
   handleRole: UserRoleEnum = UserRoleEnum.GUEST;
 
@@ -61,6 +67,7 @@ export class EventComponent implements OnInit {
       .findByPage({
         type: this.searchType,
         status: this.searchStatus,
+        handleResult: this.searchHandleResult,
         pagingVo: this.pagingController.paging,
       })
       .subscribe({

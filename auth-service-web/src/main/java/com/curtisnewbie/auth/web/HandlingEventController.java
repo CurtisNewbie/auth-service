@@ -90,7 +90,7 @@ public class HandlingEventController {
         if (et.equals(EventHandlingType.REGISTRATION_EVENT)) {
             String username = remoteUserService.findUsernameById(Integer.parseInt(e.getBody()));
             if (username == null)
-                username = "";
+                username = "   ";
             wv.setDescription(String.format("User '%s' requests registration approval", username));
         }
         return wv;
