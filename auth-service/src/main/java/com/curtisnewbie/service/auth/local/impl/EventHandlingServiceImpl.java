@@ -10,6 +10,7 @@ import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.eventhandling.EventHandler;
 import com.curtisnewbie.service.auth.local.api.eventhandling.RegistrationEventHandler;
 import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
@@ -62,8 +63,10 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
             validateStatus(eventHandling.getStatus());
         if (eventHandling.getType() != null)
             validateType(eventHandling.getType());
-        Objects.requireNonNull(vo.getPagingVo(), "pagingVo == null");
+        if (eventHandling.getHandleResult() != null)
+            validateHandleResult(eventHandling.getHandleResult());
 
+        Objects.requireNonNull(vo.getPagingVo(), "pagingVo == null");
         PageHelper.startPage(vo.getPagingVo().getPage(), vo.getPagingVo().getLimit());
         PageInfo<EventHandling> pi = PageInfo.of(mapper.selectByPage(eventHandling));
         return BeanCopyUtils.toPageList(pi, EventHandlingVo.class);
@@ -74,6 +77,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
         EventHandling eh = mapper.selectByPrimaryKey(vo.getId());
         eh.setHandlerId(vo.getHandlerId());
         eh.setHandleTime(new Date());
+        eh.setHandleResult(vo.getResult().getValue());
 
         EventHandlingType type = EnumUtils.parse(eh.getType(), EventHandlingType.class);
         String routingKey;
@@ -82,7 +86,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
                 routingKey = RegistrationEventHandler.ROUTING_KEY;
                 break;
             default:
-                throw new IllegalArgumentException("Does not support " + type.toString());
+                throw new IllegalArgumentException("There is no configured handler for type: " + type.toString());
         }
 
         // send to workers
@@ -90,7 +94,6 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
                 .payload(HandleEventInfoVo.builder()
                         .record(eh)
                         .extra(vo.getExtra())
-                        .result(vo.getResult())
                         .build())
                 .exchange(EventHandler.EVENT_HANDLER_EXCHANGE)
                 .routingKey(routingKey)
@@ -101,15 +104,23 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     private void validateType(Integer typeValue) {
         final EventHandlingType type = EnumUtils.parse(typeValue, EventHandlingType.class);
         if (type == null) {
-            log.error("Type value Illegal, cannot be parsed, value: {}", typeValue);
+            log.error("type value Illegal, cannot be parsed, value: {}", typeValue);
             throw new IllegalArgumentException("type value illegal");
+        }
+    }
+
+    private void validateHandleResult(Integer handleResult) {
+        final EventHandlingResult result = EnumUtils.parse(handleResult, EventHandlingResult.class);
+        if (result == null) {
+            log.error("handle_result value Illegal, cannot be parsed, value: {}", handleResult);
+            throw new IllegalArgumentException("handle_result value illegal");
         }
     }
 
     private void validateStatus(Integer statusValue) {
         final EventHandlingStatus status = EnumUtils.parse(statusValue, EventHandlingStatus.class);
         if (status == null) {
-            log.error("Status value Illegal, cannot be parsed, value: {}", statusValue);
+            log.error("status value Illegal, cannot be parsed, value: {}", statusValue);
             throw new IllegalArgumentException("status value illegal");
         }
     }
@@ -120,7 +131,8 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
                 vo.getPrevStatus().getValue(),
                 vo.getCurrStatus().getValue(),
                 vo.getHandlerId(),
-                vo.getHandleTime()) == 1;
+                vo.getHandleTime(),
+                vo.getHandleResult()) == 1;
     }
 
     @Override

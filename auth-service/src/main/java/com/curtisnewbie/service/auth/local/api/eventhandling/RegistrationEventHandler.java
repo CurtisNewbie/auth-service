@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 /**
  * <p>
  * Event handler for new user registration
@@ -53,6 +55,12 @@ public class RegistrationEventHandler implements EventHandler {
         try {
             final int registeredUserid = Integer.parseInt(info.getRecord().getBody());
             final String handlerName = localUserService.findUsernameById(info.getRecord().getHandlerId());
+            final EventHandlingResult result = EnumUtils.parse(info.getRecord().getHandleResult(), EventHandlingResult.class);
+            if (result == null) {
+                log.warn("Event handling result value illegal, unable to parse it, operation ignored, handle_result: {}",
+                        info.getRecord().getHandleResult());
+                return;
+            }
 
             // mark the event as handled, semantic lock is used here
             if (localEventHandlingService.updateHandleStatus(
@@ -62,32 +70,35 @@ public class RegistrationEventHandler implements EventHandler {
                             .currStatus(EventHandlingStatus.HANDLED)
                             .handlerId(info.getRecord().getHandlerId())
                             .handleTime(info.getRecord().getHandleTime())
+                            .handleResult(info.getRecord().getHandleResult())
                             .build()
             )) {
                 String extra = info.getExtra();
-                log.info("Handled event {}, result: {}, extra: {}", info.getRecord(), info.getResult(), extra);
+                log.info("Handled event {}, result: {}, extra: {}", info.getRecord(), result, extra);
 
-                if (info.getResult().equals(EventHandlingResult.ACCEPT)) {
-                    // default user role is guest
-                    UserRole role = UserRole.GUEST;
-                    if (extra != null) {
-                        UserRole parsedRole = EnumUtils.parse(extra, UserRole.class);
-                        if (parsedRole != null) {
-                            log.info("Found extra value for user_role, using parsed user_role: {}", parsedRole);
-                            role = parsedRole;
-                        } else {
-                            log.info("Found extra value for user_role, but value '{}' illegal, fallback to default role: {}",
-                                    extra, role);
-                        }
+                // only accept will actually update the user role and status
+                if (!result.equals(EventHandlingResult.ACCEPT))
+                    return;
+
+                // default user role is guest
+                UserRole role = UserRole.GUEST;
+                if (extra != null) {
+                    UserRole parsedRole = EnumUtils.parse(extra, UserRole.class);
+                    if (parsedRole != null) {
+                        log.info("Found extra value for user_role, using parsed user_role: {}", parsedRole);
+                        role = parsedRole;
+                    } else {
+                        log.info("Found extra value for user_role, but value '{}' illegal, fallback to default role: {}",
+                                extra, role);
                     }
-
-                    // enable user
-                    localUserService.updateUser(UpdateUserVo.builder()
-                            .id(registeredUserid)
-                            .role(role)
-                            .updateBy(handlerName)
-                            .build());
                 }
+
+                // enable user
+                localUserService.updateUser(UpdateUserVo.builder()
+                        .id(registeredUserid)
+                        .role(role)
+                        .updateBy(handlerName)
+                        .build());
             }
         } catch (Exception e) {
             throw new AmqpRejectAndDontRequeueException(e);

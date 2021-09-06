@@ -23,6 +23,9 @@ public class EventHandling {
     /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
     private Integer status;
 
+    /** handle result, 1-accept, 2-reject */
+    private Integer handleResult;
+
     /** id of user who handled the event */
     private Integer handlerId;
 

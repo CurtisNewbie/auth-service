@@ -17,14 +17,17 @@ public class UpdateHandleStatusReqVo {
     private EventHandlingStatus currStatus;
     private int handlerId;
     private Date handleTime;
+    private int handleResult;
 
     @Builder
-    public UpdateHandleStatusReqVo(int id, EventHandlingStatus prevStatus, EventHandlingStatus currStatus, int handlerId, Date handleTime) {
+    public UpdateHandleStatusReqVo(int id, EventHandlingStatus prevStatus, EventHandlingStatus currStatus, int handlerId,
+                                   Date handleTime, int handleResult) {
         this.id = id;
         this.prevStatus = prevStatus;
         this.currStatus = currStatus;
         this.handlerId = handlerId;
         this.handleTime = handleTime;
+        this.handleResult = handleResult;
     }
 
     public UpdateHandleStatusReqVo() {

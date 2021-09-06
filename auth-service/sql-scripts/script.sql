@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS event_handling (
     type INT NOT NULL COMMENT "type of event, 1-registration",
     body VARCHAR(1000) NOT NULL COMMENT "body of the event",
     status INT NOT NULL COMMENT "status of event, 0-no need to handle, 1-to be handled, 2-handled",
+    handle_result TINYINT COMMENT "handle result, 1-accept, 2-reject",
     handler_id INT UNSIGNED COMMENT "id of user who handled the event",
     handle_time DATETIME COMMENT 'when the event is handled'
 ) ENGINE=InnoDB COMMENT 'events that need to be handled by someone, e.g., administrators';

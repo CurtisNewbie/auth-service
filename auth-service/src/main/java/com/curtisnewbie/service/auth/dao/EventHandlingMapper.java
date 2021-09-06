@@ -41,7 +41,7 @@ public interface EventHandlingMapper {
     List<EventHandling> selectByPage(EventHandling eventHandling);
 
     int updateHandlingResult(@Param("id") int id, @Param("prevStatus") int prevStatus, @Param("currStatus") int currStatus
-            , @Param("handlerId") int handlerId, @Param("handleTime") Date handleTime);
+            , @Param("handlerId") int handlerId, @Param("handleTime") Date handleTime, @Param("handleResult") int handleResult);
 
     Integer selectTypeById(int id);
 }

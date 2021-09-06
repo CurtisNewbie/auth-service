@@ -20,10 +20,14 @@ public class FindEventHandlingByPageReqVo extends PageableVo {
     /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
     private Integer status;
 
+    /** handle result, 1-accept, 2-reject */
+    private Integer handleResult;
+
     @Builder
-    public FindEventHandlingByPageReqVo(Integer type, Integer status) {
+    public FindEventHandlingByPageReqVo(Integer type, Integer status, Integer handleResult) {
         this.type = type;
         this.status = status;
+        this.handleResult = handleResult;
     }
 
     public FindEventHandlingByPageReqVo() {

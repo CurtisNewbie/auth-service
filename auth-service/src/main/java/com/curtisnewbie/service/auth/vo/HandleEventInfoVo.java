@@ -21,19 +21,13 @@ public class HandleEventInfoVo {
     private EventHandling record;
 
     /**
-     * result
-     */
-    private EventHandlingResult result;
-
-    /**
      * extra
      */
     private String extra;
 
     @Builder
-    public HandleEventInfoVo(EventHandling record, EventHandlingResult result, String extra) {
+    public HandleEventInfoVo(EventHandling record, String extra) {
         this.record = record;
-        this.result = result;
         this.extra = extra;
     }
 
