@@ -143,7 +143,8 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     public @NotNull UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName)
-            throws UserRelatedException {
+            throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException,
+            UserNotAllowedToUseApplicationException {
 
         // validate the credentials first
         UserVo uv = login(username, password);

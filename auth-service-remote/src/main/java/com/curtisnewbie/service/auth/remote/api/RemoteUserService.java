@@ -53,7 +53,8 @@ public interface RemoteUserService {
      * @throws UserNotAllowedToUseApplicationException when the user is not allowed to use this application
      */
     @NotNull
-    UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName) throws UserRelatedException;
+    UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName)
+            throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException, UserNotAllowedToUseApplicationException;
 
     /**
      * <p>
