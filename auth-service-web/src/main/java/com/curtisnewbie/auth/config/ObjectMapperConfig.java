@@ -1,5 +1,6 @@
 package com.curtisnewbie.auth.config;
 
+import com.curtisnewbie.common.util.JsonUtils;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
@@ -17,9 +18,6 @@ public class ObjectMapperConfig {
 
     @Bean
     public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setTimeZone(TimeZone.getDefault());
-        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        return objectMapper;
+        return JsonUtils.constructsJsonMapper();
     }
 }
