@@ -46,7 +46,7 @@
     where user_id = #{userId}
     and app_id =
     (
-      select app_id
+      select id
       from app
       where name = #{appName}
       limit 1
