@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { PageEvent } from "@angular/material";
 import { PagingController } from "src/models/paging";
 import { AppService, AppVo } from "../app.service";
 
@@ -34,5 +35,10 @@ export class UserAppComponent implements OnInit {
           this.pagingController.updatePages(resp.data.pagingVo.total);
         },
       });
+  }
+
+  handle(e: PageEvent): void {
+    this.pagingController.handle(e);
+    this.fetchList();
   }
 }
