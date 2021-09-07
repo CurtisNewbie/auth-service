@@ -6,6 +6,7 @@ import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.UpdateUserVo;
 import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
@@ -98,6 +99,7 @@ public class RegistrationEventHandler implements EventHandler {
                         .id(registeredUserid)
                         .role(role)
                         .updateBy(handlerName)
+                        .isDisabled(UserIsDisabled.NORMAL)
                         .build());
             }
         } catch (Exception e) {
