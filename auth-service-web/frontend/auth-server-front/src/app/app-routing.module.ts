@@ -9,6 +9,7 @@ import { ManagerUserComponent } from "./manager-user/manager-user.component";
 import { OperateHistoryComponent } from "./operate-history/operate-history.component";
 import { RegisterComponent } from "./register/register.component";
 import { TaskHistoryComponent } from "./task-history/task-history.component";
+import { UserAppComponent } from "./user-app/user-app.component";
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
   {
     path: "register",
     component: RegisterComponent,
+  },
+  {
+    path: "user-app",
+    component: UserAppComponent,
   },
   { path: "**", redirectTo: "/login-page" },
 ];

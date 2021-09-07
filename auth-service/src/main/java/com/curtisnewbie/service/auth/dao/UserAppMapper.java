@@ -38,4 +38,19 @@ public interface UserAppMapper {
      * select 1
      */
     Integer selectOneIfUserIsAllowed(@Param("userId") int userId, @Param("appName") String appName);
+
+    /**
+     * select app.id, app.name
+     */
+    List<App> getAppsPermittedForUser(@Param("userId") int userId);
+
+    /**
+     * delete all apps for user
+     */
+    void clearAppsForUser(@Param("userId") int userId);
+
+    /**
+     * insert by user_id and one or more app_id
+     */
+    void setAppsForUser(@Param("userId") int userId, @Param("appIdList") List<Integer> appIdList);
 }

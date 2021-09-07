@@ -36,6 +36,10 @@ import { ManageTasksComponent } from "./manage-tasks/manage-tasks.component";
 import { RegisterComponent } from "./register/register.component";
 import { EventComponent } from "./event/event.component";
 import { TaskHistoryComponent } from "./task-history/task-history.component";
+import { UserAppComponent } from "./user-app/user-app.component";
+import { UserPermittedAppUpdateComponent } from "./user-permitted-app-update/user-permitted-app-update.component";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   exports: [],
@@ -52,6 +56,8 @@ import { TaskHistoryComponent } from "./task-history/task-history.component";
     RegisterComponent,
     EventComponent,
     TaskHistoryComponent,
+    UserAppComponent,
+    UserPermittedAppUpdateComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,8 +77,10 @@ import { TaskHistoryComponent } from "./task-history/task-history.component";
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
+    MatCheckboxModule,
+    ScrollingModule,
   ],
-  entryComponents: [ConfirmDialogComponent],
+  entryComponents: [ConfirmDialogComponent, UserPermittedAppUpdateComponent],
   providers: [
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     { provide: APP_BASE_HREF, useValue: "/" },

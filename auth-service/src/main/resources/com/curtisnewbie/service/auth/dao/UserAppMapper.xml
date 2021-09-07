@@ -22,6 +22,19 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
+  <update id="setAppsForUser">
+    insert into user_app (user_id, app_id)
+    values
+    <foreach collection="appIdList" separator="," item="appId">
+      (#{userId}, #{appId})
+    </foreach>
+  </update>
+
+  <delete id="clearAppsForUser">
+    delete from user_app
+    where user_id = #{userId}
+  </delete>
+
   <select id="selectAll" resultType="com.curtisnewbie.service.auth.dao.UserApp">
     select id, user_id, app_id, create_time, create_by, update_time, update_by
     from user_app
@@ -38,5 +51,11 @@
       where name = #{appName}
       limit 1
     )
+  </select>
+  <select id="getAppsPermittedForUser" resultType="com.curtisnewbie.service.auth.dao.App">
+    select a.id, a.name
+    from user_app ua
+    left join app a on ua.app_id = a.id
+    where ua.user_id = #{userId}
   </select>
 </mapper>

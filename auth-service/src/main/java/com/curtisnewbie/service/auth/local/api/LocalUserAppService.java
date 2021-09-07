@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.local.api;
 
+import com.curtisnewbie.service.auth.remote.api.RemoteUserAppService;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotEmpty;
  * @author yongjie.zhuang
  */
 @Validated
-public interface LocalUserAppService {
+public interface LocalUserAppService extends RemoteUserAppService {
 
     /**
      * Check if the user can use the specified application

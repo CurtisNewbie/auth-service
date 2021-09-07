@@ -10,14 +10,7 @@ import {
 } from "src/models/user-info";
 import { NavigationService, NavType } from "./navigation.service";
 import { NotificationService } from "./notification.service";
-import { buildApiPath } from "./util/api-util";
-
-const headers = {
-  headers: new HttpHeaders({
-    "Content-Type": "application/json",
-  }),
-  withCredentials: true,
-};
+import { buildApiPath, httpClientOptions } from "./util/api-util";
 
 @Injectable({
   providedIn: "root",
@@ -85,7 +78,7 @@ export class UserService {
     return this.http.post<Resp<any>>(
       buildApiPath("/user/register"),
       { username, password, userRole },
-      headers
+      httpClientOptions
     );
   }
 
@@ -99,7 +92,7 @@ export class UserService {
     return this.http.post<Resp<any>>(
       buildApiPath("/user/register/request"),
       { username, password },
-      headers
+      httpClientOptions
     );
   }
 
@@ -159,7 +152,7 @@ export class UserService {
     return this.http.post<Resp<FetchUserInfoResp>>(
       buildApiPath("/user/list"),
       param,
-      headers
+      httpClientOptions
     );
   }
 
@@ -170,7 +163,7 @@ export class UserService {
     return this.http.post<Resp<void>>(
       buildApiPath("/user/info/update"),
       param,
-      headers
+      httpClientOptions
     );
   }
 
@@ -181,7 +174,7 @@ export class UserService {
     return this.http.post<Resp<void>>(
       buildApiPath("/user/delete"),
       param,
-      headers
+      httpClientOptions
     );
   }
 }

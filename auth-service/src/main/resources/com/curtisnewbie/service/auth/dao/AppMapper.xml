@@ -69,4 +69,8 @@
     select id, name, create_time, create_by, update_time, update_by
     from app
   </select>
+  <select id="selectAllBriefInfo" resultType="com.curtisnewbie.service.auth.dao.App">
+    select id, name
+    from app
+  </select>
 </mapper>

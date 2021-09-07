@@ -14,16 +14,9 @@ import {
   FetchAccessLogList,
   FetchAccessLogListParam,
 } from "src/models/access-log";
-import { buildApiPath } from "./util/api-util";
+import { buildApiPath, httpClientOptions } from "./util/api-util";
 import { Paging } from "src/models/paging";
 import { FetchOperateLogListResp } from "src/models/operate-log";
-
-const headers = {
-  headers: new HttpHeaders({
-    "Content-Type": "application/json",
-  }),
-  withCredentials: true,
-};
 
 @Injectable({
   providedIn: "root",
@@ -40,7 +33,7 @@ export class HttpClientService {
     return this.http.post<Resp<FetchAccessLogList>>(
       buildApiPath("/access/history"),
       param,
-      headers
+      httpClientOptions
     );
   }
 
@@ -51,7 +44,7 @@ export class HttpClientService {
     return this.http.post<Resp<any>>(
       buildApiPath("/user/password/update"),
       param,
-      headers
+      httpClientOptions
     );
   }
 
@@ -62,7 +55,7 @@ export class HttpClientService {
     return this.http.post<Resp<FetchOperateLogListResp>>(
       buildApiPath("/operate/history"),
       param,
-      headers
+      httpClientOptions
     );
   }
 }

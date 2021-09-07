@@ -11,14 +11,7 @@ import {
   TriggerTaskReqVo,
   UpdateTaskReqVo,
 } from "src/models/task";
-import { buildApiPath } from "./util/api-util";
-
-const headers = {
-  headers: new HttpHeaders({
-    "Content-Type": "application/json",
-  }),
-  withCredentials: true,
-};
+import { buildApiPath, httpClientOptions } from "./util/api-util";
 
 @Injectable({
   providedIn: "root",
@@ -36,7 +29,7 @@ export class TaskService {
     return this.http.post<Resp<ListTaskByPageRespVo>>(
       buildApiPath("/task/list"),
       param,
-      headers
+      httpClientOptions
     );
   }
 
@@ -49,7 +42,7 @@ export class TaskService {
     return this.http.post<Resp<void>>(
       buildApiPath("/task/update"),
       param,
-      headers
+      httpClientOptions
     );
   }
 
@@ -60,7 +53,7 @@ export class TaskService {
     return this.http.post<Resp<void>>(
       buildApiPath("/task/trigger"),
       param,
-      headers
+      httpClientOptions
     );
   }
 
@@ -74,7 +67,7 @@ export class TaskService {
     return this.http.post<Resp<ListTaskHistoryRespVo>>(
       buildApiPath("/task/history"),
       param,
-      headers
+      httpClientOptions
     );
   }
 }

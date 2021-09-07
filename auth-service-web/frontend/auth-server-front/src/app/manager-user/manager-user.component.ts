@@ -22,6 +22,7 @@ import {
 } from "src/models/user-info";
 import { ConfirmDialogComponent } from "../dialog/confirm/confirm-dialog.component";
 import { NotificationService } from "../notification.service";
+import { UserPermittedAppUpdateComponent } from "../user-permitted-app-update/user-permitted-app-update.component";
 import { UserService } from "../user.service";
 
 @Component({
@@ -165,6 +166,21 @@ export class ManagerUserComponent implements OnInit {
           });
       }
     });
+  }
+
+  /**
+   * Open dialog to show permitted apps for user
+   */
+  openDialogForUserApp(): void {
+    const dialogRef: MatDialogRef<UserPermittedAppUpdateComponent, void> =
+      this.dialog.open(UserPermittedAppUpdateComponent, {
+        width: "900px",
+        data: {
+          userId: this.expandedElement.id,
+        },
+      });
+
+    dialogRef.afterClosed().subscribe();
   }
 
   idEquals(tl: UserInfo, tr: UserInfo): boolean {

@@ -45,4 +45,9 @@ public interface AppMapper {
      * @mbg.generated Mon Sep 06 20:38:55 CST 2021
      */
     int updateByPrimaryKey(App record);
+
+    /**
+     * select id, name
+     */
+    List<App> selectAllBriefInfo();
 }
