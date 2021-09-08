@@ -19,7 +19,7 @@ then
     then
         (
         cd $authfrontpath; 
-        ng build;
+        ng build --prod;
         )
     fi
 
