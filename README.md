@@ -2,6 +2,8 @@
 
 Service for managing users, access log and operation log, it internally uses Dubbo RPC framework. The API layer for Dubbo is under **`/auth-service-remote`**, and the exposed routing information for messaging/MQ is under **`/auth-service-messaging`**.
 
+***Do not run the 'build' scripts, these are written for my development environment only***
+
 ## Middleware
 
 - MySQL
