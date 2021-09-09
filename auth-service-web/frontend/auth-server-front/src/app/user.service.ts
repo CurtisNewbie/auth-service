@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
 import { Resp } from "src/models/resp";
@@ -176,5 +176,25 @@ export class UserService {
       param,
       httpClientOptions
     );
+  }
+
+  /**
+   * Navigate to the specified page if the user is logged in
+   */
+  public navigateToPageIfIsLoggedIn(page: NavType): void {
+    if (this.hasUserInfo()) {
+      console.log("User has logged in, navigate to page:", page);
+      this.nav.navigateTo(page);
+    } else {
+      this.isLoggedInObservable.subscribe({
+        next: (isLoggedIn) => {
+          if (isLoggedIn) {
+            console.log("User has logged in, navigate to page:", page);
+            this.nav.navigateTo(page);
+          }
+        },
+      });
+      this.fetchUserInfo();
+    }
   }
 }
