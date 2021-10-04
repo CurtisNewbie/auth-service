@@ -16,7 +16,7 @@
     </encoder>
   </appender>
 
-  <logger name="com.curtisnewbie.module.auth.config" additivity="false">
+  <logger name="com.curtisnewbie" additivity="false">
     <appender-ref ref="TRACED_STDOUT"/>
   </logger>
 

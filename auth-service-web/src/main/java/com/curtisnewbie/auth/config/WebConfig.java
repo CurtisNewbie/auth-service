@@ -4,6 +4,9 @@ import com.curtisnewbie.common.converters.EpochDateLongConverter;
 import com.curtisnewbie.common.converters.EpochDateStringConverter;
 import com.curtisnewbie.common.converters.EpochLongDateConverter;
 import com.curtisnewbie.common.converters.EpochStringDateConverter;
+import com.curtisnewbie.module.tracing.filter.FieldNameBasedExtractor;
+import com.curtisnewbie.module.tracing.filter.TracingHandlerInterceptor;
+import com.curtisnewbie.service.auth.remote.vo.UserVo;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.CacheControl;
@@ -25,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // cache 10 minutes for the static resources
+        // cache 24 hours for the static resources
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/")
                 .setCacheControl(CacheControl.maxAge(RESOURCES_CACHE_MAX_AGE_HOUR, TimeUnit.HOURS));
@@ -33,7 +36,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new TracingHandlerInterceptor());
+        try {
+            registry.addInterceptor(
+                    new TracingHandlerInterceptor(
+                            new FieldNameBasedExtractor("username", UserVo.class)
+                    ));
+        } catch (NoSuchFieldException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     @Override

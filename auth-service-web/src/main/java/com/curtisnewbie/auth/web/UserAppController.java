@@ -15,6 +15,7 @@ import com.curtisnewbie.service.auth.remote.vo.AppVo;
 import com.curtisnewbie.service.auth.remote.vo.GetAppsPermittedForUserReqVo;
 import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqVo;
 import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
