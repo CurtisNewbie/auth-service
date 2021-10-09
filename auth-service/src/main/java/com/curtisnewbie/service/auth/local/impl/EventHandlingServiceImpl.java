@@ -25,6 +25,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
@@ -57,6 +58,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public PageInfo<EventHandlingVo> findEventHandlingByPage(@NotNull FindEventHandlingByPageReqVo vo) {
         final EventHandling eventHandling = BeanCopyUtils.toType(vo, EventHandling.class);
         if (eventHandling.getStatus() != null)
@@ -136,6 +138,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public EventHandlingVo findById(int id) {
         return BeanCopyUtils.toType(mapper.selectByPrimaryKey(id), EventHandlingVo.class);
     }

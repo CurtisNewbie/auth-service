@@ -34,8 +34,8 @@ public class AppServiceImpl implements LocalAppService {
     @Autowired
     private AppMapper appMapper;
 
-    @Transactional(propagation = Propagation.SUPPORTS)
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public PageInfo<AppVo> getAllAppInfo(@NotNull PagingVo pagingVo) {
         PageHelper.startPage(pagingVo.getPage(), pagingVo.getLimit());
         return pageInfoOf(
@@ -45,6 +45,7 @@ public class AppServiceImpl implements LocalAppService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<AppBriefVo> getAllAppBriefInfo() {
         return toTypeList(
                 appMapper.selectAllBriefInfo(),

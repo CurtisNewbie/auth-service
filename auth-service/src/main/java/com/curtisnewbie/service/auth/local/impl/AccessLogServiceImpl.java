@@ -12,6 +12,8 @@ import com.github.pagehelper.PageInfo;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -22,6 +24,7 @@ import java.util.Objects;
  * @author yongjie.zhuang
  */
 @Service
+@Transactional
 @DubboService(interfaceClass = RemoteAccessLogService.class)
 public class AccessLogServiceImpl implements LocalAccessLogService {
 
@@ -34,6 +37,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public PageInfo<AccessLogInfoVo> findAccessLogInfoByPage(PagingVo paging) {
         Objects.requireNonNull(paging);
         PageHelper.startPage(paging.getPage(), paging.getLimit());
@@ -42,6 +46,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public @NotNull PageInfo<Integer> findIdsBeforeDateByPage(@NotNull PagingVo paging, @NotNull Date date) {
         Objects.requireNonNull(paging);
         Objects.requireNonNull(date);

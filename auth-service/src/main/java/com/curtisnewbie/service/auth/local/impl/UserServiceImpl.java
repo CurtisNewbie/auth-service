@@ -66,6 +66,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public String findUsernameById(int id) {
         return userMapper.findUsernameById(id);
     }

@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -24,6 +26,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
+@Transactional
 @DubboService(interfaceClass = RemoteOperateLogService.class)
 public class OperateLogServiceImpl implements LocalOperateLogService {
 
@@ -36,6 +39,7 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public PageInfo<OperateLogVo> findOperateLogInfoInPages(@NotNull PagingVo pagingVo) {
         Objects.requireNonNull(pagingVo.getPage());
         Objects.requireNonNull(pagingVo.getLimit());
@@ -45,6 +49,7 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public @NotNull PageInfo<Integer> findIdsBeforeDateByPage(@NotNull PagingVo paging, @NotNull Date date) {
         Objects.requireNonNull(paging);
         Objects.requireNonNull(date);
