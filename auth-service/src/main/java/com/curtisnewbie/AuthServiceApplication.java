@@ -8,6 +8,7 @@ import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
@@ -21,6 +22,7 @@ import java.io.IOException;
         @PropertySource(value = "classpath:common.properties")
 })
 @EnableDubbo
+@EnableDiscoveryClient
 @SpringBootApplication
 public class AuthServiceApplication {
 

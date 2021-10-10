@@ -41,7 +41,7 @@ public class HandlingEventController {
     @DubboReference
     private RemoteEventHandlingService remoteEventHandlingService;
 
-    @Autowired
+    @DubboReference
     private RemoteUserService remoteUserService;
 
     @PostMapping("/list")
