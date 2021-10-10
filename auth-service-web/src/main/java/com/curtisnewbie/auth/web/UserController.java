@@ -1,5 +1,7 @@
 package com.curtisnewbie.auth.web;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.vo.*;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.BeanCopyUtils;
@@ -23,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author yongjie.zhuang
@@ -37,6 +40,8 @@ public class UserController {
     @DubboReference(lazy = true)
     private RemoteUserService userService;
 
+    @SentinelResource(value = "addUser", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/user/register", description = "add user")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/register")
@@ -72,6 +77,8 @@ public class UserController {
         return Result.ok();
     }
 
+    @SentinelResource(value = "requestRegistration", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/user/register/request", description = "User request's registration approval")
     @PostMapping("/register/request")
     public Result<?> requestRegistration(@RequestBody RequestRegisterUserWebVo registerUserVo) throws UserRelatedException,
@@ -99,6 +106,8 @@ public class UserController {
         return Result.ok();
     }
 
+    @SentinelResource(value = "getUserList", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/user/list", description = "get user list")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
@@ -133,6 +142,8 @@ public class UserController {
         return infoVo;
     }
 
+    @SentinelResource(value = "changeUserRole", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/user/info/update", description = "update user info")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/info/update")
@@ -162,18 +173,22 @@ public class UserController {
         return Result.ok();
     }
 
-
+    @SentinelResource(value = "getUserInfo", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/user/info", description = "get user info", enabled = false)
     @GetMapping("/info")
     public Result<UserWebVo> getUserInfo() throws InvalidAuthenticationException {
         // user is not authenticated yet
-        if (!AuthUtil.isPrincipalPresent(UserVo.class)) {
+        Optional<UserVo> optionalUser = AuthUtil.getOptionalUser();
+        if (!optionalUser.isPresent()) {
             return Result.ok();
         }
-        UserVo ue = AuthUtil.getUser();
+        UserVo ue = optionalUser.get();
         return Result.of(BeanCopyUtils.toType(ue, UserWebVo.class));
     }
 
+    @SentinelResource(value = "updatePassword", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/user/password/update", description = "update password")
     @PostMapping("/password/update")
     public Result<Void> updatePassword(@RequestBody UpdatePasswordVo vo) throws MsgEmbeddedException, InvalidAuthenticationException {

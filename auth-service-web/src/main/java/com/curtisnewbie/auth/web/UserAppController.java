@@ -1,5 +1,7 @@
 package com.curtisnewbie.auth.web;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.vo.AppWebVo;
 import com.curtisnewbie.auth.vo.GetAppsForUserReqVo;
 import com.curtisnewbie.auth.vo.UpdateUserAppReqWebVo;
@@ -39,6 +41,8 @@ public class UserAppController {
     @DubboReference
     private RemoteUserAppService remoteUserAppService;
 
+    @SentinelResource(value = "userAppListing", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @PostMapping("/list/all")
     @PreAuthorize("hasAuthority('admin')")
     public Result<PageablePayloadSingleton<List<AppWebVo>>> listApps(@RequestBody PageablePayloadSingleton<AppWebVo> req)
@@ -52,6 +56,8 @@ public class UserAppController {
         return Result.of(resp);
     }
 
+    @SentinelResource(value = "userAppBriefListing", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @GetMapping("/list/brief/all")
     @PreAuthorize("hasAuthority('admin')")
     public Result<List<AppBriefVo>> listAppsBriefInfo()
@@ -59,6 +65,8 @@ public class UserAppController {
         return Result.of(remoteAppService.getAllAppBriefInfo());
     }
 
+    @SentinelResource(value = "appForUserListing", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @PostMapping("/list/user")
     @PreAuthorize("hasAuthority('admin')")
     public Result<List<AppBriefVo>> getAppsForUser(@RequestBody GetAppsForUserReqVo vo)
@@ -68,6 +76,8 @@ public class UserAppController {
         return Result.of(remoteUserAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 
+    @SentinelResource(value = "userAppUpdate", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @PostMapping("/user/update")
     @PreAuthorize("hasAuthority('admin')")
     public Result<Void> updateUserApps(@RequestBody UpdateUserAppReqWebVo reqVo) throws MsgEmbeddedException {

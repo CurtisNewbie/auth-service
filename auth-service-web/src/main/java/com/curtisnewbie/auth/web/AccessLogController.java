@@ -1,5 +1,8 @@
 package com.curtisnewbie.auth.web;
 
+import com.alibaba.csp.sentinel.EntryType;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.vo.AccessLogInfoWebVo;
 import com.curtisnewbie.auth.vo.ListAccessLogInfoReqVo;
 import com.curtisnewbie.auth.vo.ListAccessLogInfoRespVo;
@@ -29,6 +32,8 @@ public class AccessLogController {
     @DubboReference(lazy = true)
     private RemoteAccessLogService accessLogService;
 
+    @SentinelResource(value = "listAccessLogInfo", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/access/history", description = "list access log info")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/history")
@@ -43,4 +48,5 @@ public class AccessLogController {
         res.setPagingVo(paging);
         return Result.of(res);
     }
+
 }

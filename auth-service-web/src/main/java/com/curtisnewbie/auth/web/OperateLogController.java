@@ -1,5 +1,7 @@
 package com.curtisnewbie.auth.web;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.vo.FindOperateLogRespVo;
 import com.curtisnewbie.auth.vo.OperateLogWebVo;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
@@ -28,6 +30,8 @@ public class OperateLogController {
     @DubboReference
     private RemoteOperateLogService remoteOperateLogService;
 
+    @SentinelResource(value = "operationLogListing", defaultFallback = "serviceNotAvailable",
+            fallbackClass = SentinelFallbackConfig.class)
     @PreAuthorize("hasAuthority('admin')")
     @LogOperation(name = "/operate/history", description = "find operate log history in pages", enabled = false)
     @PostMapping("/history")
