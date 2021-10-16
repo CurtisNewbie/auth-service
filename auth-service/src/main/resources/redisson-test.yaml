@@ -5,7 +5,7 @@ singleServerConfig:
   retryAttempts: 3
   retryInterval: 1500
   subscriptionsPerConnection: 5
-  address: "redis://redis-server:6379"
+  address: "redis://localhost:6379"
   subscriptionConnectionMinimumIdleSize: 1
   subscriptionConnectionPoolSize: 10
   connectionMinimumIdleSize: 5
