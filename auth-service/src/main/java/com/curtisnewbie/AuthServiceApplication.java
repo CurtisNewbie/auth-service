@@ -17,8 +17,8 @@ import java.io.IOException;
 
 @MapperScan("com.curtisnewbie.service.auth.dao")
 @PropertySources({
-        @PropertySource(value = "classpath:dubbo.properties"),
         @PropertySource(value = "classpath:application.properties"),
+        @PropertySource(value = "classpath:dubbo-${spring.profiles.active}.properties"),
         @PropertySource(value = "classpath:common.properties")
 })
 @EnableDubbo

@@ -1,38 +1,28 @@
 version: "3.9"
 services:
 
-  auth-service:
-    image: curtisnewbie/auth-service 
+  auth-service-web:
+    build: ./auth-service-web
+    env_file:
+      - backend.env
     ports:   
-      - "8080:8081"
-      - "9090:9091"
+      - "0.0.0.0:8443:8084"
     networks:
       - backend
+    depends_on:
+      - auth-service
+    command:
+      "java -jar -Xmx500m auth-service-web-1.0.0.jar --spring.profiles.active=test --dubbo.protocol.port=-1 --server.port=8443" 
 
-  redis-server:
-    image: redis:alpine
-    ports:
-      - "6379"
+  auth-service:
+    build: ./auth-service
+    env_file:
+      - backend.env
     networks:
       - backend 
+    command:
+      "java -jar -Xmx500m auth-service-1.0.0.jar --spring.profiles.active=test --dubbo.protocol.port=-1 --server.port=8080" 
 
-  rabbitmq-server:
-    image: rabbitmq:3.9.7-management-alpine 
-    ports: 
-      - "5672"
-    networks:
-      - backend
-
-  nacos-server:
-    image: nacos/nacos-server 
-    environment:
-      - MODE=standalone
-    ports:
-      - "8848"
-    networks:
-      - backend
 
 networks:
   backend:
-  
-    
