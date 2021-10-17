@@ -49,3 +49,7 @@ spring:
         server-addr: 192.168.10.128:8848
       config:
         server-addr: 192.168.10.128:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: sentinel-dashboard:6060
