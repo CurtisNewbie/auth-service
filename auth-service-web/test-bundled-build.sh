@@ -9,7 +9,6 @@ fi
 mkdir $staticpath  
 
 echo "Build angular? [y/Y]"
-
 read ans
 
 if [ -z $and ]
@@ -41,6 +40,6 @@ then
     exit -1
 fi
 
-ssh -l zhuangyongj 192.168.10.128 "/home/zhuangyongj/exec/authserverweb/kill.sh"
+# ssh -l zhuangyongj 192.168.10.128 "/home/zhuangyongj/exec/authserverweb/kill.sh"
 
-scp "target/auth-service-web-1.0.0.jar" "zhuangyongj@192.168.10.128:~/exec/authserverweb/authserverweb.jar"
+scp "target/auth-service-web-1.0.0.jar" "zhuangyongj@192.168.10.128:~/services/auth-service-web/auth-service-web-1.0.0.jar"
