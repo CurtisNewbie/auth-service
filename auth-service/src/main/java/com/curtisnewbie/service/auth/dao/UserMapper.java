@@ -1,8 +1,6 @@
 package com.curtisnewbie.service.auth.dao;
 
-import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 
 import java.util.Date;
 import java.util.List;
