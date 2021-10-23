@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#remoteaddr="192.168.10.128"
+remoteaddr="192.168.31.103"
 staticpath="src/main/resources/static/"
 
 if [ -d $staticpath ]; then
@@ -42,4 +43,4 @@ fi
 
 # ssh -l zhuangyongj 192.168.10.128 "/home/zhuangyongj/exec/authserverweb/kill.sh"
 
-scp "target/auth-service-web-1.0.0.jar" "zhuangyongj@192.168.10.128:~/services/auth-service-web/auth-service-web-1.0.0.jar"
+scp "target/auth-service-web-1.0.0.jar" "zhuangyongj@${remoteaddr}:~/services/auth-service-web/auth-service-web-1.0.0.jar"
