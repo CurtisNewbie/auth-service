@@ -39,6 +39,7 @@ import { UserAppComponent } from "./user-app/user-app.component";
 import { UserPermittedAppUpdateComponent } from "./user-permitted-app-update/user-permitted-app-update.component";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { MatMenuModule } from "@angular/material";
 
 @NgModule({
   exports: [],
@@ -59,6 +60,7 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
     UserPermittedAppUpdateComponent,
   ],
   imports: [
+    MatMenuModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
