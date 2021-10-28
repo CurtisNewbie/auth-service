@@ -8,9 +8,10 @@
 		<version>2.3.2.RELEASE</version>
 		<relativePath/>
 	</parent>
+
 	<groupId>com.curtisnewbie</groupId>
 	<artifactId>auth-service-web</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>auth-service-web</name>
 	<description>Web layer for authentication service</description>
 	<properties>
@@ -116,7 +117,7 @@
 			<dependency>
 				<groupId>com.curtisnewbie</groupId>
 				<artifactId>curtisnewbie-bom</artifactId>
-				<version>micro-2.0.0</version>
+				<version>micro-2.0.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

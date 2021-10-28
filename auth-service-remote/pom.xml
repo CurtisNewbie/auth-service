@@ -11,7 +11,7 @@
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-remote</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <name>auth-service-remote</name>
   <description>RPC module for authentication service</description>
   <packaging>jar</packaging>
@@ -72,7 +72,7 @@
       <dependency>
         <groupId>com.curtisnewbie</groupId>
         <artifactId>curtisnewbie-bom</artifactId>
-        <version>micro-2.0.0</version>
+        <version>micro-2.0.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

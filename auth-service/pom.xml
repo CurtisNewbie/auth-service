@@ -11,7 +11,7 @@
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <name>auth-service</name>
   <description>Authentication Service</description>
 
@@ -45,13 +45,13 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-messaging</artifactId>
-      <version>1.0.0</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-remote</artifactId>
-      <version>1.0.0</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
@@ -99,11 +99,11 @@
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>com.curtisnewbie</groupId>-->
-<!--      <artifactId>comment-generator</artifactId>-->
-<!--      <version>1.0-SNAPSHOT</version>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>com.curtisnewbie</groupId>-->
+    <!--      <artifactId>comment-generator</artifactId>-->
+    <!--      <version>1.0-SNAPSHOT</version>-->
+    <!--    </dependency>-->
   </dependencies>
 
   <build>
@@ -112,21 +112,21 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>org.mybatis.generator</groupId>-->
-<!--        <artifactId>mybatis-generator-maven-plugin</artifactId>-->
-<!--        <version>1.4.0</version>-->
-<!--        <dependencies>-->
-<!--          <dependency>-->
-<!--            <groupId>com.curtisnewbie</groupId>-->
-<!--            <artifactId>comment-generator</artifactId>-->
-<!--            <version>1.0-SNAPSHOT</version>-->
-<!--          </dependency>-->
-<!--        </dependencies>-->
-<!--        <configuration>-->
-<!--          <configurationFile>generatorConfig.xml</configurationFile>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
+      <!--      <plugin>-->
+      <!--        <groupId>org.mybatis.generator</groupId>-->
+      <!--        <artifactId>mybatis-generator-maven-plugin</artifactId>-->
+      <!--        <version>1.4.0</version>-->
+      <!--        <dependencies>-->
+      <!--          <dependency>-->
+      <!--            <groupId>com.curtisnewbie</groupId>-->
+      <!--            <artifactId>comment-generator</artifactId>-->
+      <!--            <version>1.0-SNAPSHOT</version>-->
+      <!--          </dependency>-->
+      <!--        </dependencies>-->
+      <!--        <configuration>-->
+      <!--          <configurationFile>generatorConfig.xml</configurationFile>-->
+      <!--        </configuration>-->
+      <!--      </plugin>-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -143,7 +143,7 @@
       <dependency>
         <groupId>com.curtisnewbie</groupId>
         <artifactId>curtisnewbie-bom</artifactId>
-        <version>micro-2.0.0</version>
+        <version>micro-2.0.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
