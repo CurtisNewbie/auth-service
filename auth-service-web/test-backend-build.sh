@@ -1,6 +1,7 @@
 #!/bin/bash
 #remoteaddr="192.168.10.128"
 remoteaddr="192.168.31.103"
+jarname="auth-service-web-1.0.1.jar"
 
 mvn clean package 
 
@@ -11,4 +12,4 @@ then
     exit -1
 fi
 
-scp "target/auth-service-web-1.0.0.jar" "zhuangyongj@${remoteaddr}:~/services/auth-service-web/auth-service-web-1.0.0.jar"
+scp "target/${jarname}" "zhuangyongj@${remoteaddr}:~/services/auth-service-web/auth-service-web.jar"
