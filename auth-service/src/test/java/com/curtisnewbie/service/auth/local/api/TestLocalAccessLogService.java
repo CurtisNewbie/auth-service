@@ -1,11 +1,14 @@
 package com.curtisnewbie.service.auth.local.api;
 
+import com.curtisnewbie.AuthServiceApplication;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.AccessLogTestMapper;
+import com.curtisnewbie.service.auth.dao.TestMapperConfig;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.github.pagehelper.PageInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -18,7 +21,7 @@ import java.util.Date;
  *
  * @author yongjie.zhuang
  */
-@SpringBootTest
+@SpringBootTest(classes = {AuthServiceApplication.class, TestMapperConfig.class})
 public class TestLocalAccessLogService {
 
     private static final String TEST_IP = "xxx.xxx.xxx.xxx";

@@ -5,7 +5,7 @@ import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.module.messaging.service.MessagingParam;
 import com.curtisnewbie.module.messaging.service.MessagingService;
 import com.curtisnewbie.service.auth.dao.EventHandling;
-import com.curtisnewbie.service.auth.dao.EventHandlingMapper;
+import com.curtisnewbie.service.auth.infrastructure.repository.mapper.EventHandlingMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.eventhandling.EventHandler;
 import com.curtisnewbie.service.auth.local.api.eventhandling.RegistrationEventHandler;

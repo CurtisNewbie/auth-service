@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySources;
 
 import java.io.IOException;
 
-@MapperScan("com.curtisnewbie.service.auth.dao")
+@MapperScan("com.curtisnewbie.service.auth.infrastructure.repository.mapper")
 @PropertySources({
         @PropertySource(value = "classpath:dubbo-${spring.profiles.active}.properties"),
 })

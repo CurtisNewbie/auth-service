@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.curtisnewbie.service.auth.dao.UserAppMapper">
+<mapper namespace="com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserAppMapper">
 
   <insert id="insert" parameterType="com.curtisnewbie.service.auth.dao.UserApp">
     insert into user_app (id, user_id, app_id,

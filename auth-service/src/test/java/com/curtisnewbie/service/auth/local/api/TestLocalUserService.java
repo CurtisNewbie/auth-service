@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.local.api;
 
+import com.curtisnewbie.AuthServiceApplication;
 import com.curtisnewbie.service.auth.dao.*;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
@@ -23,10 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author yongjie.zhuang
  */
+@Slf4j
 @Rollback
 @Transactional
-@SpringBootTest
-@Slf4j
+@SpringBootTest(classes = {AuthServiceApplication.class, TestMapperConfig.class})
 public class TestLocalUserService {
 
     private static final int APP_ID = 1234123123;

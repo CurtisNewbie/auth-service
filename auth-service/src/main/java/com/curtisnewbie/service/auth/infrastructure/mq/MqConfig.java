@@ -1,8 +1,7 @@
-package com.curtisnewbie.service.auth.mq;
+package com.curtisnewbie.service.auth.infrastructure.mq;
 
 import com.curtisnewbie.module.messaging.config.SimpleConnectionFactoryBeanFactory;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

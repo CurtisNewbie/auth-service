@@ -1,6 +1,9 @@
-package com.curtisnewbie.service.auth.dao;
+package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.curtisnewbie.service.auth.dao.UserEntity;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
 import java.util.Date;
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.List;
 /**
  * @author yongjie.zhuang
  */
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<UserEntity> {
 
     /**
      * Select * by username
@@ -16,11 +19,6 @@ public interface UserMapper {
      * @param username username
      */
     UserEntity findByUsername(@Param("username") String username);
-
-    /**
-     * Insert user
-     */
-    void insert(UserEntity userEntity);
 
     /**
      * Select id by username

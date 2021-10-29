@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.local.impl;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.AccessLogEntity;
-import com.curtisnewbie.service.auth.dao.AccessLogMapper;
+import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;

@@ -1,8 +1,10 @@
 package com.curtisnewbie.service.auth.local.api;
 
+import com.curtisnewbie.AuthServiceApplication;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.module.messaging.service.MessagingParam;
 import com.curtisnewbie.module.messaging.service.MessagingService;
+import com.curtisnewbie.service.auth.dao.TestMapperConfig;
 import com.curtisnewbie.service.auth.dao.UserEntity;
 import com.curtisnewbie.service.auth.local.api.eventhandling.EventHandler;
 import com.curtisnewbie.service.auth.local.api.eventhandling.RegistrationEventHandler;
@@ -37,7 +39,7 @@ import java.util.Date;
  */
 @Rollback
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = {AuthServiceApplication.class, TestMapperConfig.class})
 public class TestLocalEventHandlingService {
 
     private static final String USERNAME = "eventhandling-username";

@@ -1,9 +1,7 @@
 package com.curtisnewbie.service.auth.local.impl;
 
-import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.PagingVo;
-import com.curtisnewbie.service.auth.dao.App;
-import com.curtisnewbie.service.auth.dao.AppMapper;
+import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AppMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.remote.api.RemoteAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;

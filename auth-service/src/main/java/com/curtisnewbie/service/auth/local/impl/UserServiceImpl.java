@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.local.impl;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.dao.UserEntity;
-import com.curtisnewbie.service.auth.dao.UserMapper;
+import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;

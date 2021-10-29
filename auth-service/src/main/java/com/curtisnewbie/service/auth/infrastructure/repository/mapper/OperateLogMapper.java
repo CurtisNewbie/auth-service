@@ -1,5 +1,7 @@
-package com.curtisnewbie.service.auth.dao;
+package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.curtisnewbie.service.auth.dao.OperateLogEntity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -10,9 +12,7 @@ import java.util.List;
  *
  * @author yongjie.zhuang
  */
-public interface OperateLogMapper {
-
-    int insert(OperateLogEntity record);
+public interface OperateLogMapper extends BaseMapper<OperateLogEntity> {
 
     OperateLogEntity selectByPrimaryKey(Integer id);
 

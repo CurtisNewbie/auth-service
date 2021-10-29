@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.curtisnewbie.service.auth.dao.UserMapper">
+<mapper namespace="com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper">
 
   <update id="updatePwd">
     UPDATE user
@@ -96,8 +96,4 @@
     where id = #{id}
   </select>
 
-  <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO user (username, password, salt, role, create_time, create_by, is_disabled)
-    VALUES (#{username}, #{password}, #{salt}, #{role}, #{createTime}, #{createBy}, #{isDisabled})
-  </insert>
 </mapper>

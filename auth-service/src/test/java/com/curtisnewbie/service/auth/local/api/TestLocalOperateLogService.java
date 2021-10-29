@@ -1,6 +1,8 @@
 package com.curtisnewbie.service.auth.local.api;
 
+import com.curtisnewbie.AuthServiceApplication;
 import com.curtisnewbie.common.vo.PagingVo;
+import com.curtisnewbie.service.auth.dao.TestMapperConfig;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,8 +19,8 @@ import java.util.Date;
  * @author yongjie.zhuang
  */
 @Transactional
-@SpringBootTest
 @Rollback
+@SpringBootTest(classes = {AuthServiceApplication.class, TestMapperConfig.class})
 public class TestLocalOperateLogService {
 
     @Autowired

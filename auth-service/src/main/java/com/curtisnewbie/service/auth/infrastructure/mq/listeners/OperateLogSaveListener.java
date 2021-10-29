@@ -1,4 +1,4 @@
-package com.curtisnewbie.service.auth.mq.listeners;
+package com.curtisnewbie.service.auth.infrastructure.mq.listeners;
 
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;

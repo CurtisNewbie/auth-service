@@ -1,20 +1,13 @@
 package com.curtisnewbie.service.auth.local.impl;
 
-import com.curtisnewbie.common.util.BeanCopyUtils;
-import com.curtisnewbie.common.vo.PagingVo;
-import com.curtisnewbie.service.auth.dao.*;
+import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserAppMapper;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
-import com.curtisnewbie.service.auth.remote.vo.AppVo;
-import com.curtisnewbie.service.auth.remote.vo.GetAppsPermittedForUserReqVo;
 import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqVo;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-import static com.curtisnewbie.common.util.BeanCopyUtils.pageInfoOf;
 import static com.curtisnewbie.common.util.BeanCopyUtils.toTypeList;
 
 /**

@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.curtisnewbie.service.auth.dao.OperateLogMapper">
-
-  <insert id="insert" parameterType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
-    insert into operate_log (id, operate_name, operate_desc,
-    operate_time, operate_param, username,
-    user_id)
-    values (#{id,jdbcType=INTEGER}, #{operateName,jdbcType=VARCHAR}, #{operateDesc,jdbcType=VARCHAR},
-    #{operateTime,jdbcType=TIMESTAMP}, #{operateParam,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR},
-    #{userId,jdbcType=INTEGER})
-  </insert>
+<mapper namespace="com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLogMapper">
 
   <update id="updateByPrimaryKey" parameterType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
     update operate_log
