@@ -1,0 +1,14 @@
+# ----- Redis
+redisson-config: redisson-dev.yaml
+
+# ----- distributed-task-module
+distributed-task-module:
+  enabled: true
+
+# ----- nacos
+namingClientBeatThreadCount: 1
+namingPollingThreadCount: 1
+
+# ----- quartz
+org.quartz.threadPool:
+  threadCount: 2

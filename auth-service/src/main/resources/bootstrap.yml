@@ -3,6 +3,10 @@ spring:
     name: auth-service
   profiles:
     active: dev
+mybatis:
+  config-location: "classpath:mybatis-config.xml"
+distributed-task-module:
+  application-group: auth-service
 
 ---
 spring:
