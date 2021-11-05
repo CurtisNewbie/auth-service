@@ -1,10 +1,10 @@
 package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.curtisnewbie.service.auth.dao.OperateLogEntity;
+import com.curtisnewbie.service.auth.dao.OperateLog;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -12,20 +12,20 @@ import java.util.List;
  *
  * @author yongjie.zhuang
  */
-public interface OperateLogMapper extends BaseMapper<OperateLogEntity> {
+public interface OperateLogMapper extends BaseMapper<OperateLog> {
 
-    OperateLogEntity selectByPrimaryKey(Integer id);
+    OperateLog selectByPrimaryKey(Integer id);
 
-    List<OperateLogEntity> selectAll();
+    List<OperateLog> selectAll();
 
-    int updateByPrimaryKey(OperateLogEntity record);
+    int updateByPrimaryKey(OperateLog record);
 
     /**
      * select operate_name, operate_desc, operate_time, operate_param, username, user_id
      */
-    List<OperateLogEntity> selectBasicInfo();
+    List<OperateLog> selectBasicInfo();
 
-    List<Integer> selectIdsBeforeDate(@Param("date") Date date);
+    List<Integer> selectIdsBeforeDate(@Param("date") LocalDateTime date);
 
     void copyToHistory(@Param("ids") List<Integer> ids);
 

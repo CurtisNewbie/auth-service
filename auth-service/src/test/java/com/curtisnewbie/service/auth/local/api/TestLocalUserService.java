@@ -6,12 +6,10 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
-import com.curtisnewbie.service.auth.remote.vo.UpdateUserVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -76,7 +74,7 @@ public class TestLocalUserService {
             registerTestUser();
 
             // load the registered user, get it's id
-            UserEntity e = userService.loadUserByUsername(USERNAME);
+            User e = userService.loadUserByUsername(USERNAME);
             Assertions.assertNotNull(e);
             Assertions.assertNotNull(e.getId());
 
@@ -165,7 +163,7 @@ public class TestLocalUserService {
             registerTestUser();
         });
 
-        UserEntity e = userService.loadUserByUsername(USERNAME);
+        User e = userService.loadUserByUsername(USERNAME);
         Assertions.assertNotNull(e);
         Assertions.assertNotNull(e.getId());
     }
@@ -182,7 +180,7 @@ public class TestLocalUserService {
             userService.requestRegistrationApproval(getRegisterUser());
         });
 
-        UserEntity e = userService.loadUserByUsername(USERNAME);
+        User e = userService.loadUserByUsername(USERNAME);
         Assertions.assertNotNull(e);
         Assertions.assertNotNull(e.getId());
         Assertions.assertEquals(e.getIsDisabled(), UserIsDisabled.DISABLED.getValue());

@@ -5,7 +5,7 @@ import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.module.messaging.service.MessagingParam;
 import com.curtisnewbie.module.messaging.service.MessagingService;
 import com.curtisnewbie.service.auth.dao.TestMapperConfig;
-import com.curtisnewbie.service.auth.dao.UserEntity;
+import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.local.api.eventhandling.EventHandler;
 import com.curtisnewbie.service.auth.local.api.eventhandling.RegistrationEventHandler;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
@@ -24,7 +24,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -122,7 +121,7 @@ public class TestLocalEventHandlingService {
 
     private EventHandlingVo getEventHandlingVo() throws UsernameNotFoundException, UserRegisteredException, ExceededMaxAdminCountException {
         registerTestUser();
-        UserEntity ue = userService.loadUserByUsername(USERNAME);
+        User ue = userService.loadUserByUsername(USERNAME);
         Assertions.assertNotNull(ue);
         final int userId = ue.getId();
 

@@ -9,33 +9,25 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * operate log
+ * access_log entity
  *
  * @author yongjie.zhuang
  */
 @Data
-@TableName("operate_log")
-public class OperateLogEntity {
+@TableName("access_log")
+public class AccessLog {
 
     /** primary key */
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    /** name of operation */
-    @TableField("operate_name")
-    private String operateName;
+    /** when the user signed in */
+    @TableField("access_time")
+    private Date accessTime;
 
-    /** description of operation */
-    @TableField("operate_desc")
-    private String operateDesc;
-
-    /** when the operation happens */
-    @TableField("operate_time")
-    private Date operateTime;
-
-    /** parameters used for the operation */
-    @TableField("operate_param")
-    private String operateParam;
+    /** ip address */
+    @TableField("ip_address")
+    private String ipAddress;
 
     /** username */
     @TableField("username")
@@ -44,5 +36,4 @@ public class OperateLogEntity {
     /** primary key of user */
     @TableField("user_id")
     private Integer userId;
-
 }

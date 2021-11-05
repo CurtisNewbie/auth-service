@@ -37,7 +37,7 @@
     where id = #{id}
   </delete>
 
-  <select id="findByUsername" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
+  <select id="findByUsername" resultType="com.curtisnewbie.service.auth.dao.User">
     SELECT *
     FROM user
     WHERE username = #{username}
@@ -59,23 +59,23 @@
   </select>
 
   <!-- disabled users are not included -->
-  <select id="findNormalUserInfoList" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
+  <select id="findNormalUserInfoList" resultType="com.curtisnewbie.service.auth.dao.User">
     SELECT id, username, role
     FROM user
     WHERE is_disabled = 0
   </select>
 
-  <select id="findAllUserInfoList" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
+  <select id="findAllUserInfoList" resultType="com.curtisnewbie.service.auth.dao.User">
     SELECT id, username, role, is_disabled
     FROM user
   </select>
 
-  <select id="findById" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
+  <select id="findById" resultType="com.curtisnewbie.service.auth.dao.User">
     SELECT *
     FROM user
     WHERE id = #{id}
   </select>
-  <select id="findUserInfoBy" resultType="com.curtisnewbie.service.auth.dao.UserEntity">
+  <select id="findUserInfoBy" resultType="com.curtisnewbie.service.auth.dao.User">
     Select id, username, role, is_disabled, create_by, create_time, update_by, update_time
     FROM user
     <where>

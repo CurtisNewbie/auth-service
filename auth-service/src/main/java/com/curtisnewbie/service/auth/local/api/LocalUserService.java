@@ -1,6 +1,6 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.service.auth.dao.UserEntity;
+import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
 import com.curtisnewbie.service.auth.remote.exception.*;
 
@@ -19,7 +19,7 @@ public interface LocalUserService extends RemoteUserService {
      *
      * @throws UsernameNotFoundException user with given username is not found
      */
-    UserEntity loadUserByUsername(@NotEmpty String username) throws UsernameNotFoundException;
+    User loadUserByUsername(@NotEmpty String username) throws UsernameNotFoundException;
 
 
 }

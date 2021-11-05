@@ -1,7 +1,9 @@
 package com.curtisnewbie.service.auth.dao;
 
-import com.baomidou.mybatisplus.annotation.*;
-import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,7 +15,7 @@ import java.util.Date;
  */
 @Data
 @TableName("user")
-public class UserEntity {
+public class User {
 
     /** primary key */
     @TableField("id")

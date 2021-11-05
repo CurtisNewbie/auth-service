@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLogMapper">
 
-  <update id="updateByPrimaryKey" parameterType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
+  <update id="updateByPrimaryKey" parameterType="com.curtisnewbie.service.auth.dao.OperateLog">
     update operate_log
     set operate_name = #{operateName,jdbcType=VARCHAR},
     operate_desc = #{operateDesc,jdbcType=VARCHAR},
@@ -14,16 +14,16 @@
   </update>
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer"
-          resultType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
+          resultType="com.curtisnewbie.service.auth.dao.OperateLog">
     select id, operate_name, operate_desc, operate_time, operate_param, username, user_id
     from operate_log
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
+  <select id="selectAll" resultType="com.curtisnewbie.service.auth.dao.OperateLog">
     select id, operate_name, operate_desc, operate_time, operate_param, username, user_id
     from operate_log
   </select>
-  <select id="selectBasicInfo" resultType="com.curtisnewbie.service.auth.dao.OperateLogEntity">
+  <select id="selectBasicInfo" resultType="com.curtisnewbie.service.auth.dao.OperateLog">
     select operate_name, operate_desc, operate_time, operate_param, username, user_id
     from operate_log
     order by id desc

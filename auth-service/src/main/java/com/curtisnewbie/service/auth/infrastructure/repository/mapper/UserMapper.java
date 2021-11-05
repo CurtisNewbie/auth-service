@@ -1,24 +1,22 @@
 package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.curtisnewbie.service.auth.dao.UserEntity;
+import com.curtisnewbie.service.auth.dao.User;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * @author yongjie.zhuang
  */
-public interface UserMapper extends BaseMapper<UserEntity> {
+public interface UserMapper extends BaseMapper<User> {
 
     /**
      * Select * by username
      *
      * @param username username
      */
-    UserEntity findByUsername(@Param("username") String username);
+    User findByUsername(@Param("username") String username);
 
     /**
      * Select id by username
@@ -43,24 +41,24 @@ public interface UserMapper extends BaseMapper<UserEntity> {
     /**
      * Select id, username, role of normal users
      */
-    List<UserEntity> findNormalUserInfoList();
+    List<User> findNormalUserInfoList();
 
     /**
      * Select id, username, role, is_disabled of all users
      */
-    List<UserEntity> findAllUserInfoList();
+    List<User> findAllUserInfoList();
 
     /**
      * Select *
      *
      * @param id id
      */
-    UserEntity findById(@Param("id") long id);
+    User findById(@Param("id") long id);
 
     /**
      * Select id, username, role, is_disabled, create_time, update_time, create_by, update_by
      */
-    List<UserEntity> findUserInfoBy(UserEntity ue);
+    List<User> findUserInfoBy(User ue);
 
     /**
      * Select username
@@ -70,7 +68,7 @@ public interface UserMapper extends BaseMapper<UserEntity> {
     /**
      * Update role, is_disabled, update_by, update_time
      */
-    void updateUser(UserEntity ue);
+    void updateUser(User ue);
 
     /**
      * Move disabled user to deleted_user

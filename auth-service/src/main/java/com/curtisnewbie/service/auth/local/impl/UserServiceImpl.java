@@ -2,7 +2,7 @@ package com.curtisnewbie.service.auth.local.impl;
 
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
-import com.curtisnewbie.service.auth.dao.UserEntity;
+import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
@@ -57,9 +57,9 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public UserEntity loadUserByUsername(@NotEmpty String s) throws UsernameNotFoundException {
+    public User loadUserByUsername(@NotEmpty String s) throws UsernameNotFoundException {
         Objects.requireNonNull(s);
-        UserEntity userEntity = userMapper.findByUsername(s);
+        User userEntity = userMapper.findByUsername(s);
         if (userEntity == null)
             throw new UsernameNotFoundException("Username '" + s + "' not found");
         return userEntity;
@@ -83,7 +83,7 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     public void updateUser(@NotNull UpdateUserVo param) {
-        UserEntity ue = new UserEntity();
+        User ue = new User();
         ue.setId(param.getId());
         if (param.getIsDisabled() == null && param.getRole() == null)
             throw new IllegalArgumentException("Nothing to update");
@@ -117,7 +117,7 @@ public class UserServiceImpl implements LocalUserService {
     public UserVo login(@NotEmpty String username, @NotEmpty String password) throws UserDisabledException, UsernameNotFoundException,
             PasswordIncorrectException {
 
-        UserEntity ue = loadUserByUsername(username);
+        User ue = loadUserByUsername(username);
         if (ue == null) {
             logger.info("User '{}' attempt to login, but username is not found.", username);
             throw new UsernameNotFoundException(username);
@@ -173,7 +173,7 @@ public class UserServiceImpl implements LocalUserService {
         if (registerUserVo.getRole().equals(UserRole.ADMIN.getValue())) {
             checkAdminQuota();
         }
-        UserEntity userEntity = toUserEntity(registerUserVo);
+        User userEntity = toUserEntity(registerUserVo);
         userEntity.setIsDisabled(UserIsDisabled.NORMAL.getValue());
 
         logger.info("New user '{}' successfully registered, role: {}", registerUserVo.getUsername(), registerUserVo.getRole().getValue());
@@ -198,7 +198,7 @@ public class UserServiceImpl implements LocalUserService {
         }
 
         // set user disabled, this will be handled by the admin
-        UserEntity userEntity = toUserEntity(registerUserVo);
+        User userEntity = toUserEntity(registerUserVo);
         userEntity.setIsDisabled(UserIsDisabled.DISABLED.getValue());
         userMapper.insert(userEntity);
 
@@ -221,7 +221,7 @@ public class UserServiceImpl implements LocalUserService {
     public void updatePassword(final String newPassword, final String oldPassword, long id) throws UserNotFoundException,
             PasswordIncorrectException {
 
-        UserEntity ue = userMapper.findById(id);
+        User ue = userMapper.findById(id);
         if (ue == null) {
             logger.info("User_id '{}' attempt to change password, but user is not found.", id);
             throw new UserNotFoundException("user.id: " + id);
@@ -256,7 +256,7 @@ public class UserServiceImpl implements LocalUserService {
     public @NotNull PageInfo<UserInfoVo> findUserInfoByPage(@NotNull FindUserInfoVo vo) {
         Objects.requireNonNull(vo.getPagingVo());
         PageHelper.startPage(vo.getPagingVo().getPage(), vo.getPagingVo().getLimit());
-        UserEntity ue = new UserEntity();
+        User ue = new User();
         if (vo.getIsDisabled() != null)
             ue.setIsDisabled(vo.getIsDisabled().getValue());
         if (vo.getRole() != null)
@@ -283,8 +283,8 @@ public class UserServiceImpl implements LocalUserService {
                 .build());
     }
 
-    private UserEntity toUserEntity(RegisterUserVo registerUserVo) {
-        UserEntity u = new UserEntity();
+    private User toUserEntity(RegisterUserVo registerUserVo) {
+        User u = new User();
         u.setUsername(registerUserVo.getUsername());
         u.setRole(registerUserVo.getRole().getValue());
         u.setSalt(RandomNumUtil.randomNoStr(5));

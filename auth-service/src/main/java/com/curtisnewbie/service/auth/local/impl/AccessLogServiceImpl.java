@@ -2,7 +2,7 @@ package com.curtisnewbie.service.auth.local.impl;
 
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.PagingVo;
-import com.curtisnewbie.service.auth.dao.AccessLogEntity;
+import com.curtisnewbie.service.auth.dao.AccessLog;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
@@ -33,7 +33,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
 
     @Override
     public void save(AccessLogInfoVo accessLogVo) {
-        m.insert(BeanCopyUtils.toType(accessLogVo, AccessLogEntity.class));
+        m.insert(BeanCopyUtils.toType(accessLogVo, AccessLog.class));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     public PageInfo<AccessLogInfoVo> findAccessLogInfoByPage(PagingVo paging) {
         Objects.requireNonNull(paging);
         PageHelper.startPage(paging.getPage(), paging.getLimit());
-        List<AccessLogEntity> list = m.selectAllBasicInfo();
+        List<AccessLog> list = m.selectAllBasicInfo();
         return BeanCopyUtils.toPageList(PageInfo.of(list), AccessLogInfoVo.class);
     }
 
