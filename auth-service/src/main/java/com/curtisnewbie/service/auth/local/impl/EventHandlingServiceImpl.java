@@ -27,10 +27,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static com.curtisnewbie.service.auth.infrastructure.converters.EventHandlingConverter.converter;
 
 /**
  * @author yongjie.zhuang
@@ -49,7 +52,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
 
     @Override
     public int createEvent(@NotNull EventHandlingVo vo) {
-        final EventHandling eventHandling = BeanCopyUtils.toType(vo, EventHandling.class);
+        final EventHandling eventHandling = converter.toDo(vo);
         validateStatus(eventHandling.getStatus());
         validateType(eventHandling.getType());
 
@@ -58,9 +61,9 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public PageInfo<EventHandlingVo> findEventHandlingByPage(@NotNull FindEventHandlingByPageReqVo vo) {
-        final EventHandling eventHandling = BeanCopyUtils.toType(vo, EventHandling.class);
+        final EventHandling eventHandling = converter.toDo(vo);
         if (eventHandling.getStatus() != null)
             validateStatus(eventHandling.getStatus());
         if (eventHandling.getType() != null)
@@ -103,30 +106,6 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
                 .build());
     }
 
-    private void validateType(Integer typeValue) {
-        final EventHandlingType type = EnumUtils.parse(typeValue, EventHandlingType.class);
-        if (type == null) {
-            log.error("type value Illegal, cannot be parsed, value: {}", typeValue);
-            throw new IllegalArgumentException("type value illegal");
-        }
-    }
-
-    private void validateHandleResult(Integer handleResult) {
-        final EventHandlingResult result = EnumUtils.parse(handleResult, EventHandlingResult.class);
-        if (result == null) {
-            log.error("handle_result value Illegal, cannot be parsed, value: {}", handleResult);
-            throw new IllegalArgumentException("handle_result value illegal");
-        }
-    }
-
-    private void validateStatus(Integer statusValue) {
-        final EventHandlingStatus status = EnumUtils.parse(statusValue, EventHandlingStatus.class);
-        if (status == null) {
-            log.error("status value Illegal, cannot be parsed, value: {}", statusValue);
-            throw new IllegalArgumentException("status value illegal");
-        }
-    }
-
     @Override
     public boolean updateHandleStatus(@NotNull UpdateHandleStatusReqVo vo) {
         return mapper.updateHandlingResult(vo.getId(),
@@ -138,8 +117,25 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
     public EventHandlingVo findById(int id) {
-        return BeanCopyUtils.toType(mapper.selectByPrimaryKey(id), EventHandlingVo.class);
+        return converter.toVo(mapper.selectByPrimaryKey(id));
+    }
+
+    // ----------------------- private methods -------------------------------
+
+    private void validateType(Integer typeValue) {
+        final EventHandlingType type = EnumUtils.parse(typeValue, EventHandlingType.class);
+        Assert.notNull(type, "EventHandlingType value illegal");
+    }
+
+    private void validateHandleResult(Integer handleResult) {
+        final EventHandlingResult result = EnumUtils.parse(handleResult, EventHandlingResult.class);
+        Assert.notNull(result, "EventHandlingResult value illegal");
+    }
+
+    private void validateStatus(Integer statusValue) {
+        final EventHandlingStatus status = EnumUtils.parse(statusValue, EventHandlingStatus.class);
+        Assert.notNull(status, "EventHandlingStatus value illegal");
     }
 }

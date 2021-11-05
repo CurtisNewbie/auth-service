@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static com.curtisnewbie.service.auth.infrastructure.converters.AccessLogConverter.converter;
+
 /**
  * @author yongjie.zhuang
  */
@@ -36,7 +38,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
 
     @Override
     public void save(AccessLogInfoVo accessLogVo) {
-        m.insert(BeanCopyUtils.toType(accessLogVo, AccessLog.class));
+        m.insert(converter.toDo(accessLogVo));
     }
 
     @Override

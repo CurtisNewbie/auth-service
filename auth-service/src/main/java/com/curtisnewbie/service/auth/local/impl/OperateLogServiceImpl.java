@@ -22,6 +22,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static com.curtisnewbie.service.auth.infrastructure.converters.OperateLogConverter.converter;
+
 /**
  * @author yongjie.zhuang
  */
@@ -36,7 +38,7 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
 
     @Override
     public void saveOperateLogInfo(@NotNull OperateLogVo operateLogVo) {
-        operateLogMapper.insert(BeanCopyUtils.toType(operateLogVo, OperateLog.class));
+        operateLogMapper.insert(converter.toDo(operateLogVo));
     }
 
     @Override

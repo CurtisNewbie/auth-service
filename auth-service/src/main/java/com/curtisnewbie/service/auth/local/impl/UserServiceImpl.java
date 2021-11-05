@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.local.impl;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.dao.User;
+import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
@@ -139,7 +140,7 @@ public class UserServiceImpl implements LocalUserService {
         }
 
         logger.info("User '{}' login successful, user_info returned", username);
-        return BeanCopyUtils.toType(ue, UserVo.class);
+        return UserConverter.converter.toVo(ue);
     }
 
     @Override
