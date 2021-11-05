@@ -1,7 +1,6 @@
 package com.curtisnewbie.auth.vo;
 
 import com.curtisnewbie.common.vo.PageableVo;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;

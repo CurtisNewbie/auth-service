@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * operate_log web vo
@@ -23,7 +23,7 @@ public class OperateLogWebVo implements Serializable {
 
     /** when the operation happens */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
-    private Date operateTime;
+    private LocalDateTime operateTime;
 
     /** parameters used for the operation */
     private String operateParam;

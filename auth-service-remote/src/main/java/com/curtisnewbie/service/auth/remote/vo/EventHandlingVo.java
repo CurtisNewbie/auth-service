@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Events that need to be handled by someone, e.g., administrators
@@ -33,11 +33,11 @@ public class EventHandlingVo implements Serializable {
     private Integer handleResult;
 
     /** when the event is handled */
-    private Date handleTime;
+    private LocalDateTime handleTime;
 
     @Builder
     public EventHandlingVo(Integer id, Integer type, String body, Integer status, Integer handlerId,
-                           Integer handleResult, Date handleTime) {
+                           Integer handleResult, LocalDateTime handleTime) {
         this.id = id;
         this.type = type;
         this.body = body;

@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * operate_log vo
@@ -20,7 +20,7 @@ public class OperateLogVo implements Serializable {
     private String operateDesc;
 
     /** when the operation happens */
-    private Date operateTime;
+    private LocalDateTime operateTime;
 
     /** parameters used for the operation */
     private String operateParam;

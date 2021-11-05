@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Test {@link LocalOperateLogService}
@@ -33,7 +33,7 @@ public class TestLocalOperateLogService {
         v.setUsername("yongj.zhuang");
         v.setOperateDesc("Add new user");
         v.setOperateName("New-User");
-        v.setOperateTime(new Date());
+        v.setOperateTime(LocalDateTime.now());
         v.setOperateParam("{ \"username\" : \"sharon\" }");
 
         Assertions.assertDoesNotThrow(() -> {

@@ -4,7 +4,7 @@ import com.curtisnewbie.common.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author yongjie.zhuang
@@ -14,7 +14,7 @@ public class AccessLogInfoWebVo {
 
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     /** when the user signed in */
-    private Date accessTime;
+    private LocalDateTime accessTime;
 
     /** ip address */
     private String ipAddress;

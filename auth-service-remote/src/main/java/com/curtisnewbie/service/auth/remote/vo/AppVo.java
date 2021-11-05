@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Application
@@ -19,13 +19,13 @@ public class AppVo implements Serializable {
     private String name;
 
     /** when the record is created */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /** who created this record */
     private String createBy;
 
     /** when the record is updated */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /** who updated this record */
     private String updateBy;

@@ -1,8 +1,7 @@
 package com.curtisnewbie.service.auth.remote.api;
 
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
-import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqVo;
-import com.github.pagehelper.PageInfo;
+import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqCmd;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
@@ -24,5 +23,5 @@ public interface RemoteUserAppService {
     /**
      * Update user's app
      */
-    void updateUserApp(@NotNull UpdateUserAppReqVo vo);
+    void updateUserApp(@NotNull UpdateUserAppReqCmd vo);
 }

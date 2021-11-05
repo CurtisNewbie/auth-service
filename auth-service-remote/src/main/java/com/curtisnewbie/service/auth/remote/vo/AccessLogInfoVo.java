@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Access log info vo
@@ -14,7 +14,7 @@ import java.util.Date;
 public class AccessLogInfoVo implements Serializable {
 
     /** when the user signed in */
-    private Date accessTime;
+    private LocalDateTime accessTime;
 
     /** ip address */
     private String ipAddress;

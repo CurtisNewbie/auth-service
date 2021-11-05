@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Events that need to be handled by someone, e.g., administrators
@@ -32,7 +32,7 @@ public class EventHandlingWebVo {
 
     /** when the event is handled */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
-    private Date handleTime;
+    private LocalDateTime handleTime;
 
     /**
      * A description of the event
@@ -41,7 +41,7 @@ public class EventHandlingWebVo {
 
     @Builder
     public EventHandlingWebVo(Integer id, Integer type, Integer status, Integer handlerId, Integer handleResult,
-                              Date handleTime, String description) {
+                              LocalDateTime handleTime, String description) {
         this.id = id;
         this.type = type;
         this.status = status;

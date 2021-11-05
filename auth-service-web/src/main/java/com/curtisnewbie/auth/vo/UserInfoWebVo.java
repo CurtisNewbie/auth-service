@@ -4,7 +4,7 @@ import com.curtisnewbie.common.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * UserInfo web vo
@@ -32,11 +32,11 @@ public class UserInfoWebVo {
 
     /** when the user is created */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /** when the user is updated */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /** who updated this user */
     private String updateBy;

@@ -3,7 +3,6 @@ package com.curtisnewbie.service.auth.remote.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Application basic info

@@ -4,7 +4,6 @@ import com.curtisnewbie.common.vo.PageableVo;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
 
 /**
  * Events that need to be handled by someone, e.g., administrators

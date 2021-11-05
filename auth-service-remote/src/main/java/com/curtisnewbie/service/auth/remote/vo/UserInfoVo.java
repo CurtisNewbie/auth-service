@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Basic info of user
@@ -13,6 +13,7 @@ import java.util.Date;
 @Data
 public class UserInfoVo implements Serializable {
 
+    /** user id */
     private Integer id;
 
     /**
@@ -29,10 +30,10 @@ public class UserInfoVo implements Serializable {
     private Integer isDisabled;
 
     /** when the user is created */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /** when the user is updated */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /** who updated this user */
     private String updateBy;

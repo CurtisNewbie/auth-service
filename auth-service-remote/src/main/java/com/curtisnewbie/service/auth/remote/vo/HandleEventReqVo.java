@@ -4,10 +4,7 @@ import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Events that need to be handled by someone, e.g., administrators
