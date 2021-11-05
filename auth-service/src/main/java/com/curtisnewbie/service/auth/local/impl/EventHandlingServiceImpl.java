@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -78,7 +78,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     public void handleEvent(@NotNull HandleEventReqVo vo) {
         EventHandling eh = mapper.selectByPrimaryKey(vo.getId());
         eh.setHandlerId(vo.getHandlerId());
-        eh.setHandleTime(new Date());
+        eh.setHandleTime(LocalDateTime.now());
         eh.setHandleResult(vo.getResult().getValue());
 
         EventHandlingType type = EnumUtils.parse(eh.getType(), EventHandlingType.class);

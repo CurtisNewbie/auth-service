@@ -31,7 +31,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author yongjie.zhuang
@@ -77,7 +77,7 @@ public class TestLocalEventHandlingService {
                             .prevStatus(EventHandlingStatus.TO_BE_HANDLED)
                             .currStatus(EventHandlingStatus.HANDLED)
                             .handlerId(1) // random user_id
-                            .handleTime(new Date())
+                            .handleTime(LocalDateTime.now())
                             .build()));
         });
     }

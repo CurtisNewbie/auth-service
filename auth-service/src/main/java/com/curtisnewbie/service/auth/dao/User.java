@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * User entity
@@ -40,11 +40,11 @@ public class User {
 
     /** when the user is created */
     @TableField("create_time")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /** when the user is updated */
     @TableField("update_time")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /** whether the user is disabled, 0-normal, 1-disabled */
     @TableField("is_disabled")

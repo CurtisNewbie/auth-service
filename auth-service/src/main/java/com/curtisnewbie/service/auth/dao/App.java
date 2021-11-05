@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Application
@@ -27,7 +27,7 @@ public class App {
 
     /** when the record is created */
     @TableField("create_time")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /** who created this record */
     @TableField("create_by")
@@ -35,7 +35,7 @@ public class App {
 
     /** when the record is updated */
     @TableField("update_time")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /** who updated this record */
     @TableField("update_by")

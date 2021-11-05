@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Events that need to be handled by someone, e.g., administrators
@@ -43,5 +43,5 @@ public class EventHandling {
 
     /** when the event is handled */
     @TableField("handler_time")
-    private Date handleTime;
+    private LocalDateTime handleTime;
 }

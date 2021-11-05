@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * access_log entity
@@ -23,7 +23,7 @@ public class AccessLog {
 
     /** when the user signed in */
     @TableField("access_time")
-    private Date accessTime;
+    private LocalDateTime accessTime;
 
     /** ip address */
     @TableField("ip_address")

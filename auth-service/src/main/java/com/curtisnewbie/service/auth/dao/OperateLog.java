@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * operate log
@@ -31,7 +31,7 @@ public class OperateLog {
 
     /** when the operation happens */
     @TableField("operate_time")
-    private Date operateTime;
+    private LocalDateTime operateTime;
 
     /** parameters used for the operation */
     @TableField("operate_param")

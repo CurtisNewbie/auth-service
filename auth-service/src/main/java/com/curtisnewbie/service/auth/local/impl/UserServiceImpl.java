@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.text.MessageFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -92,7 +92,7 @@ public class UserServiceImpl implements LocalUserService {
         if (param.getRole() != null)
             ue.setRole(param.getRole().getValue());
         ue.setUpdateBy(param.getUpdateBy());
-        ue.setUpdateTime(new Date());
+        ue.setUpdateTime(LocalDateTime.now());
         userMapper.updateUser(ue);
     }
 
@@ -290,7 +290,7 @@ public class UserServiceImpl implements LocalUserService {
         u.setSalt(RandomNumUtil.randomNoStr(5));
         u.setPassword(PasswordUtil.encodePassword(registerUserVo.getPassword(), u.getSalt()));
         u.setCreateBy(registerUserVo.getCreateBy());
-        u.setCreateTime(new Date());
+        u.setCreateTime(LocalDateTime.now());
         return u;
     }
 

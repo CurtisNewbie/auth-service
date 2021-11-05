@@ -4,7 +4,7 @@ import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author yongjie.zhuang
@@ -16,12 +16,12 @@ public class UpdateHandleStatusReqVo {
     private EventHandlingStatus prevStatus;
     private EventHandlingStatus currStatus;
     private int handlerId;
-    private Date handleTime;
+    private LocalDateTime handleTime;
     private int handleResult;
 
     @Builder
     public UpdateHandleStatusReqVo(int id, EventHandlingStatus prevStatus, EventHandlingStatus currStatus, int handlerId,
-                                   Date handleTime, int handleResult) {
+                                   LocalDateTime handleTime, int handleResult) {
         this.id = id;
         this.prevStatus = prevStatus;
         this.currStatus = currStatus;
