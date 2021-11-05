@@ -1,18 +1,15 @@
 package com.curtisnewbie.service.auth.infrastructure.job;
 
-import com.curtisnewbie.common.util.DateUtils;
-import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.module.task.scheduling.AbstractJob;
 import com.curtisnewbie.module.task.vo.TaskVo;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
-import com.github.pagehelper.PageInfo;
+import com.curtisnewbie.service.auth.vo.MoveAccessLogToHistoryCmd;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * <p>
@@ -30,23 +27,16 @@ public class MoveAccessLogHistoryJob extends AbstractJob {
 
     @Override
     protected void executeInternal(TaskVo task) throws JobExecutionException {
-        final Date oneMonthBefore = DateUtils.dateOf(LocalDateTime.now().minusMonths(1));
+        final LocalDateTime oneWeekBefore = LocalDateTime.now().minusWeeks(1);
 
-        log.info("Finding access_log records before '{}'", oneMonthBefore);
+        log.info("Finding and moving access_log records before '{}'", oneWeekBefore);
+        accessLogService.moveRecordsToHistory(
+                MoveAccessLogToHistoryCmd.builder()
+                        .batchSize(200)
+                        .before(oneWeekBefore)
+                        .maxCount(10000)
+                        .build()
+        );
 
-        // records are moved, no need to change the page number
-        PagingVo paging = new PagingVo().ofLimit(50).ofPage(1);
-
-        PageInfo<Integer> ids = accessLogService.findIdsBeforeDateByPage(paging, oneMonthBefore);
-
-        while (!ids.getList().isEmpty()) {
-
-            log.info("Found {} access_log records before '{}', moving them to access_log_history",
-                    ids.getList().size(), oneMonthBefore);
-
-            accessLogService.moveRecordsToHistory(ids.getList());
-
-            ids = accessLogService.findIdsBeforeDateByPage(paging, oneMonthBefore);
-        }
     }
 }

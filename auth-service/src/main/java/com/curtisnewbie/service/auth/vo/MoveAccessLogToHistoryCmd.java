@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
  * Cmd object
  *
  * @author yongjie.zhuang
- * @see com.curtisnewbie.service.auth.local.api.LocalOperateLogService#moveRecordsToHistory(MoveRecordsToHistoryCmd)
+ * @see com.curtisnewbie.service.auth.local.api.LocalAccessLogService#moveRecordsToHistory(MoveAccessLogToHistoryCmd)
  */
 @Builder
-public class MoveRecordsToHistoryCmd {
+public class MoveAccessLogToHistoryCmd {
 
     private static final int DEFAULT_BATCH_SIZE = 50;
 

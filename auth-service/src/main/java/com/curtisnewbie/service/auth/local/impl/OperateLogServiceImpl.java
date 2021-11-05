@@ -7,7 +7,7 @@ import com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLog
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.api.RemoteOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
-import com.curtisnewbie.service.auth.vo.MoveRecordsToHistoryCmd;
+import com.curtisnewbie.service.auth.vo.MoveOperateLogToHistoryCmd;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
     }
 
     @Override
-    public void moveRecordsToHistory(@NotNull MoveRecordsToHistoryCmd cmd) {
+    public void moveRecordsToHistory(@NotNull MoveOperateLogToHistoryCmd cmd) {
         // validate the command object
         cmd.validate();
 
