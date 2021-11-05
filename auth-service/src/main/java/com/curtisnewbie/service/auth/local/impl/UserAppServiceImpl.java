@@ -4,7 +4,7 @@ import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserAppMap
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
-import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqVo;
+import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqCmd;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,12 +45,16 @@ public class UserAppServiceImpl implements LocalUserAppService {
     }
 
     @Override
-    public void updateUserApp(@NotNull UpdateUserAppReqVo vo) {
+    public void updateUserApp(@NotNull UpdateUserAppReqCmd cmd) {
+        cmd.validate();
+
+        final int userId = cmd.getUserId();
+
         // clear all apps first
-        userAppMapper.clearAppsForUser(vo.getUserId());
+        userAppMapper.clearAppsForUser(userId);
 
         // insert the new apps
-        if (!vo.getAppIdList().isEmpty())
-            userAppMapper.setAppsForUser(vo.getUserId(), vo.getAppIdList());
+        if (cmd.hasAppToAssign())
+            userAppMapper.setAppsForUser(userId, cmd.getAppIdList());
     }
 }

@@ -20,4 +20,11 @@ public class UpdateUserAppReqVo implements Serializable {
      * List of app id
      */
     private List<Integer> appIdList;
+
+    /**
+     * Has app records to assign to the user
+     */
+    public boolean hasAppToAssign() {
+        return appIdList != null && !appIdList.isEmpty();
+    }
 }
