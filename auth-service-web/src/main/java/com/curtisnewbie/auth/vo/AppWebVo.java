@@ -4,7 +4,7 @@ import com.curtisnewbie.common.util.DateUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Application
@@ -21,14 +21,14 @@ public class AppWebVo {
 
     /** when the record is created */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /** who created this record */
     private String createBy;
 
     /** when the record is updated */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /** who updated this record */
     private String updateBy;

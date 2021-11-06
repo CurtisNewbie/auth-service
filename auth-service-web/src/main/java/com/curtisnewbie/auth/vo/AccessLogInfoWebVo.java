@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Data
 public class AccessLogInfoWebVo {
 
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     /** when the user signed in */
+    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime accessTime;
 
     /** ip address */

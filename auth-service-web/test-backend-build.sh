@@ -3,7 +3,7 @@
 remoteaddr="192.168.31.103"
 jarname="auth-service-web-1.0.1.jar"
 
-mvn clean package 
+mvn clean package -Dmaven.test.skip=true
 
 mvnpkg=$?
 
