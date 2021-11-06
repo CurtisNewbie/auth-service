@@ -17,9 +17,7 @@ import java.io.IOException;
 
 @EnableRedisHttpSession(redisNamespace = "auth-service:session")
 @PropertySources({
-        @PropertySource("classpath:application.properties"),
         @PropertySource("classpath:dubbo-${spring.profiles.active}.properties"),
-        @PropertySource("classpath:common.properties"),
 })
 @EnableDubbo
 @EnableGlobalMethodSecurity(prePostEnabled = true)

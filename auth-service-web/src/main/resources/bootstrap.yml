@@ -4,6 +4,48 @@ spring:
   profiles:
     active: dev
 
+dubbo:
+  cloud:
+    subscribed-services: auth-service-application
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+
+web:
+  base-path: "/api/"
+
+authmodule:
+  permittedAntPatterns:
+    - "/"
+    - "/api/login"
+    - "/api/logout"
+    - "/api/user/info"
+    - "/api/user/register/request"
+    - "/**/*.js"
+    - "/**/*.css"
+    - "/favicon.ico"
+  # setup custom login processing url
+  loginProcessingUrl: "/api/login"
+  # setup custom login page url
+  customLoginPage: "/"
+  # setup logout url
+  logoutUrl: "/api/logout"
+  # customized cors filter
+  cors:
+    isFilterEnabled: false
+    allowOrigin: "*"
+    allowMethods: "GET,PUT,POST,DELETE,OPTION"
+    allowCredential: true
+    allowHeaders: "content-type, x-gwt-module-base, x-gwt-permutation, clientid, longpush, set-cookie"
+  enableOperateLog: true
+  permitAdminLoginOnly: true
+
+distributed-task-module:
+  application-group: auth-service
+  enabled: false
+
+management.endpoints.web.exposure.include: "*"
+
 ---
 spring:
   profiles: dev
@@ -29,6 +71,25 @@ spring:
         port: 8719
         dashboard: localhost:8070
 
+server.port: 8080
+redisson-config: redisson-dev.yaml
+
+logging.level.root: INFO
+
+authmodule:
+  enableAccessLog: false
+  enableOperateLog: false
+  enableControllerConsoleLog: false
+
+# ----- nacos heartbeat thread count
+namingClientBeatThreadCount: 1
+
+# ----- nacos naming polling thread count
+namingPollingThreadCount: 1
+
+# ----- quartz thread pool size
+org.quartz.threadPool.threadCount: 2
+
 ---
 spring:
   profiles: test
@@ -53,3 +114,20 @@ spring:
       transport:
         port: 8719
         dashboard: sentinel-dashboard:6060
+
+redisson-config: redisson-test.yaml
+server.port: 8443
+logging.level.root: INFO
+
+authmodule:
+  enable-controller-console-log: false
+  is-app-authorization-checked: true
+
+# ----- nacos heartbeat thread count
+namingClientBeatThreadCount: 2
+
+# ----- nacos naming polling thread count
+namingPollingThreadCount: 2
+
+# ----- quartz thread pool size
+org.quartz.threadPool.threadCount: 2

@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 public class User {
 
     /** primary key */
-    @TableField("id")
     @TableId(type = IdType.AUTO)
     private Integer id;
 
