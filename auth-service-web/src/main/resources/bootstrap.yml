@@ -42,7 +42,10 @@ authmodule:
 
 distributed-task-module:
   application-group: auth-service
-  enabled: false
+  enabled: true
+  # do not participate in scheduling
+  scheduling:
+    disabled: true
 
 management.endpoints.web.exposure.include: "*"
 

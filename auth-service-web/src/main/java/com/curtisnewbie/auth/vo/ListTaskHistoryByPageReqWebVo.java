@@ -1,5 +1,7 @@
 package com.curtisnewbie.auth.vo;
 
+import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
+import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageableVo;
 import lombok.Data;
 
@@ -25,4 +27,8 @@ public class ListTaskHistoryByPageReqWebVo extends PageableVo {
 
     /** task triggered by */
     private String runBy;
+
+    public void validate() throws MsgEmbeddedException {
+        ValidUtils.requireNonNull(getPagingVo());
+    }
 }

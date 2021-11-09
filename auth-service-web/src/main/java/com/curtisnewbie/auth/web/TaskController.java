@@ -2,12 +2,13 @@ package com.curtisnewbie.auth.web;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.curtisnewbie.auth.config.SentinelFallbackConfig;
+import com.curtisnewbie.auth.converters.TaskAsConverter;
+import com.curtisnewbie.auth.converters.TaskHistoryAsConverter;
 import com.curtisnewbie.auth.vo.*;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
-import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.util.ValidUtils;
-import com.curtisnewbie.common.vo.PagingVo;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.module.auth.util.AuthUtil;
@@ -17,15 +18,22 @@ import com.curtisnewbie.module.task.scheduling.JobUtils;
 import com.curtisnewbie.module.task.service.NodeCoordinationService;
 import com.curtisnewbie.module.task.service.TaskHistoryService;
 import com.curtisnewbie.module.task.service.TaskService;
-import com.curtisnewbie.module.task.vo.*;
+import com.curtisnewbie.module.task.vo.ListTaskByPageRespVo;
+import com.curtisnewbie.module.task.vo.ListTaskHistoryByPageRespVo;
+import com.curtisnewbie.module.task.vo.TaskVo;
+import com.curtisnewbie.module.task.vo.UpdateTaskReqVo;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 
 /**
  * @author yongjie.zhuang
@@ -43,6 +51,12 @@ public class TaskController {
     @Autowired
     private NodeCoordinationService nodeCoordinationService;
 
+    @Autowired
+    private TaskAsConverter taskAsConverter;
+
+    @Autowired
+    private TaskHistoryAsConverter taskHistoryAsConverter;
+
     @SentinelResource(value = "taskListing", defaultFallback = "serviceNotAvailable",
             fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/task/list", description = "list tasks")
@@ -50,11 +64,17 @@ public class TaskController {
     @PostMapping("/list")
     public Result<ListTaskByPageRespAsVo> listTaskByPage(@RequestBody ListTaskByPageReqAsVo reqVo) throws MsgEmbeddedException {
         ValidUtils.requireNonNull(reqVo.getPagingVo());
-        PageInfo<ListTaskByPageRespVo> pi = taskService.listByPage(BeanCopyUtils.toType(reqVo, ListTaskByPageReqVo.class),
+
+        PageablePayloadSingleton<List<ListTaskByPageRespVo>> pi = taskService.listByPage(taskAsConverter.toListTaskByPageReqAsVo(reqVo),
                 reqVo.getPagingVo());
         ListTaskByPageRespAsVo resp = new ListTaskByPageRespAsVo();
-        resp.setPagingVo(new PagingVo().ofTotal(pi.getTotal()));
-        resp.setList(BeanCopyUtils.toTypeList(pi.getList(), TaskAsVo.class));
+        resp.setPagingVo(pi.getPagingVo());
+        resp.setList(
+                pi.getPayload()
+                        .stream()
+                        .map(taskAsConverter::toTaskAsVo)
+                        .collect(Collectors.toList())
+        );
         return Result.of(resp);
     }
 
@@ -65,10 +85,12 @@ public class TaskController {
     @PostMapping("/history")
     public Result<ListTaskHistoryByPageRespWebVo> listTaskHistoryByPage(@RequestBody ListTaskHistoryByPageReqWebVo reqVo)
             throws MsgEmbeddedException {
-        PageInfo<ListTaskHistoryByPageRespVo> pi = taskHistoryService.findByPage(BeanCopyUtils.toType(reqVo, ListTaskHistoryByPageReqVo.class));
+        reqVo.validate();
+
+        PageablePayloadSingleton<List<ListTaskHistoryByPageRespVo>> pi = taskHistoryService.findByPage(taskHistoryAsConverter.toListTaskHistoryByPageReqVo(reqVo));
         ListTaskHistoryByPageRespWebVo resp = new ListTaskHistoryByPageRespWebVo();
-        resp.setList(BeanCopyUtils.toTypeList(pi.getList(), TaskHistoryWebVo.class));
-        resp.setPagingVo(new PagingVo().ofTotal(pi.getTotal()));
+        resp.setList(mapTo(pi.getPayload(), taskHistoryAsConverter::toTaskHistoryWebVo));
+        resp.setPagingVo(pi.getPagingVo());
         return Result.of(resp);
     }
 
