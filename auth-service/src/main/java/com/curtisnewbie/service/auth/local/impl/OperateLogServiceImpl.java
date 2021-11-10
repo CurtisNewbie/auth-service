@@ -1,15 +1,16 @@
 package com.curtisnewbie.service.auth.local.impl;
 
-import com.curtisnewbie.common.util.BeanCopyUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.curtisnewbie.common.util.PagingUtil;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.OperateLog;
+import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.api.RemoteOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import com.curtisnewbie.service.auth.vo.MoveOperateLogToHistoryCmd;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
-import static com.curtisnewbie.service.auth.infrastructure.converters.OperateLogConverter.converter;
+import static com.curtisnewbie.common.util.PagingUtil.forPage;
 
 /**
  * @author yongjie.zhuang
@@ -36,19 +36,20 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
     @Autowired
     private OperateLogMapper operateLogMapper;
 
+    @Autowired
+    private OperateLogConverter cvtr;
+
+
     @Override
     public void saveOperateLogInfo(@NotNull OperateLogVo operateLogVo) {
-        operateLogMapper.insert(converter.toDo(operateLogVo));
+        operateLogMapper.insert(cvtr.toDo(operateLogVo));
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PageInfo<OperateLogVo> findOperateLogInfoInPages(@NotNull PagingVo pagingVo) {
-        Objects.requireNonNull(pagingVo.getPage());
-        Objects.requireNonNull(pagingVo.getLimit());
-        PageHelper.startPage(pagingVo.getPage(), pagingVo.getLimit());
-        PageInfo<OperateLog> pi = PageInfo.of(operateLogMapper.selectBasicInfo());
-        return BeanCopyUtils.toPageList(pi, OperateLogVo.class);
+    public PageablePayloadSingleton<List<OperateLogVo>> findOperateLogInfoInPages(@NotNull PagingVo pagingVo) {
+        IPage<OperateLog> ipg = operateLogMapper.selectBasicInfo(forPage(pagingVo));
+        return PagingUtil.toPageList(ipg, cvtr::toVo);
     }
 
     @Override
@@ -62,21 +63,21 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
         // records are moved, no need to change the page number
         final PagingVo paging = new PagingVo().ofLimit(batchLimit).ofPage(1);
 
-        PageInfo<Integer> ids = findIdsBeforeDateByPage(paging, before);
+        IPage<Integer> page = findIdsBeforeDateByPage(paging, before);
 
         // count of records being moved
         int count = 0;
 
         // while has next page
-        while (moveRecordsToHistory(ids)) {
+        while (moveRecordsToHistory(page.getRecords())) {
 
-            count += ids.getList().size();
+            count += page.getRecords().size();
 
             // violated maxCount, end the loop
             if (cmd.isMaxCountViolated(count))
                 break;
 
-            ids = findIdsBeforeDateByPage(paging, before);
+            page = findIdsBeforeDateByPage(paging, before);
         }
         log.info("Found and moved {} operate_log records before '{}' to operate_log_history", count,
                 before);
@@ -89,8 +90,7 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
      *
      * @return has next page
      */
-    private boolean moveRecordsToHistory(PageInfo<Integer> idsPi) {
-        List<Integer> ids = idsPi.getList();
+    private boolean moveRecordsToHistory(List<Integer> ids) {
         if (ids.isEmpty())
             return false;
         operateLogMapper.copyToHistory(ids);
@@ -98,11 +98,7 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
         return true;
     }
 
-    private PageInfo<Integer> findIdsBeforeDateByPage(PagingVo paging, LocalDateTime date) {
-        Objects.requireNonNull(paging);
-        Objects.requireNonNull(date);
-
-        PageHelper.startPage(paging.getPage(), paging.getLimit());
-        return PageInfo.of(operateLogMapper.selectIdsBeforeDate(date));
+    private IPage<Integer> findIdsBeforeDateByPage(PagingVo paging, LocalDateTime date) {
+        return operateLogMapper.selectIdsBeforeDate(forPage(paging), date);
     }
 }

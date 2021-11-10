@@ -1,6 +1,8 @@
 package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.service.auth.dao.AccessLog;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,9 +32,9 @@ public interface AccessLogMapper extends BaseMapper<AccessLog> {
      */
     int updateByPrimaryKey(AccessLog record);
 
-    List<AccessLog> selectAllBasicInfo();
+    IPage<AccessLog> selectAllBasicInfo(Page p);
 
-    List<Integer> selectIdsBeforeDate(@Param("date") LocalDateTime date);
+    IPage<Integer> selectIdsBeforeDate(Page p, @Param("date") LocalDateTime date);
 
     void copyToHistory(@Param("ids") List<Integer> ids);
 

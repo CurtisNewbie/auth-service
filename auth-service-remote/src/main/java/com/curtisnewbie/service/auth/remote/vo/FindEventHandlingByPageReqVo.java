@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 import com.curtisnewbie.common.vo.PageableVo;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 
 /**
@@ -30,5 +31,9 @@ public class FindEventHandlingByPageReqVo extends PageableVo {
     }
 
     public FindEventHandlingByPageReqVo() {
+    }
+
+    public void validate() {
+        Assert.notNull(getPagingVo(), "pagingVo == null");
     }
 }

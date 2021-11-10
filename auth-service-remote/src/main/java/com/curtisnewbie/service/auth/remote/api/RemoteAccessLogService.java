@@ -1,11 +1,12 @@
 package com.curtisnewbie.service.auth.remote.api;
 
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
-import com.github.pagehelper.PageInfo;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Remote service for access_log
@@ -26,5 +27,5 @@ public interface RemoteAccessLogService {
      * @param paging pagination param
      */
     @NotNull
-    PageInfo<AccessLogInfoVo> findAccessLogInfoByPage(@NotNull PagingVo paging);
+    PageablePayloadSingleton<List<AccessLogInfoVo>> findAccessLogInfoByPage(@NotNull PagingVo paging);
 }

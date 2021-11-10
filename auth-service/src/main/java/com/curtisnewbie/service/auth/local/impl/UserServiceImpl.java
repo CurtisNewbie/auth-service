@@ -1,7 +1,10 @@
 package com.curtisnewbie.service.auth.local.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
+import com.curtisnewbie.common.util.PagingUtil;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
@@ -17,11 +20,8 @@ import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
 import com.curtisnewbie.service.auth.util.RandomNumUtil;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.lang.Nullable;
@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.text.MessageFormat;
@@ -37,15 +38,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.curtisnewbie.common.util.PagingUtil.forPage;
+
 /**
  * @author yongjie.zhuang
  */
-@DubboService(interfaceClass = RemoteUserService.class)
+@Slf4j
 @Service
 @Transactional
+@DubboService(interfaceClass = RemoteUserService.class)
 public class UserServiceImpl implements LocalUserService {
     private static final String ADMIN_LIMIT_COUNT_KEY = "admin.count.limit";
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserMapper userMapper;
@@ -55,6 +58,8 @@ public class UserServiceImpl implements LocalUserService {
     private LocalUserAppService userAppService;
     @Autowired
     private Environment environment;
+    @Autowired
+    private UserConverter cvtr;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -120,13 +125,13 @@ public class UserServiceImpl implements LocalUserService {
 
         User ue = loadUserByUsername(username);
         if (ue == null) {
-            logger.info("User '{}' attempt to login, but username is not found.", username);
+            log.info("User '{}' attempt to login, but username is not found.", username);
             throw new UsernameNotFoundException(username);
         }
         UserIsDisabled isDisabled = EnumUtils.parse(ue.getIsDisabled(), UserIsDisabled.class);
         Objects.requireNonNull(isDisabled, "Illegal is_disabled value");
         if (isDisabled == UserIsDisabled.DISABLED) {
-            logger.info("User '{}' attempt to login, but user is disabled.", username);
+            log.info("User '{}' attempt to login, but user is disabled.", username);
             throw new UserDisabledException(username);
         }
 
@@ -135,12 +140,12 @@ public class UserServiceImpl implements LocalUserService {
                 .compareToPasswordHash(ue.getPassword())
                 .isMatched();
         if (!isPwdCorrect) {
-            logger.info("User '{}' attempt to login, but password is incorrect.", username);
+            log.info("User '{}' attempt to login, but password is incorrect.", username);
             throw new PasswordIncorrectException(username);
         }
 
-        logger.info("User '{}' login successful, user_info returned", username);
-        return UserConverter.converter.toVo(ue);
+        log.info("User '{}' login successful, user_info returned", username);
+        return cvtr.toVo(ue);
     }
 
     @Override
@@ -166,7 +171,7 @@ public class UserServiceImpl implements LocalUserService {
         Objects.requireNonNull(registerUserVo.getRole());
 
         if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
-            logger.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
+            log.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
             throw new UserRegisteredException(registerUserVo.getUsername());
         }
 
@@ -177,7 +182,7 @@ public class UserServiceImpl implements LocalUserService {
         User userEntity = toUserEntity(registerUserVo);
         userEntity.setIsDisabled(UserIsDisabled.NORMAL.getValue());
 
-        logger.info("New user '{}' successfully registered, role: {}", registerUserVo.getUsername(), registerUserVo.getRole().getValue());
+        log.info("New user '{}' successfully registered, role: {}", registerUserVo.getUsername(), registerUserVo.getRole().getValue());
         userMapper.insert(userEntity);
     }
 
@@ -189,7 +194,7 @@ public class UserServiceImpl implements LocalUserService {
         Objects.requireNonNull(registerUserVo.getRole());
 
         if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
-            logger.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
+            log.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
             throw new UserRegisteredException(registerUserVo.getUsername());
         }
 
@@ -203,7 +208,7 @@ public class UserServiceImpl implements LocalUserService {
         userEntity.setIsDisabled(UserIsDisabled.DISABLED.getValue());
         userMapper.insert(userEntity);
 
-        logger.info("New user '{}' successfully registered, role: {}, currently disabled and waiting for approval",
+        log.info("New user '{}' successfully registered, role: {}, currently disabled and waiting for approval",
                 registerUserVo.getUsername(), registerUserVo.getRole().getValue());
 
         // generate a handling_event for registration request
@@ -215,7 +220,7 @@ public class UserServiceImpl implements LocalUserService {
                         .type(EventHandlingType.REGISTRATION_EVENT.getValue())
                         .build()
         );
-        logger.info("Created event_handling for {}'s registration", registerUserVo.getUsername());
+        log.info("Created event_handling for {}'s registration", registerUserVo.getUsername());
     }
 
     @Override
@@ -224,7 +229,7 @@ public class UserServiceImpl implements LocalUserService {
 
         User ue = userMapper.findById(id);
         if (ue == null) {
-            logger.info("User_id '{}' attempt to change password, but user is not found.", id);
+            log.info("User_id '{}' attempt to change password, but user is not found.", id);
             throw new UserNotFoundException("user.id: " + id);
         }
         boolean isPasswordMatched = PasswordUtil.getValidator()
@@ -232,11 +237,11 @@ public class UserServiceImpl implements LocalUserService {
                 .compareToPasswordHash(ue.getPassword())
                 .isMatched();
         if (!isPasswordMatched) {
-            logger.info("User_id '{}' attempt to change password, but the old password is unmatched.", id);
+            log.info("User_id '{}' attempt to change password, but the old password is unmatched.", id);
             throw new PasswordIncorrectException("user.id: " + id);
         }
 
-        logger.info("User_id '{}' successfully changed password.", id);
+        log.info("User_id '{}' successfully changed password.", id);
         userMapper.updatePwd(PasswordUtil.encodePassword(newPassword, ue.getSalt()), id);
     }
 
@@ -254,16 +259,16 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public @NotNull PageInfo<UserInfoVo> findUserInfoByPage(@NotNull FindUserInfoVo vo) {
-        Objects.requireNonNull(vo.getPagingVo());
-        PageHelper.startPage(vo.getPagingVo().getPage(), vo.getPagingVo().getLimit());
+    public @NotNull PageablePayloadSingleton<List<UserInfoVo>> findUserInfoByPage(@Valid @NotNull FindUserInfoVo vo) {
         User ue = new User();
         if (vo.getIsDisabled() != null)
             ue.setIsDisabled(vo.getIsDisabled().getValue());
         if (vo.getRole() != null)
             ue.setRole(vo.getRole().getValue());
         ue.setUsername(vo.getUsername());
-        return BeanCopyUtils.toPageList(PageInfo.of(userMapper.findUserInfoBy(ue)), UserInfoVo.class);
+
+        IPage<User> pge = userMapper.findUserInfoBy(forPage(vo.getPagingVo()), ue);
+        return PagingUtil.toPageList(pge, cvtr::toInfoVo);
     }
 
     @Override
@@ -315,7 +320,7 @@ public class UserServiceImpl implements LocalUserService {
             int currCntOfAdmin = userMapper.countAdmin();
             // exceeded the max num of administrators
             if (currCntOfAdmin >= optInt.get()) {
-                logger.info("Try to register user as admin, but the maximum number of admin ({}) is exceeded.", optInt.get());
+                log.info("Try to register user as admin, but the maximum number of admin ({}) is exceeded.", optInt.get());
                 throw new ExceededMaxAdminCountException(MessageFormat.format("Max: {0}, curr: {1}",
                         optInt.get(), currCntOfAdmin));
             }

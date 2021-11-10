@@ -5,6 +5,8 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -25,6 +27,7 @@ public class FindUserInfoVo implements Serializable {
     private UserIsDisabled isDisabled;
 
     /** paging param */
+    @NotNull
     private PagingVo pagingVo;
 
 }

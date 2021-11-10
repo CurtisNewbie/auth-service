@@ -1,7 +1,11 @@
 package com.curtisnewbie.auth.vo;
 
 import com.curtisnewbie.common.util.DateUtils;
+import com.curtisnewbie.common.util.EnumUtils;
+import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
@@ -34,6 +38,10 @@ public class EventHandlingWebVo {
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime handleTime;
 
+    /** body of the event */
+    @JsonIgnore
+    private String body;
+
     /**
      * A description of the event
      */
@@ -52,5 +60,19 @@ public class EventHandlingWebVo {
     }
 
     public EventHandlingWebVo() {
+    }
+
+    /**
+     * Fill {@code description} based on type
+     */
+    public void fillDescription(RemoteUserService remoteUserService) {
+        EventHandlingType et = EnumUtils.parse(getType(), EventHandlingType.class);
+
+        if (et.equals(EventHandlingType.REGISTRATION_EVENT)) {
+            String username = remoteUserService.findUsernameById(Integer.parseInt(getBody()));
+            if (username == null)
+                username = "... deleted ...";
+            setDescription(String.format("User '%s' requests registration approval", username));
+        }
     }
 }

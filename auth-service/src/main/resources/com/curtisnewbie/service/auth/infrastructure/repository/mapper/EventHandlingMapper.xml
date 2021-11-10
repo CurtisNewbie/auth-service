@@ -61,14 +61,14 @@
     select *
     from event_handling
     <where>
-      <if test="status != null">
-        status = #{status}
+      <if test="p.status != null">
+        status = #{p.status}
       </if>
-      <if test="type != null">
-        and type = #{type}
+      <if test="p.type != null">
+        and type = #{p.type}
       </if>
-      <if test="handleResult != null">
-        and handle_result = #{handleResult}
+      <if test="p.handleResult != null">
+        and handle_result = #{p.handleResult}
       </if>
     </where>
     order by id desc

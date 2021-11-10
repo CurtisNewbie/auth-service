@@ -1,15 +1,16 @@
 package com.curtisnewbie.service.auth.local.impl;
 
-import com.curtisnewbie.common.util.BeanCopyUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.curtisnewbie.common.util.PagingUtil;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.AccessLog;
+import com.curtisnewbie.service.auth.infrastructure.converters.AccessLogConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.vo.MoveAccessLogToHistoryCmd;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
-
-import static com.curtisnewbie.service.auth.infrastructure.converters.AccessLogConverter.converter;
 
 /**
  * @author yongjie.zhuang
@@ -36,6 +34,9 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     @Autowired
     private AccessLogMapper m;
 
+    @Autowired
+    private AccessLogConverter converter;
+
     @Override
     public void save(AccessLogInfoVo accessLogVo) {
         m.insert(converter.toDo(accessLogVo));
@@ -43,11 +44,9 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PageInfo<AccessLogInfoVo> findAccessLogInfoByPage(PagingVo paging) {
-        Objects.requireNonNull(paging);
-        PageHelper.startPage(paging.getPage(), paging.getLimit());
-        List<AccessLog> list = m.selectAllBasicInfo();
-        return BeanCopyUtils.toPageList(PageInfo.of(list), AccessLogInfoVo.class);
+    public PageablePayloadSingleton<List<AccessLogInfoVo>> findAccessLogInfoByPage(@NotNull PagingVo paging) {
+        IPage<AccessLog> list = m.selectAllBasicInfo(PagingUtil.forPage(paging));
+        return PagingUtil.toPageList(list, converter::toVo);
     }
 
     @Override
@@ -61,15 +60,15 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
         // records are moved, no need to change the page number
         final PagingVo paging = new PagingVo().ofLimit(batchLimit).ofPage(1);
 
-        PageInfo<Integer> ids = findIdsBeforeDateByPage(paging, before);
+        IPage<Integer> ids = findIdsBeforeDateByPage(paging, before);
 
         // count of records being moved
         int count = 0;
 
         // while has next page
-        while (moveRecordsToHistory(ids)) {
+        while (moveRecordsToHistory(ids.getRecords())) {
 
-            count += ids.getList().size();
+            count += ids.getRecords().size();
 
             // violated maxCount, end the loop
             if (cmd.isMaxCountViolated(count))
@@ -78,7 +77,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
             ids = findIdsBeforeDateByPage(paging, before);
         }
         log.info("Found and moved {} access_log records before '{}', moving them to access_log_history",
-                ids.getList().size(), before);
+                count, before);
     }
 
     // ---------------------- private methods ---------------------------
@@ -87,20 +86,15 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     /**
      * Find ids of records where the access_date is before the given date
      */
-    private PageInfo<Integer> findIdsBeforeDateByPage(PagingVo paging, LocalDateTime date) {
-        Objects.requireNonNull(paging);
-        Objects.requireNonNull(date);
-
-        PageHelper.startPage(paging.getPage(), paging.getLimit());
-        return PageInfo.of(m.selectIdsBeforeDate(date));
+    private IPage<Integer> findIdsBeforeDateByPage(PagingVo paging, LocalDateTime date) {
+        return m.selectIdsBeforeDate(PagingUtil.forPage(paging), date);
     }
 
 
     /**
      * Move the records to access_log_history
      */
-    private boolean moveRecordsToHistory(PageInfo<Integer> idsPi) {
-        List<Integer> ids = idsPi.getList();
+    private boolean moveRecordsToHistory(List<Integer> ids) {
         if (ids.isEmpty())
             return false;
 

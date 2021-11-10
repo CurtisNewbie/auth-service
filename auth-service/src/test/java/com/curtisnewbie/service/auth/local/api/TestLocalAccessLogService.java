@@ -1,11 +1,11 @@
 package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.AuthServiceApplication;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.AccessLogTestMapper;
 import com.curtisnewbie.service.auth.dao.TestMapperConfig;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
-import com.github.pagehelper.PageInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Test {@link LocalAccessLogService}
@@ -48,9 +49,9 @@ public class TestLocalAccessLogService {
         PagingVo pagingVo = new PagingVo();
         pagingVo.setLimit(10);
         pagingVo.setPage(1);
-        PageInfo<AccessLogInfoVo> pi = localAccessLogService.findAccessLogInfoByPage(pagingVo);
+        PageablePayloadSingleton<List<AccessLogInfoVo>> pi = localAccessLogService.findAccessLogInfoByPage(pagingVo);
         Assertions.assertNotNull(pi);
-        Assertions.assertFalse(pi.getList().isEmpty());
+        Assertions.assertFalse(pi.getPayload().isEmpty());
     }
 
     private void saveTestAccessLogInfo() {

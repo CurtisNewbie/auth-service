@@ -1,11 +1,12 @@
 package com.curtisnewbie.service.auth.remote.api;
 
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
-import com.github.pagehelper.PageInfo;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Remote service for operate_log
@@ -23,6 +24,6 @@ public interface RemoteOperateLogService {
     /**
      * Find operate_log info in pages
      */
-    PageInfo<OperateLogVo> findOperateLogInfoInPages(@NotNull PagingVo pagingVo);
+    PageablePayloadSingleton<List<OperateLogVo>> findOperateLogInfoInPages(@NotNull PagingVo pagingVo);
 
 }

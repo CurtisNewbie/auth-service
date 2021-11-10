@@ -1,6 +1,11 @@
 package com.curtisnewbie.auth.vo;
 
+import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
+import com.curtisnewbie.common.util.EnumUtils;
+import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageableVo;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -29,5 +34,16 @@ public class FindEventHandlingByPageReqWebVo extends PageableVo {
     }
 
     public FindEventHandlingByPageReqWebVo() {
+    }
+
+    public void validate() throws MsgEmbeddedException {
+        if (getType() != null) {
+            EventHandlingType type = EnumUtils.parse(getType(), EventHandlingType.class);
+            ValidUtils.requireNonNull(type);
+        }
+        if (getStatus() != null) {
+            EventHandlingStatus status = EnumUtils.parse(getStatus(), EventHandlingStatus.class);
+            ValidUtils.requireNonNull(status);
+        }
     }
 }

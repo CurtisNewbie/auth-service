@@ -1,5 +1,7 @@
 package com.curtisnewbie.service.auth.local.impl;
 
+import com.curtisnewbie.common.util.BeanCopyUtils;
+import com.curtisnewbie.service.auth.infrastructure.converters.AppConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserAppMapper;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserAppService;
@@ -16,8 +18,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-import static com.curtisnewbie.common.util.BeanCopyUtils.toTypeList;
-
 /**
  * @author yongjie.zhuang
  */
@@ -29,6 +29,9 @@ public class UserAppServiceImpl implements LocalUserAppService {
     @Autowired
     private UserAppMapper userAppMapper;
 
+    @Autowired
+    private AppConverter cvtr;
+
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public boolean isUserAllowedToUseApp(int userId, @NotEmpty String appName) {
@@ -38,10 +41,7 @@ public class UserAppServiceImpl implements LocalUserAppService {
     @Transactional(propagation = Propagation.SUPPORTS)
     @Override
     public List<AppBriefVo> getAppsPermittedForUser(int userId) {
-        return toTypeList(
-                userAppMapper.getAppsPermittedForUser(userId),
-                AppBriefVo.class
-        );
+        return BeanCopyUtils.mapTo(userAppMapper.getAppsPermittedForUser(userId), cvtr::toBriefVo);
     }
 
     @Override

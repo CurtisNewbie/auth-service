@@ -1,6 +1,8 @@
 package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.service.auth.dao.User;
 import org.apache.ibatis.annotations.Param;
 
@@ -58,7 +60,7 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * Select id, username, role, is_disabled, create_time, update_time, create_by, update_by
      */
-    List<User> findUserInfoBy(User ue);
+    IPage<User> findUserInfoBy(Page p, @Param("u") User ue);
 
     /**
      * Select username

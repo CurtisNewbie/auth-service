@@ -79,14 +79,14 @@
     Select id, username, role, is_disabled, create_by, create_time, update_by, update_time
     FROM user
     <where>
-      <if test="username != null and username != ''">
-        username like "%"#{username}"%"
+      <if test="u.username != null and u.username != ''">
+        username like "%"#{u.username}"%"
       </if>
-      <if test="role != null">
-        and role = #{role}
+      <if test="u.role != null">
+        and role = #{u.role}
       </if>
-      <if test="isDisabled != null">
-        and is_disabled = #{isDisabled}
+      <if test="u.isDisabled != null">
+        and is_disabled = #{u.isDisabled}
       </if>
     </where>
   </select>

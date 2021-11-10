@@ -1,12 +1,13 @@
 package com.curtisnewbie.service.auth.remote.api;
 
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
-import com.github.pagehelper.PageInfo;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Remove service for event_handling
@@ -26,7 +27,7 @@ public interface RemoteEventHandlingService {
     /**
      * Find events with pagination
      */
-    PageInfo<EventHandlingVo> findEventHandlingByPage(@NotNull FindEventHandlingByPageReqVo vo);
+    PageablePayloadSingleton<List<EventHandlingVo>> findEventHandlingByPage(@NotNull FindEventHandlingByPageReqVo vo);
 
     /**
      * <p>

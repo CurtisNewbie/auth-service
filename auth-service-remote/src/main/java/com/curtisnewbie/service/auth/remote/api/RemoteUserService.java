@@ -1,13 +1,13 @@
 package com.curtisnewbie.service.auth.remote.api;
 
-import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
-import com.github.pagehelper.PageInfo;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -117,7 +117,7 @@ public interface RemoteUserService {
      * Fetch list of user info based on the provided arguments
      */
     @NotNull
-    PageInfo<UserInfoVo> findUserInfoByPage(@NotNull FindUserInfoVo vo);
+    PageablePayloadSingleton<List<UserInfoVo>> findUserInfoByPage(@Valid @NotNull FindUserInfoVo vo);
 
     /**
      * Disable user by id

@@ -4,9 +4,16 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.curtisnewbie.common.util.EnumUtils;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+
+import static java.util.Objects.nonNull;
 
 /**
  * Events that need to be handled by someone, e.g., administrators
@@ -44,4 +51,29 @@ public class EventHandling {
     /** when the event is handled */
     @TableField("handler_time")
     private LocalDateTime handleTime;
+
+    public void validateType() {
+        final EventHandlingType eht = EnumUtils.parse(type, EventHandlingType.class);
+        Assert.notNull(eht, "EventHandlingType value illegal");
+    }
+
+    public void validateHandleResult() {
+        final EventHandlingResult result = EnumUtils.parse(handleResult, EventHandlingResult.class);
+        Assert.notNull(result, "EventHandlingResult value illegal");
+    }
+
+    public void validateStatus() {
+        final EventHandlingStatus ehs = EnumUtils.parse(status, EventHandlingStatus.class);
+        Assert.notNull(ehs, "EventHandlingStatus value illegal");
+    }
+
+    public void validateNonNullValuesForQuery() {
+        if (nonNull(type))
+            validateType();
+        if (nonNull(handleResult))
+            validateHandleResult();
+        if (nonNull(status))
+            validateStatus();
+    }
+
 }

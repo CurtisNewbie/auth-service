@@ -1,6 +1,8 @@
 package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.service.auth.dao.EventHandling;
 import org.apache.ibatis.annotations.Param;
 
@@ -33,7 +35,7 @@ public interface EventHandlingMapper extends BaseMapper<EventHandling> {
     /**
      * Select * by status, type
      */
-    List<EventHandling> selectByPage(EventHandling eventHandling);
+    IPage<EventHandling> selectByPage(Page p, @Param("p") EventHandling eventHandling);
 
     int updateHandlingResult(@Param("id") int id, @Param("prevStatus") int prevStatus, @Param("currStatus") int currStatus
             , @Param("handlerId") int handlerId, @Param("handleTime") LocalDateTime handleTime, @Param("handleResult") int handleResult);

@@ -2,12 +2,13 @@ package com.curtisnewbie.auth.web;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.curtisnewbie.auth.config.SentinelFallbackConfig;
+import com.curtisnewbie.auth.converters.UserWebConverter;
 import com.curtisnewbie.auth.vo.*;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.util.ValidUtils;
-import com.curtisnewbie.common.vo.PagingVo;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.module.auth.util.AuthUtil;
@@ -17,15 +18,18 @@ import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
 import com.curtisnewbie.service.auth.remote.vo.*;
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 
 /**
  * @author yongjie.zhuang
@@ -39,6 +43,9 @@ public class UserController {
 
     @DubboReference(lazy = true)
     private RemoteUserService userService;
+
+    @Autowired
+    private UserWebConverter cvtr;
 
     @SentinelResource(value = "addUser", defaultFallback = "serviceNotAvailable",
             fallbackClass = SentinelFallbackConfig.class)
@@ -113,10 +120,10 @@ public class UserController {
     @PostMapping("/list")
     public Result<GetUserListRespVo> getUserList(@RequestBody GetUserListReqVo reqVo) {
         FindUserInfoVo searchParam = toFindUserInfoVo(reqVo);
-        PageInfo<UserInfoVo> voPageInfo = userService.findUserInfoByPage(searchParam);
+        PageablePayloadSingleton<List<UserInfoVo>> pps = userService.findUserInfoByPage(searchParam);
         GetUserListRespVo resp = new GetUserListRespVo();
-        resp.setList(BeanCopyUtils.toTypeList(voPageInfo.getList(), UserInfoWebVo.class));
-        resp.setPagingVo(new PagingVo().ofTotal(voPageInfo.getTotal()));
+        resp.setList(mapTo(pps.getPayload(), cvtr::toWebInfoVo));
+        resp.setPagingVo(pps.getPagingVo());
         return Result.of(resp);
     }
 
