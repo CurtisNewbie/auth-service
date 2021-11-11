@@ -19,6 +19,7 @@ public class OperateLogVo implements Serializable {
     /** description of operation */
     private String operateDesc;
 
+    // todo fix bug, unable to deserialize this
     /** when the operation happens */
     private LocalDateTime operateTime;
 

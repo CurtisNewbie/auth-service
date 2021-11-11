@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.local.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
@@ -34,9 +35,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.curtisnewbie.common.util.PagingUtil.forPage;
 
@@ -117,6 +116,21 @@ public class UserServiceImpl implements LocalUserService {
                 .role(role)
                 .updateBy(updatedBy)
                 .build());
+    }
+
+    @Override
+    public Map<Integer, String> fetchUsernameById(List<Integer> userIds) {
+        QueryWrapper<User> cond = new QueryWrapper<>();
+        cond.lambda()
+                .select(User::getId, User::getUsername)
+                .in(User::getId, userIds);
+
+        List<User> users = userMapper.selectList(cond);
+        Map<Integer, String> idToName = new HashMap<>();
+        users.forEach(u -> {
+            idToName.put(u.getId(), u.getUsername());
+        });
+        return idToName;
     }
 
     @Override

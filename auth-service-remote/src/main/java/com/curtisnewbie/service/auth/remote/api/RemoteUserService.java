@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Remote service for users
@@ -170,4 +171,12 @@ public interface RemoteUserService {
      * Update user role
      */
     void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy);
+
+    /**
+     * Fetch username by ids
+     *
+     * @param userIds list of user_id
+     * @return user_id -> username map
+     */
+    Map<Integer, String> fetchUsernameById(List<Integer> userIds);
 }
