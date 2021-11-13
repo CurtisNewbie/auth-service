@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,6 +22,7 @@ public class OperateLogVo implements Serializable {
 
     // todo fix bug, unable to deserialize this
     /** when the operation happens */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime operateTime;
 
     /** parameters used for the operation */

@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class AccessLogInfoVo implements Serializable {
 
     /** when the user signed in */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime accessTime;
 
     /** ip address */

@@ -24,21 +24,20 @@ authmodule:
     - "/**/*.js"
     - "/**/*.css"
     - "/favicon.ico"
-  # setup custom login processing url
   loginProcessingUrl: "/api/login"
-  # setup custom login page url
   customLoginPage: "/"
-  # setup logout url
   logoutUrl: "/api/logout"
-  # customized cors filter
+  enableAccessLog: true
+  enableOperateLog: true
+  permitAdminLoginOnly: true
+  isAppAuthorizationChecked: true
+  enableControllerConsoleLog: false
   cors:
     isFilterEnabled: false
     allowOrigin: "*"
     allowMethods: "GET,PUT,POST,DELETE,OPTION"
     allowCredential: true
     allowHeaders: "content-type, x-gwt-module-base, x-gwt-permutation, clientid, longpush, set-cookie"
-  enableOperateLog: true
-  permitAdminLoginOnly: true
 
 distributed-task-module:
   application-group: auth-service
@@ -80,17 +79,15 @@ redisson-config: redisson-dev.yaml
 logging.level.root: INFO
 
 authmodule:
-  enableAccessLog: false
-  enableOperateLog: false
-  enableControllerConsoleLog: false
+  enableAccessLog: true
+  enableOperateLog: true
+  enableControllerConsoleLog: true
 
-# ----- nacos heartbeat thread count
+# nacos
 namingClientBeatThreadCount: 1
-
-# ----- nacos naming polling thread count
 namingPollingThreadCount: 1
 
-# ----- quartz thread pool size
+# quartz
 org.quartz.threadPool.threadCount: 2
 
 ---
@@ -120,17 +117,10 @@ spring:
 
 redisson-config: redisson-test.yaml
 server.port: 8443
-logging.level.root: INFO
 
-authmodule:
-  enable-controller-console-log: false
-  is-app-authorization-checked: true
-
-# ----- nacos heartbeat thread count
+# nacos
 namingClientBeatThreadCount: 2
-
-# ----- nacos naming polling thread count
 namingPollingThreadCount: 2
 
-# ----- quartz thread pool size
+# quartz
 org.quartz.threadPool.threadCount: 2
