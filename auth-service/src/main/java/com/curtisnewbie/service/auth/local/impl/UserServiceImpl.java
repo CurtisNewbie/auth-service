@@ -120,6 +120,9 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     public Map<Integer, String> fetchUsernameById(List<Integer> userIds) {
+        if (userIds.isEmpty())
+            return Collections.emptyMap();
+
         QueryWrapper<User> cond = new QueryWrapper<>();
         cond.lambda()
                 .select(User::getId, User::getUsername)
