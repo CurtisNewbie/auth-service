@@ -1,7 +1,7 @@
 #!/bin/bash
 #remoteaddr="192.168.10.128"
 remoteaddr="192.168.31.103"
-jarname="auth-service-web-1.0.1.jar"
+jarname="auth-service-web-1.0.2.jar"
 
 mvn clean package -Dmaven.test.skip=true
 
