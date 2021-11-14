@@ -6,19 +6,22 @@
   <parent>
     <groupId>com.curtisnewbie</groupId>
     <artifactId>curtisnewbie-bom</artifactId>
-    <version>micro-2.0.1</version>
+    <version>micro-2.0.2</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-parent</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <packaging>pom</packaging>
   <name>auth-service-parent</name>
   <description>Authentication Service Parent</description>
 
   <properties>
     <java.version>8</java.version>
+    <auth-service-remote.version>1.0.2</auth-service-remote.version>
+    <auth-service-messaging.version>1.0.2</auth-service-messaging.version>
+    <auth-service-web.version>1.0.2</auth-service-web.version>
   </properties>
 
   <modules>
