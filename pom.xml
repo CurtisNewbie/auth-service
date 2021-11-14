@@ -6,13 +6,13 @@
   <parent>
     <groupId>com.curtisnewbie</groupId>
     <artifactId>curtisnewbie-bom</artifactId>
-    <version>micro-2.0.2</version>
+    <version>micro-2.0.3-SNAPSHOT</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-parent</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>auth-service-parent</name>
   <description>Authentication Service Parent</description>
