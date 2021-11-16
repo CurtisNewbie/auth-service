@@ -77,6 +77,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Integer findIdByUsername(@NotEmpty String username) {
         QueryWrapper<User> condition = new QueryWrapper<>();
         condition.select("id")
