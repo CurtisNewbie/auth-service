@@ -142,6 +142,11 @@ public interface RemoteUserService {
     String findUsernameById(int id);
 
     /**
+     * Find id by username
+     */
+    Integer findIdByUsername(@NotEmpty String username);
+
+    /**
      * Change user's role and enable the user
      */
     void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy);

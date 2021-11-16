@@ -77,6 +77,18 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    public Integer findIdByUsername(@NotEmpty String username) {
+        QueryWrapper<User> condition = new QueryWrapper<>();
+        condition.select("id")
+                .eq("username", username)
+                .last("limit 1");
+        User user = userMapper.selectOne(condition);
+        if (Objects.isNull(user))
+            return null;
+        return user.getId();
+    }
+
+    @Override
     public void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy) {
         updateUser(UpdateUserVo.builder()
                 .id(userId)
