@@ -6,8 +6,7 @@ import com.curtisnewbie.module.messaging.service.MessagingParam;
 import com.curtisnewbie.module.messaging.service.MessagingService;
 import com.curtisnewbie.service.auth.dao.TestMapperConfig;
 import com.curtisnewbie.service.auth.dao.User;
-import com.curtisnewbie.service.auth.local.api.eventhandling.EventHandler;
-import com.curtisnewbie.service.auth.local.api.eventhandling.RegistrationEventHandler;
+import com.curtisnewbie.service.auth.local.api.eventhandling.DelegatingAuthEventHandler;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
@@ -108,8 +107,8 @@ public class TestLocalEventHandlingService {
         // verify the captured argument
         MessagingParam captured = captor.getValue();
         Assertions.assertNotNull(captured);
-        Assertions.assertEquals(captured.getExchange(), EventHandler.EVENT_HANDLER_EXCHANGE);
-        Assertions.assertEquals(captured.getRoutingKey(), RegistrationEventHandler.ROUTING_KEY);
+        Assertions.assertEquals(captured.getExchange(), DelegatingAuthEventHandler.EVENT_HANDLER_EXCHANGE);
+        Assertions.assertEquals(captured.getRoutingKey(), DelegatingAuthEventHandler.ROUTING_KEY);
     }
 
     /**

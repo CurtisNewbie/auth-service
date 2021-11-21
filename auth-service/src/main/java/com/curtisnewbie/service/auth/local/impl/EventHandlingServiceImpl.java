@@ -10,8 +10,7 @@ import com.curtisnewbie.service.auth.dao.EventHandling;
 import com.curtisnewbie.service.auth.infrastructure.converters.EventHandlingConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.EventHandlingMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
-import com.curtisnewbie.service.auth.local.api.eventhandling.EventHandler;
-import com.curtisnewbie.service.auth.local.api.eventhandling.RegistrationEventHandler;
+import com.curtisnewbie.service.auth.local.api.eventhandling.DelegatingAuthEventHandler;
 import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
@@ -26,10 +25,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+
+import static com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus.TO_BE_HANDLED;
 
 /**
  * @author yongjie.zhuang
@@ -74,28 +77,26 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     @Override
     public void handleEvent(@NotNull HandleEventReqVo vo) {
         EventHandling eh = mapper.selectByPrimaryKey(vo.getId());
+        Assert.notNull(eh, "EventHandling == null");
+        Assert.isTrue(Objects.equals(eh.getStatus(), TO_BE_HANDLED.getValue()),
+                "Incorrect step, event shouldn't be handled");
+
         eh.setHandlerId(vo.getHandlerId());
         eh.setHandleTime(LocalDateTime.now());
         eh.setHandleResult(vo.getResult().getValue());
 
         EventHandlingType type = EnumUtils.parse(eh.getType(), EventHandlingType.class);
-        String routingKey;
-        switch (type) {
-            case REGISTRATION_EVENT:
-                routingKey = RegistrationEventHandler.ROUTING_KEY;
-                break;
-            default:
-                throw new IllegalArgumentException("There is no configured handler for type: " + type.toString());
-        }
+        Assert.notNull(type, "EventHandlingType value illegal");
 
         // send to workers
         messagingService.send(MessagingParam.builder()
                 .payload(HandleEventInfoVo.builder()
+                        .type(type)
                         .record(eh)
                         .extra(vo.getExtra())
                         .build())
-                .exchange(EventHandler.EVENT_HANDLER_EXCHANGE)
-                .routingKey(routingKey)
+                .exchange(DelegatingAuthEventHandler.EVENT_HANDLER_EXCHANGE)
+                .routingKey(DelegatingAuthEventHandler.ROUTING_KEY)
                 .deliveryMode(MessageDeliveryMode.NON_PERSISTENT)
                 .build());
     }
