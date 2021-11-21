@@ -10,7 +10,7 @@ import com.curtisnewbie.service.auth.dao.EventHandling;
 import com.curtisnewbie.service.auth.infrastructure.converters.EventHandlingConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.EventHandlingMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
-import com.curtisnewbie.service.auth.local.api.eventhandling.DelegatingAuthEventHandler;
+import com.curtisnewbie.service.auth.infrastructure.mq.listeners.DelegatingAuthEventListener;
 import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
@@ -95,8 +95,8 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
                         .record(eh)
                         .extra(vo.getExtra())
                         .build())
-                .exchange(DelegatingAuthEventHandler.EVENT_HANDLER_EXCHANGE)
-                .routingKey(DelegatingAuthEventHandler.ROUTING_KEY)
+                .exchange(DelegatingAuthEventListener.EVENT_HANDLER_EXCHANGE)
+                .routingKey(DelegatingAuthEventListener.ROUTING_KEY)
                 .deliveryMode(MessageDeliveryMode.NON_PERSISTENT)
                 .build());
     }

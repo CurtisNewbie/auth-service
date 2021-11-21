@@ -1,9 +1,10 @@
-package com.curtisnewbie.service.auth.local.api.eventhandling;
+package com.curtisnewbie.service.auth.infrastructure.mq.listeners;
 
 
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.local.api.eventhandling.AuthEventHandler;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
@@ -23,7 +24,7 @@ import java.util.Map;
 
 /**
  * <p>
- * Abstract Event handler
+ * Listener for auth handling events
  * </p>
  *
  * @author yongjie.zhuang
@@ -31,7 +32,7 @@ import java.util.Map;
 @Slf4j
 @Transactional
 @Component
-public class DelegatingAuthEventHandler {
+public class DelegatingAuthEventListener {
     public static final String EVENT_HANDLER_EXCHANGE = "auth.event-handler.exg";
     public static final String EVENT_HANDLER_QUEUE = "auth.event-handler.queue";
     public static final String ROUTING_KEY = "auth.event-handler";
