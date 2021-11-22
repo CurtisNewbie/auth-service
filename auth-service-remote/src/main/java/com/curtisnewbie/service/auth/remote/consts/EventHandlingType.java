@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.remote.consts;
 
 import com.curtisnewbie.common.enums.IntEnum;
+import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
 
 /**
  * Type of event that will be handled
@@ -12,7 +13,12 @@ public enum EventHandlingType implements IntEnum {
     /**
      * 1-registration event, the body is the id of user
      */
-    REGISTRATION_EVENT(1);
+    REGISTRATION_EVENT(1),
+
+    /**
+     * 2-request app approval (user requesting approval for using the app), body is {@link UserRequestAppApprovalCmd}
+     */
+    REQUEST_APP_APPROVAL(2);
 
     public final int val;
 

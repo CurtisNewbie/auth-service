@@ -23,4 +23,9 @@ public interface LocalUserAppService extends RemoteUserAppService {
      * @return true if it's allowed else false
      */
     boolean isUserAllowedToUseApp(int userId, @NotEmpty String appName);
+
+    /**
+     * Add userApp record
+     */
+    void addUserApp(int userId, int appId, @NotEmpty String createdBy);
 }

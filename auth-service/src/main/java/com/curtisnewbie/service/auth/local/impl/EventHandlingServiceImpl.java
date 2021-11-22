@@ -8,11 +8,12 @@ import com.curtisnewbie.module.messaging.service.MessagingParam;
 import com.curtisnewbie.module.messaging.service.MessagingService;
 import com.curtisnewbie.service.auth.dao.EventHandling;
 import com.curtisnewbie.service.auth.infrastructure.converters.EventHandlingConverter;
+import com.curtisnewbie.service.auth.infrastructure.mq.listeners.DelegatingAuthEventListener;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.EventHandlingMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
-import com.curtisnewbie.service.auth.infrastructure.mq.listeners.DelegatingAuthEventListener;
 import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
+import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
@@ -53,8 +54,10 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     private EventHandlingConverter cvtr;
 
     @Override
-    public int createEvent(@NotNull EventHandlingVo vo) {
-        final EventHandling eventHandling = cvtr.toDo(vo);
+    public int createEvent(@NotNull CreateEventHandlingCmd cmd) {
+        final EventHandling eventHandling = cvtr.toDo(cmd);
+
+        eventHandling.setStatus(TO_BE_HANDLED.getValue());
         eventHandling.validateType();
         eventHandling.validateStatus();
 

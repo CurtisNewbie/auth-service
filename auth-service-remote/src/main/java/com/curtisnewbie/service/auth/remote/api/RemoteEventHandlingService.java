@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.remote.api;
 
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
@@ -22,7 +23,7 @@ public interface RemoteEventHandlingService {
      *
      * @return id of the event
      */
-    int createEvent(@NotNull EventHandlingVo eventHandlingVo);
+    int createEvent(@NotNull CreateEventHandlingCmd cmd);
 
     /**
      * Find events with pagination

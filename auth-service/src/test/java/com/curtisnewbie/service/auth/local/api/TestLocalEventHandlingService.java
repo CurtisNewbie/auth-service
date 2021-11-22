@@ -14,10 +14,7 @@ import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.ExceededMaxAdminCountException;
 import com.curtisnewbie.service.auth.remote.exception.UserRegisteredException;
 import com.curtisnewbie.service.auth.remote.exception.UsernameNotFoundException;
-import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
-import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
-import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
-import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
+import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -115,18 +112,17 @@ public class TestLocalEventHandlingService {
      * @return id of event_handling
      */
     private int createEvent() throws UsernameNotFoundException, UserRegisteredException, ExceededMaxAdminCountException {
-        return localEventHandlingService.createEvent(getEventHandlingVo());
+        return localEventHandlingService.createEvent(getCreateEventHandlingCmd());
     }
 
-    private EventHandlingVo getEventHandlingVo() throws UsernameNotFoundException, UserRegisteredException, ExceededMaxAdminCountException {
+    private CreateEventHandlingCmd getCreateEventHandlingCmd() throws UsernameNotFoundException, UserRegisteredException, ExceededMaxAdminCountException {
         registerTestUser();
         User ue = userService.loadUserByUsername(USERNAME);
         Assertions.assertNotNull(ue);
         final int userId = ue.getId();
 
-        return EventHandlingVo.builder()
+        return CreateEventHandlingCmd.builder()
                 .body(String.valueOf(userId))
-                .status(EventHandlingStatus.TO_BE_HANDLED.getValue())
                 .type(EventHandlingType.REGISTRATION_EVENT.getValue())
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.infrastructure.converters;
 
 import com.curtisnewbie.service.auth.dao.EventHandling;
+import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import org.mapstruct.Mapper;
@@ -12,6 +13,8 @@ import org.mapstruct.Mapper;
  */
 @Mapper(componentModel = "spring")
 public interface EventHandlingConverter {
+
+    EventHandling toDo(CreateEventHandlingCmd cmd);
 
     EventHandling toDo(EventHandlingVo vo);
 

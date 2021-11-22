@@ -13,7 +13,6 @@ import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
-import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
@@ -244,9 +243,8 @@ public class UserServiceImpl implements LocalUserService {
         // generate a handling_event for registration request
         Objects.requireNonNull(userEntity.getId());
         eventHandlingService.createEvent(
-                EventHandlingVo.builder()
+                CreateEventHandlingCmd.builder()
                         .body(String.valueOf(userEntity.getId()))
-                        .status(EventHandlingStatus.TO_BE_HANDLED.getValue())
                         .type(EventHandlingType.REGISTRATION_EVENT.getValue())
                         .build()
         );
