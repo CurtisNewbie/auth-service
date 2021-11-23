@@ -1,9 +1,10 @@
-package com.curtisnewbie.service.auth.local.api.eventhandling;
+package com.curtisnewbie.service.auth.local.impl.eventhandling;
 
 
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.local.api.eventhandling.AuthEventHandler;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;

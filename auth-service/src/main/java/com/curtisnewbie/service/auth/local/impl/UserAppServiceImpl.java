@@ -85,7 +85,6 @@ public class UserAppServiceImpl implements LocalUserAppService {
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(e);
         }
-
     }
 
     @Override

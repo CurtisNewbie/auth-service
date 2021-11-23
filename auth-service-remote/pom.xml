@@ -5,13 +5,13 @@
   <parent>
     <groupId>com.curtisnewbie</groupId>
     <artifactId>auth-service-parent</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-remote</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-SNAPSHOT</version>
   <name>auth-service-remote</name>
   <description>Authentication service api module for rpc</description>
   <packaging>jar</packaging>

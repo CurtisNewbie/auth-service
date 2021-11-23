@@ -28,6 +28,7 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.toType;
 /**
  * @author yongjie.zhuang
  */
+@SentinelResource(value = "user-app", defaultFallback = "serviceNotAvailable", fallbackClass = SentinelFallbackConfig.class)
 @RequestMapping("${web.base-path}/app")
 @RestController
 public class UserAppController {
@@ -41,8 +42,6 @@ public class UserAppController {
     @Autowired
     private AppWebConverter cvtr;
 
-    @SentinelResource(value = "userAppListing", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @PostMapping("/list/all")
     @PreAuthorize("hasAuthority('admin')")
     public Result<PageablePayloadSingleton<List<AppWebVo>>> listApps(@RequestBody PageablePayloadSingleton<AppWebVo> req)
@@ -56,16 +55,12 @@ public class UserAppController {
         return Result.of(resp);
     }
 
-    @SentinelResource(value = "userAppBriefListing", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @GetMapping("/list/brief/all")
     @PreAuthorize("hasAuthority('admin')")
     public Result<List<AppBriefVo>> listAppsBriefInfo() {
         return Result.of(remoteAppService.getAllAppBriefInfo());
     }
 
-    @SentinelResource(value = "appForUserListing", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @PostMapping("/list/user")
     @PreAuthorize("hasAuthority('admin')")
     public Result<List<AppBriefVo>> getAppsForUser(@RequestBody GetAppsForUserReqVo vo) throws MsgEmbeddedException {
@@ -74,8 +69,6 @@ public class UserAppController {
         return Result.of(remoteUserAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 
-    @SentinelResource(value = "userAppUpdate", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @PostMapping("/user/update")
     @PreAuthorize("hasAuthority('admin')")
     public Result<Void> updateUserApps(@RequestBody UpdateUserAppReqWebVo reqVo) throws MsgEmbeddedException {

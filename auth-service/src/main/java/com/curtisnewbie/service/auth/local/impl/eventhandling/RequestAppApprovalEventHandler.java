@@ -1,9 +1,10 @@
-package com.curtisnewbie.service.auth.local.api.eventhandling;
+package com.curtisnewbie.service.auth.local.impl.eventhandling;
 
 
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.local.api.eventhandling.AuthEventHandler;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
 import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
@@ -53,13 +54,8 @@ public class RequestAppApprovalEventHandler implements AuthEventHandler {
                 return;
             }
 
-
-            // only "accept" will actually update the user role and status
-            if (!result.equals(EventHandlingResult.ACCEPT))
-                return;
-
-            // add user app
-            localUserAppService.addUserApp(cmd.getUserId(), cmd.getAppId(), handlerName);
+            if (result.equals(EventHandlingResult.ACCEPT))
+                localUserAppService.addUserApp(cmd.getUserId(), cmd.getAppId(), handlerName);
 
         } catch (Exception e) {
             throw new AmqpRejectAndDontRequeueException(e);
