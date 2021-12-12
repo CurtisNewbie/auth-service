@@ -4,6 +4,8 @@ redisson-config: redisson-dev.yaml
 # ----- distributed-task-module
 distributed-task-module:
   enabled: true
+  scheduling:
+    disabled: true
 
 # ----- nacos
 namingClientBeatThreadCount: 1
