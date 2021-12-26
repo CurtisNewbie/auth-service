@@ -17,6 +17,9 @@
 
   <properties>
     <java.version>8</java.version>
+    <log-tracing-module.version>2.0.1</log-tracing-module.version>
+    <messaging-module.version>2.0.2</messaging-module.version>
+    <distributed-task-module.version>2.0.3-SNAPSHOT</distributed-task-module.version>
   </properties>
 
   <dependencies>
@@ -87,11 +90,13 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>log-tracing-module</artifactId>
+      <version>${log-tracing-module.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>messaging-module</artifactId>
+      <version>${messaging-module.version}</version>
     </dependency>
 
     <dependency>
@@ -103,6 +108,7 @@
           <artifactId>mybatis-spring-boot-starter</artifactId>
         </exclusion>
       </exclusions>
+      <version>${distributed-task-module.version}</version>
     </dependency>
 
     <dependency>

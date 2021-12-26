@@ -18,12 +18,14 @@
 
   <properties>
     <java.version>8</java.version>
+    <common-module.version>2.0.3-SNAPSHOT</common-module.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>common-module</artifactId>
+      <version>${common-module.version}</version>
     </dependency>
 
     <dependency>

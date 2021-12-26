@@ -17,13 +17,19 @@
 
   <properties>
     <java.version>8</java.version>
+    <auth-module.version>micro-2.0.3-SNAPSHOT</auth-module.version>
+    <common-module.version>2.0.3-SNAPSHOT</common-module.version>
+    <log-tracing-module.version>2.0.1</log-tracing-module.version>
+    <redis-util-module.version>2.0.2-SNAPSHOT</redis-util-module.version>
+    <distributed-task-module.version>2.0.3-SNAPSHOT</distributed-task-module.version>
+    <jwt-module.version>1.0.0-SNAPSHOT</jwt-module.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>jwt-module</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>${jwt-module.version}</version>
     </dependency>
 
     <dependency>
@@ -65,6 +71,7 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-module</artifactId>
+      <version>${auth-module.version}</version>
     </dependency>
 
     <dependency>
@@ -80,6 +87,7 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>common-module</artifactId>
+      <version>${common-module.version}</version>
     </dependency>
 
     <dependency>
@@ -90,6 +98,7 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>log-tracing-module</artifactId>
+      <version>${log-tracing-module.version}</version>
     </dependency>
 
     <dependency>
@@ -100,11 +109,13 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>redis-util-module</artifactId>
+      <version>${redis-util-module.version}</version>
     </dependency>
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>distributed-task-module</artifactId>
+      <version>${distributed-task-module.version}</version>
     </dependency>
 
     <dependency>
