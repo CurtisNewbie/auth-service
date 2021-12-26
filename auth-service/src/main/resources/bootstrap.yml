@@ -3,10 +3,43 @@ spring:
     name: auth-service
   profiles:
     active: dev
+
 mybatis:
   config-location: classpath:mybatis-config.xml
+
 distributed-task-module:
   application-group: auth-service
+
+web:
+  base-path: "/api/"
+
+authmodule:
+  permittedAntPatterns:
+    - "/"
+    - "/api/login"
+    - "/api/logout"
+    - "/api/user/info"
+    - "/api/user/register/request"
+    - "/**/*.js"
+    - "/**/*.css"
+    - "/favicon.ico"
+    - "/api/token/login-for-token"
+  loginProcessingUrl: "/api/login"
+  customLoginPage: "/"
+  logoutUrl: "/api/logout"
+  enableAccessLog: true
+  enableOperateLog: true
+  permitAdminLoginOnly: true
+  isAppAuthorizationChecked: true
+  enableControllerConsoleLog: false
+  cors:
+    isFilterEnabled: false
+    allowOrigin: "*"
+    allowMethods: "GET,PUT,POST,DELETE,OPTION"
+    allowCredential: true
+    allowHeaders: "content-type, x-gwt-module-base, x-gwt-permutation, clientid, longpush, set-cookie"
+
+management.endpoints.web.exposure.include: "*"
 
 ---
 spring:

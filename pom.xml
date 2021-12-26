@@ -26,7 +26,6 @@
 
   <modules>
     <module>auth-service</module>
-    <module>auth-service-web</module>
     <module>auth-service-remote</module>
     <module>auth-service-messaging</module>
   </modules>

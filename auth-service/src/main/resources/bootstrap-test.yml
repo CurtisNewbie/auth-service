@@ -1,0 +1,43 @@
+spring:
+  profiles: test
+  datasource:
+    url: jdbc:mysql://${mysqladdr}:3306/authserver?serverTimezone=Asia/Shanghai
+    username: ${mysqlusername}
+    password: ${mysqlpassword}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: ${rabbitmqaddr}
+    port: 5672
+    username: ${rabbitmqusername}
+    password: ${rabbitmqpassword}
+    virtualHost: /
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${nacosaddr}:8848
+      config:
+        server-addr: ${nacosaddr}:8848
+
+# ----- Redis
+redisson-config: redisson-test.yaml
+
+# ----- distributed-task-module
+distributed-task-module:
+  enabled: true
+
+# ----- nacos
+namingClientBeatThreadCount: 2
+namingPollingThreadCount: 2
+
+# ----- quartz
+org.quartz.threadPool:
+  threadCount: 2
+
+authmodule:
+  enableAccessLog: true
+  enableOperateLog: true
+  enableControllerConsoleLog: false
+
+jwt-module:
+  publicKey: ${jwt-module.publicKey}
+  privateKey: ${jwt-module.privateKey}

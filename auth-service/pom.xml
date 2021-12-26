@@ -20,9 +20,36 @@
     <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
     <messaging-module.version>2.0.3-SNAPSHOT</messaging-module.version>
     <distributed-task-module.version>2.0.3-SNAPSHOT</distributed-task-module.version>
+    <auth-module.version>micro-2.0.3-SNAPSHOT</auth-module.version>
+    <common-module.version>2.0.3-SNAPSHOT</common-module.version>
+    <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
+    <redis-util-module.version>2.0.2-SNAPSHOT</redis-util-module.version>
+    <jwt-module.version>1.0.0-SNAPSHOT</jwt-module.version>
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>com.curtisnewbie</groupId>
+      <artifactId>jwt-module</artifactId>
+      <version>${jwt-module.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.session</groupId>
+      <artifactId>spring-session-data-redis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.curtisnewbie</groupId>
+      <artifactId>auth-module</artifactId>
+      <version>${auth-module.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>

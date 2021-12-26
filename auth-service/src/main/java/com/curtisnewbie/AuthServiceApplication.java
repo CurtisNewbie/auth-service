@@ -12,6 +12,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import java.io.IOException;
 
@@ -22,6 +24,8 @@ import java.io.IOException;
 @EnableDubbo
 @EnableDiscoveryClient
 @SpringBootApplication
+@EnableRedisHttpSession(redisNamespace = "auth-service:session")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthServiceApplication {
 
     public static void main(String[] args) {
