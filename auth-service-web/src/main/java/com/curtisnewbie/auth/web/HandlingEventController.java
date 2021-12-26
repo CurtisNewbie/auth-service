@@ -1,7 +1,5 @@
 package com.curtisnewbie.auth.web;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.vo.EventHandlingWebVo;
 import com.curtisnewbie.auth.vo.FindEventHandlingByPageReqWebVo;
 import com.curtisnewbie.auth.vo.FindEventHandlingByPageRespWebVo;
@@ -44,8 +42,6 @@ public class HandlingEventController {
     @DubboReference
     private RemoteUserService remoteUserService;
 
-    @SentinelResource(value = "findEventHandlingByPage", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
     public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v)
@@ -63,8 +59,6 @@ public class HandlingEventController {
         return Result.of(resp);
     }
 
-    @SentinelResource(value = "handleEvent", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/handle")
     public Result<Void> handleEvent(@RequestBody HandleEventReqWebVo v) throws InvalidAuthenticationException,

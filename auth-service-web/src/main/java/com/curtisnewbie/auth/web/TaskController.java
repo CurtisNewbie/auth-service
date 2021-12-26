@@ -1,7 +1,5 @@
 package com.curtisnewbie.auth.web;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.converters.TaskAsConverter;
 import com.curtisnewbie.auth.converters.TaskHistoryAsConverter;
 import com.curtisnewbie.auth.vo.*;
@@ -57,8 +55,6 @@ public class TaskController {
     @Autowired
     private TaskHistoryAsConverter taskHistoryAsConverter;
 
-    @SentinelResource(value = "taskListing", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/task/list", description = "list tasks")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
@@ -78,8 +74,6 @@ public class TaskController {
         return Result.of(resp);
     }
 
-    @SentinelResource(value = "taskHistoryListing", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/task/history", description = "list task history")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/history")
@@ -94,8 +88,6 @@ public class TaskController {
         return Result.of(resp);
     }
 
-    @SentinelResource(value = "taskUpdate", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/task/update", description = "update task")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/update")
@@ -118,8 +110,6 @@ public class TaskController {
         return Result.ok();
     }
 
-    @SentinelResource(value = "taskTriggering", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/task/trigger", description = "trigger task")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/trigger")

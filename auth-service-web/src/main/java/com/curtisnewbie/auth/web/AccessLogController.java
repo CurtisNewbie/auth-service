@@ -1,7 +1,5 @@
 package com.curtisnewbie.auth.web;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.converters.AccessLogWebConverter;
 import com.curtisnewbie.auth.vo.ListAccessLogInfoReqVo;
 import com.curtisnewbie.auth.vo.ListAccessLogInfoRespVo;
@@ -37,8 +35,6 @@ public class AccessLogController {
     @Autowired
     private AccessLogWebConverter accessLogWebConverter;
 
-    @SentinelResource(value = "listAccessLogInfo", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class)
     @LogOperation(name = "/access/history", description = "list access log info")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/history")

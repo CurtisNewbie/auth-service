@@ -1,7 +1,5 @@
 package com.curtisnewbie.auth.web;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.vo.LoginWebVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
@@ -36,8 +34,6 @@ public class JwtController {
     @Autowired
     private JwtBuilder jwtBuilder;
 
-    @SentinelResource(value = "login-for-token", defaultFallback = "serviceNotAvailable",
-            fallbackClass = SentinelFallbackConfig.class, exceptionsToIgnore = UserRelatedException.class)
     @LogOperation(name = "/token/login-for-token", description = "get token")
     @PostMapping("/login-for-token")
     public Result<String> getToken(@Validated @RequestBody LoginWebVo loginWebVo) throws UserRelatedException {

@@ -1,7 +1,5 @@
 package com.curtisnewbie.auth.web;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.curtisnewbie.auth.config.SentinelFallbackConfig;
 import com.curtisnewbie.auth.converters.AppWebConverter;
 import com.curtisnewbie.auth.vo.AppWebVo;
 import com.curtisnewbie.auth.vo.GetAppsForUserReqVo;
@@ -28,7 +26,6 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.toType;
 /**
  * @author yongjie.zhuang
  */
-@SentinelResource(value = "user-app", defaultFallback = "serviceNotAvailable", fallbackClass = SentinelFallbackConfig.class)
 @RequestMapping("${web.base-path}/app")
 @RestController
 public class UserAppController {
