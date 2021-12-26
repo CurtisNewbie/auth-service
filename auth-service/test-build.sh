@@ -1,6 +1,6 @@
 #!/bin/bash
 
-jarname="auth-service-1.0.3-SNAPSHOT.jar"
+jarname="auth-service-build.jar"
 
 mvn clean package -Dmaven.test.skip=true
 
