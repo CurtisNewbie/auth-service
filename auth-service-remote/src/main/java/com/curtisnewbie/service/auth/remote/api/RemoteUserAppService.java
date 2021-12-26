@@ -5,6 +5,7 @@ import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqCmd;
 import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -26,4 +27,13 @@ public interface RemoteUserAppService {
 
     /** Request approval to use the app */
     void requestAppUseApproval(@NotNull UserRequestAppApprovalCmd cmd);
+
+    /**
+     * Check if the user can use the specified application
+     *
+     * @param userId  user's id
+     * @param appName application's name
+     * @return true if it's allowed else false
+     */
+    boolean isUserAllowedToUseApp(int userId, @NotEmpty String appName);
 }

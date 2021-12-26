@@ -11,7 +11,7 @@
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-remote</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
   <name>auth-service-remote</name>
   <description>Authentication service api module for rpc</description>
   <packaging>jar</packaging>

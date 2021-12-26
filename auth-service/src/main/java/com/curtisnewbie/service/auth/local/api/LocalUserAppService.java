@@ -16,15 +16,6 @@ import javax.validation.constraints.NotEmpty;
 public interface LocalUserAppService extends RemoteUserAppService {
 
     /**
-     * Check if the user can use the specified application
-     *
-     * @param userId  user's id
-     * @param appName application's name
-     * @return true if it's allowed else false
-     */
-    boolean isUserAllowedToUseApp(int userId, @NotEmpty String appName);
-
-    /**
      * Add userApp record
      */
     void addUserApp(int userId, int appId, @NotEmpty String createdBy);
