@@ -6,11 +6,10 @@ import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.service.auth.infrastructure.converters.AccessLogWebConverter;
-import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
+import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.vo.ListAccessLogInfoReqVo;
 import com.curtisnewbie.service.auth.vo.ListAccessLogInfoRespVo;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +28,8 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 @RequestMapping("${web.base-path}/access")
 public class AccessLogController {
 
-    @DubboReference
-    private RemoteAccessLogService accessLogService;
+    @Autowired
+    private LocalAccessLogService accessLogService;
 
     @Autowired
     private AccessLogWebConverter accessLogWebConverter;

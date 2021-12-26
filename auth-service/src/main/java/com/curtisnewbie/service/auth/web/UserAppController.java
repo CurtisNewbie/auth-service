@@ -5,15 +5,14 @@ import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.infrastructure.converters.AppWebConverter;
-import com.curtisnewbie.service.auth.remote.api.RemoteAppService;
-import com.curtisnewbie.service.auth.remote.api.RemoteUserAppService;
+import com.curtisnewbie.service.auth.local.api.LocalAppService;
+import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
 import com.curtisnewbie.service.auth.remote.vo.AppVo;
 import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqCmd;
 import com.curtisnewbie.service.auth.vo.AppWebVo;
 import com.curtisnewbie.service.auth.vo.GetAppsForUserReqVo;
 import com.curtisnewbie.service.auth.vo.UpdateUserAppReqWebVo;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +29,11 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.toType;
 @RestController
 public class UserAppController {
 
-    @DubboReference
-    private RemoteAppService remoteAppService;
+    @Autowired
+    private LocalAppService appService;
 
-    @DubboReference
-    private RemoteUserAppService remoteUserAppService;
+    @Autowired
+    private LocalUserAppService userAppService;
 
     @Autowired
     private AppWebConverter cvtr;
@@ -45,7 +44,7 @@ public class UserAppController {
             throws MsgEmbeddedException {
         ValidUtils.requireNonNull(req.getPagingVo());
 
-        PageablePayloadSingleton<List<AppVo>> pps = remoteAppService.getAllAppInfo(req.getPagingVo());
+        PageablePayloadSingleton<List<AppVo>> pps = appService.getAllAppInfo(req.getPagingVo());
         PageablePayloadSingleton<List<AppWebVo>> resp = new PageablePayloadSingleton<>();
         resp.setPagingVo(pps.getPagingVo());
         resp.setPayload(mapTo(pps.getPayload(), cvtr::toWebVo));
@@ -55,7 +54,7 @@ public class UserAppController {
     @GetMapping("/list/brief/all")
     @PreAuthorize("hasAuthority('admin')")
     public Result<List<AppBriefVo>> listAppsBriefInfo() {
-        return Result.of(remoteAppService.getAllAppBriefInfo());
+        return Result.of(appService.getAllAppBriefInfo());
     }
 
     @PostMapping("/list/user")
@@ -63,14 +62,14 @@ public class UserAppController {
     public Result<List<AppBriefVo>> getAppsForUser(@RequestBody GetAppsForUserReqVo vo) throws MsgEmbeddedException {
 
         vo.validate();
-        return Result.of(remoteUserAppService.getAppsPermittedForUser(vo.getUserId()));
+        return Result.of(userAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 
     @PostMapping("/user/update")
     @PreAuthorize("hasAuthority('admin')")
     public Result<Void> updateUserApps(@RequestBody UpdateUserAppReqWebVo reqVo) throws MsgEmbeddedException {
         reqVo.validate();
-        remoteUserAppService.updateUserApp(toType(reqVo, UpdateUserAppReqCmd.class));
+        userAppService.updateUserApp(toType(reqVo, UpdateUserAppReqCmd.class));
         return Result.ok();
     }
 

@@ -3,12 +3,11 @@ package com.curtisnewbie.service.auth.web;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
-import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
+import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
 import com.curtisnewbie.service.auth.vo.LoginWebVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,8 +27,8 @@ import java.time.LocalDateTime;
 @RequestMapping("${web.base-path}/token")
 public class JwtController {
 
-    @DubboReference
-    private RemoteUserService remoteUserService;
+    @Autowired
+    private LocalUserService remoteUserService;
 
     @Autowired
     private JwtBuilder jwtBuilder;

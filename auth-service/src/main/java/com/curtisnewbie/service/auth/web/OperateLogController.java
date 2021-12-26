@@ -7,10 +7,9 @@ import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogWebConverter;
-import com.curtisnewbie.service.auth.remote.api.RemoteOperateLogService;
+import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import com.curtisnewbie.service.auth.vo.FindOperateLogRespVo;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,8 +26,8 @@ import java.util.List;
 @RequestMapping("${web.base-path}/operate")
 public class OperateLogController {
 
-    @DubboReference
-    private RemoteOperateLogService remoteOperateLogService;
+    @Autowired
+    private LocalOperateLogService operateLogService;
 
     @Autowired
     private OperateLogWebConverter cvtr;
@@ -37,7 +36,7 @@ public class OperateLogController {
     @LogOperation(name = "/operate/history", description = "find operate log history in pages", enabled = false)
     @PostMapping("/history")
     public Result<FindOperateLogRespVo> findByPage(@RequestBody PagingVo pagingVo) throws MsgEmbeddedException {
-        PageablePayloadSingleton<List<OperateLogVo>> pv = remoteOperateLogService.findOperateLogInfoInPages(pagingVo);
+        PageablePayloadSingleton<List<OperateLogVo>> pv = operateLogService.findOperateLogInfoInPages(pagingVo);
         FindOperateLogRespVo res = new FindOperateLogRespVo();
         res.setPagingVo(pv.getPagingVo());
         res.setOperateLogVoList(BeanCopyUtils.mapTo(pv.getPayload(), cvtr::toWebVo));

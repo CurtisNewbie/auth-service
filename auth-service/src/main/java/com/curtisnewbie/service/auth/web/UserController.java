@@ -9,7 +9,7 @@ import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.module.auth.util.AuthUtil;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
-import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
+import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
@@ -17,7 +17,6 @@ import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.vo.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,8 +38,8 @@ public class UserController {
 
     private static final int PASSWORD_LENGTH = 6;
 
-    @DubboReference(lazy = true)
-    private RemoteUserService userService;
+    @Autowired
+    private LocalUserService userService;
 
     @Autowired
     private UserWebConverter cvtr;

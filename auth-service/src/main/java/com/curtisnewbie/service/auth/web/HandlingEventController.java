@@ -7,8 +7,8 @@ import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.util.AuthUtil;
-import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
-import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
+import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
+import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
@@ -18,7 +18,7 @@ import com.curtisnewbie.service.auth.vo.EventHandlingWebVo;
 import com.curtisnewbie.service.auth.vo.FindEventHandlingByPageReqWebVo;
 import com.curtisnewbie.service.auth.vo.FindEventHandlingByPageRespWebVo;
 import com.curtisnewbie.service.auth.vo.HandleEventReqWebVo;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,11 +36,11 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 @RequestMapping("${web.base-path}/event")
 public class HandlingEventController {
 
-    @DubboReference
-    private RemoteEventHandlingService remoteEventHandlingService;
+    @Autowired
+    private LocalEventHandlingService eventHandlingService;
 
-    @DubboReference
-    private RemoteUserService remoteUserService;
+    @Autowired
+    private LocalUserService userService;
 
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
@@ -49,7 +49,7 @@ public class HandlingEventController {
 
         v.validate();
 
-        PageablePayloadSingleton<List<EventHandlingVo>> pi = remoteEventHandlingService.findEventHandlingByPage(
+        PageablePayloadSingleton<List<EventHandlingVo>> pi = eventHandlingService.findEventHandlingByPage(
                 BeanCopyUtils.toType(v, FindEventHandlingByPageReqVo.class)
         );
 
@@ -67,7 +67,7 @@ public class HandlingEventController {
         ValidUtils.requireNonNull(v.getResult());
         EventHandlingResult result = EnumUtils.parse(v.getResult(), EventHandlingResult.class);
         ValidUtils.requireNonNull(result);
-        remoteEventHandlingService.handleEvent(HandleEventReqVo.builder()
+        eventHandlingService.handleEvent(HandleEventReqVo.builder()
                 .id(v.getId())
                 .result(result)
                 .extra(v.getExtra())
@@ -78,7 +78,7 @@ public class HandlingEventController {
 
     private EventHandlingWebVo fillTextDescription(EventHandlingVo e) {
         EventHandlingWebVo wv = BeanCopyUtils.toType(e, EventHandlingWebVo.class);
-        wv.fillDescription(remoteUserService);
+        wv.fillDescription(userService);
         return wv;
     }
 }
