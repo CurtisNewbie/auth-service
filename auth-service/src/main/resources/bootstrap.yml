@@ -30,7 +30,7 @@ authmodule:
   enableAccessLog: true
   enableOperateLog: true
   permitAdminLoginOnly: true
-  isAppAuthorizationChecked: true
+  appAuthorizationChecked: true
   enableControllerConsoleLog: false
   cors:
     isFilterEnabled: false

@@ -37,6 +37,7 @@ authmodule:
   enableAccessLog: true
   enableOperateLog: true
   enableControllerConsoleLog: false
+  appAuthorizationChecked: true
 
 jwt-module:
   publicKey: ${jwt-module.publicKey}
