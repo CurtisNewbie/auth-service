@@ -41,42 +41,5 @@ authmodule:
 
 management.endpoints.web.exposure.include: "*"
 
----
-spring:
-  profiles: dev
-  datasource:
-    url: jdbc:mysql://localhost:3306/fileServer?serverTimezone=Asia/Shanghai
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtualHost: /
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848
-      config:
-        server-addr: localhost:8848
-
----
-spring:
-  profiles: test
-  datasource:
-    url: jdbc:mysql://${mysqladdr}:3306/authserver?serverTimezone=Asia/Shanghai
-    username: ${mysqlusername}
-    password: ${mysqlpassword}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  rabbitmq:
-    host: ${rabbitmqaddr}
-    port: 5672
-    username: ${rabbitmqusername}
-    password: ${rabbitmqpassword}
-    virtualHost: /
-  cloud:
-    nacos:
-      discovery:
-        server-addr: ${nacosaddr}:8848
+jwt-module:
+  issuer: yongj.zhuang-auth-service

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controller for JWT retrieval and exchange
@@ -37,8 +39,12 @@ public class JwtController {
     @PostMapping("/login-for-token")
     public Result<String> getToken(@Validated @RequestBody LoginWebVo loginWebVo) throws UserRelatedException {
         UserVo user = remoteUserService.login(loginWebVo.getUsername(), loginWebVo.getPassword());
+        Map<String, String> claims = new HashMap<>();
+        claims.put("id", user.getId().toString());
+        claims.put("username", user.getUsername());
+        claims.put("role", user.getRole());
 
         // valid for 20 minutes
-        return Result.of(jwtBuilder.encode(user, LocalDateTime.now().plusMinutes(20)));
+        return Result.of(jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(20)));
     }
 }
