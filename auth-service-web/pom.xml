@@ -19,7 +19,7 @@
     <java.version>8</java.version>
     <auth-module.version>micro-2.0.3-SNAPSHOT</auth-module.version>
     <common-module.version>2.0.3-SNAPSHOT</common-module.version>
-    <log-tracing-module.version>2.0.1</log-tracing-module.version>
+    <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
     <redis-util-module.version>2.0.2-SNAPSHOT</redis-util-module.version>
     <distributed-task-module.version>2.0.3-SNAPSHOT</distributed-task-module.version>
     <jwt-module.version>1.0.0-SNAPSHOT</jwt-module.version>
