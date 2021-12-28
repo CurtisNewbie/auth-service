@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.curtisnewbie</groupId>
     <artifactId>auth-service-parent</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -25,16 +25,9 @@
     <common-module.version>2.0.3-SNAPSHOT</common-module.version>
     <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
     <redis-util-module.version>2.0.2-SNAPSHOT</redis-util-module.version>
-    <jwt-module.version>1.0.0-SNAPSHOT</jwt-module.version>
   </properties>
 
   <dependencies>
-
-    <dependency>
-      <groupId>com.curtisnewbie</groupId>
-      <artifactId>jwt-module</artifactId>
-      <version>${jwt-module.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>org.springframework.session</groupId>

@@ -24,6 +24,7 @@ authmodule:
     - "/**/*.css"
     - "/favicon.ico"
     - "/api/token/login-for-token"
+    - "/api/token/exchange-token"
   loginProcessingUrl: "/api/login"
   customLoginPage: "/"
   logoutUrl: "/api/logout"
