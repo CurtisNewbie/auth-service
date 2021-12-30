@@ -11,7 +11,7 @@
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-remote</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>${auth-service-remote.version}</version>
   <name>auth-service-remote</name>
   <description>Authentication service api module for rpc</description>
   <packaging>jar</packaging>
@@ -31,6 +31,11 @@
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-openfeign</artifactId>
     </dependency>
   </dependencies>
 

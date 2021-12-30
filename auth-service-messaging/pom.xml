@@ -11,7 +11,7 @@
 
   <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-messaging</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>${auth-service-messaging.version}</version>
   <packaging>jar</packaging>
   <name>auth-service-messaging</name>
   <description>Module that provides required constants to send async messages to auth-service</description>
