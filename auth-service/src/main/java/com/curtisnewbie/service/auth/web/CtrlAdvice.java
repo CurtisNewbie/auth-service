@@ -4,6 +4,7 @@ import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.remote.exception.ExceededMaxAdminCountException;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
+import com.curtisnewbie.service.auth.remote.exception.PasswordIncorrectException;
 import com.curtisnewbie.service.auth.remote.exception.UserRegisteredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,12 @@ public class CtrlAdvice {
     @ResponseBody
     public Result<?> handleInvalidAuthenticationException(Exception e) {
         return Result.error("Please login first");
+    }
+
+    @ExceptionHandler({PasswordIncorrectException.class})
+    @ResponseBody
+    public Result<?> handlePasswordIncorrectException(Exception e) {
+        return Result.error("Password Incorrect");
     }
 
     @ExceptionHandler({MsgEmbeddedException.class})

@@ -42,7 +42,7 @@ public class JwtController {
     @Autowired
     private JwtDecoder jwtDecoder;
 
-    @LogOperation(name = "/token/login-for-token", description = "get token")
+    @LogOperation(name = "/token/login-for-token", description = "get token", enabled = false)
     @PostMapping("/login-for-token")
     public Result<String> getToken(@Validated @RequestBody LoginWebVo loginWebVo) throws UserRelatedException {
         UserVo user = remoteUserService.login(loginWebVo.getUsername(), loginWebVo.getPassword());
@@ -55,7 +55,7 @@ public class JwtController {
         return Result.of(jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(20)));
     }
 
-    @LogOperation(name = "/token/exchange-token", description = "exchange token")
+    @LogOperation(name = "/token/exchange-token", description = "exchange token", enabled = false)
     @PostMapping("/exchange-token")
     public Result<String> exchangeToken(@Validated @RequestBody ExchangeTokenWebVo exchangeTokenWebVo) {
 
