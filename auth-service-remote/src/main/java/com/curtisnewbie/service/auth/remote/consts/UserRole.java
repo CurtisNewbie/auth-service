@@ -2,6 +2,7 @@ package com.curtisnewbie.service.auth.remote.consts;
 
 import com.curtisnewbie.common.enums.ValueEnum;
 import com.curtisnewbie.common.util.EnumUtils;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Objects;
 
@@ -21,6 +22,7 @@ public enum UserRole implements ValueEnum<String> {
     /** Guest */
     GUEST("guest");
 
+    @JsonValue
     private final String val;
 
     UserRole(String v) {

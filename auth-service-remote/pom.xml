@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.curtisnewbie</groupId>
     <artifactId>auth-service-parent</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -18,7 +18,7 @@
 
   <properties>
     <java.version>8</java.version>
-    <common-module.version>2.0.3-SNAPSHOT</common-module.version>
+    <common-module.version>2.0.4-SNAPSHOT</common-module.version>
   </properties>
 
   <dependencies>
