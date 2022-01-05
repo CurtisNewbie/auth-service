@@ -8,11 +8,9 @@ import com.curtisnewbie.service.auth.dao.OperateLog;
 import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
-import com.curtisnewbie.service.auth.remote.api.RemoteOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import com.curtisnewbie.service.auth.vo.MoveOperateLogToHistoryCmd;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -30,7 +28,6 @@ import static com.curtisnewbie.common.util.PagingUtil.forPage;
 @Slf4j
 @Service
 @Transactional
-@DubboService(interfaceClass = RemoteOperateLogService.class)
 public class OperateLogServiceImpl implements LocalOperateLogService {
 
     @Autowired

@@ -45,6 +45,6 @@ public interface EventHandlingServiceFeign {
      * </p>
      */
     @PostMapping("/handling")
-    void handleEvent(@NotNull HandleEventReqVo vo);
+    Result<Void> handleEvent(@NotNull HandleEventReqVo vo);
 }
 

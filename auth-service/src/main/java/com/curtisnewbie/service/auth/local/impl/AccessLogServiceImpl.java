@@ -8,11 +8,9 @@ import com.curtisnewbie.service.auth.dao.AccessLog;
 import com.curtisnewbie.service.auth.infrastructure.converters.AccessLogConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
-import com.curtisnewbie.service.auth.remote.api.RemoteAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.vo.MoveAccessLogToHistoryCmd;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,7 +26,6 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
-@DubboService(interfaceClass = RemoteAccessLogService.class)
 public class AccessLogServiceImpl implements LocalAccessLogService {
 
     @Autowired

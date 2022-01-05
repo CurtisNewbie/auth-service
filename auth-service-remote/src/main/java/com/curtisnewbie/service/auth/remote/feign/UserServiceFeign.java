@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.remote.feign;
 
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;

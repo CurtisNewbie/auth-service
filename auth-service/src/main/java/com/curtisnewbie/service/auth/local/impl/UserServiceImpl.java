@@ -12,7 +12,6 @@ import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
-import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
@@ -21,7 +20,6 @@ import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
 import com.curtisnewbie.service.auth.util.RandomNumUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.lang.Nullable;
@@ -44,7 +42,6 @@ import static com.curtisnewbie.common.util.PagingUtil.forPage;
 @Slf4j
 @Service
 @Transactional
-@DubboService(interfaceClass = RemoteUserService.class)
 public class UserServiceImpl implements LocalUserService {
     private static final String ADMIN_LIMIT_COUNT_KEY = "admin.count.limit";
 

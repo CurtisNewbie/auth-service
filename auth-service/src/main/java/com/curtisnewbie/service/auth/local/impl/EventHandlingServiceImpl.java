@@ -11,7 +11,6 @@ import com.curtisnewbie.service.auth.infrastructure.converters.EventHandlingConv
 import com.curtisnewbie.service.auth.infrastructure.mq.listeners.DelegatingAuthEventListener;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.EventHandlingMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
-import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
@@ -20,7 +19,6 @@ import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
 import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +39,6 @@ import static com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus.TO
 @Slf4j
 @Service
 @Transactional
-@DubboService(interfaceClass = RemoteEventHandlingService.class)
 public class EventHandlingServiceImpl implements LocalEventHandlingService {
 
     @Autowired

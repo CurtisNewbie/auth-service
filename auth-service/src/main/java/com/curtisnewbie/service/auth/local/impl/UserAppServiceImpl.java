@@ -8,7 +8,6 @@ import com.curtisnewbie.service.auth.infrastructure.converters.AppConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserAppMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
-import com.curtisnewbie.service.auth.remote.api.RemoteUserAppService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
 import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
@@ -16,7 +15,6 @@ import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqCmd;
 import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +33,6 @@ import static java.util.Objects.nonNull;
  */
 @Slf4j
 @Transactional
-@DubboService(interfaceClass = RemoteUserAppService.class)
 public class UserAppServiceImpl implements LocalUserAppService {
 
     @Autowired

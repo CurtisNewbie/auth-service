@@ -1,18 +1,21 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.service.auth.dao.EventHandling;
-import com.curtisnewbie.service.auth.remote.api.RemoteEventHandlingService;
+import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
+import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
+import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
 import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Local service for event_handling
  *
  * @author yongjie.zhuang
  */
-public interface LocalEventHandlingService extends RemoteEventHandlingService {
+public interface LocalEventHandlingService {
 
     /**
      * Update handling result
@@ -27,4 +30,26 @@ public interface LocalEventHandlingService extends RemoteEventHandlingService {
      * @param id id
      */
     EventHandlingVo findById(int id);
+
+    /**
+     * Create an event to be handled
+     *
+     * @return id of the event
+     */
+    int createEvent(@NotNull CreateEventHandlingCmd cmd);
+
+    /**
+     * Find events with pagination
+     */
+    PageablePayloadSingleton<List<EventHandlingVo>> findEventHandlingByPage(@NotNull FindEventHandlingByPageReqVo vo);
+
+    /**
+     * <p>
+     * Handle the event
+     * </p>
+     * <p>
+     * Trying to handle an event that doesn't need to be handled will have no effect
+     * </p>
+     */
+    void handleEvent(@NotNull HandleEventReqVo vo);
 }

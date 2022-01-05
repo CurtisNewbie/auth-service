@@ -2,7 +2,7 @@ package com.curtisnewbie.service.auth.vo;
 
 import com.curtisnewbie.common.util.DateUtils;
 import com.curtisnewbie.common.util.EnumUtils;
-import com.curtisnewbie.service.auth.remote.api.RemoteUserService;
+import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -65,11 +65,11 @@ public class EventHandlingWebVo {
     /**
      * Fill {@code description} based on type
      */
-    public void fillDescription(RemoteUserService remoteUserService) {
+    public void fillDescription(LocalUserService localUserService) {
         EventHandlingType et = EnumUtils.parse(getType(), EventHandlingType.class);
 
         if (et.equals(EventHandlingType.REGISTRATION_EVENT)) {
-            String username = remoteUserService.findUsernameById(Integer.parseInt(getBody()));
+            String username = localUserService.findUsernameById(Integer.parseInt(getBody()));
             if (username == null)
                 username = "... deleted ...";
             setDescription(String.format("User '%s' requests registration approval", username));
