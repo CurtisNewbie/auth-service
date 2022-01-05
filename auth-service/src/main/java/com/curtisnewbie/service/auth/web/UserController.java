@@ -183,7 +183,7 @@ public class UserController {
 
     @LogOperation(name = "/user/password/update", description = "update password")
     @PostMapping("/password/update")
-    public Result<Void> updatePassword(@RequestBody UpdatePasswordVo vo) throws MsgEmbeddedException, InvalidAuthenticationException {
+    public Result<Void> updatePassword(@RequestBody UpdatePasswordWebVo vo) throws MsgEmbeddedException, InvalidAuthenticationException {
         ValidUtils.requireNotEmpty(vo.getNewPassword());
         ValidUtils.requireNotEmpty(vo.getPrevPassword());
 

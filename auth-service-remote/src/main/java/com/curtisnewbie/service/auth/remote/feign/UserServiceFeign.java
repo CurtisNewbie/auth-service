@@ -6,6 +6,7 @@ import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,29 +22,23 @@ public interface UserServiceFeign {
     /**
      * Login
      *
-     * @param username username
-     * @param password password
      * @return user's info when it was successful
      * @throws UserDisabledException      when the user is disabled
      * @throws UsernameNotFoundException  when the username is not found
      * @throws PasswordIncorrectException when the password is incorrect
      */
     @PostMapping("/login")
-    Result<UserVo> login(@RequestParam("username") String username, @RequestParam("password") String password)
-            throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException;
+    Result<UserVo> login(@RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException;
 
     /**
      * <p>
      * Login
      * </p>
      * <p>
-     * Different from {@link #login(String, String)}, this method takes into the consideration of applications that the
+     * Different from {@link #loginForApp(LoginVo)}, this method takes into the consideration of applications that the
      * user is allowed to use.
      * </p>
      *
-     * @param username username
-     * @param password password
-     * @param appName  application name that the user is trying to use
      * @return user's info when it was successful
      * @throws UserDisabledException                   when the user is disabled
      * @throws UsernameNotFoundException               when the username is not found
@@ -51,8 +46,8 @@ public interface UserServiceFeign {
      * @throws UserNotAllowedToUseApplicationException when the user is not allowed to use this application
      */
     @PostMapping("/login-with-app")
-    Result<UserVo> login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("appName") String appName)
-            throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException, UserNotAllowedToUseApplicationException;
+    Result<UserVo> loginForApp(@RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException,
+            UserNotAllowedToUseApplicationException;
 
     /**
      * <p>
@@ -77,7 +72,7 @@ public interface UserServiceFeign {
      * <p>
      * User registered with this method is disabled by default, it requires the admin to 'approve' the registration by
      * enabling it. To do this, this method will generate a {@code event_handling} record, that will later be received
-     * by the admin and handled. For more information, see {@link RemoteEventHandlingService}
+     * by the admin and handled. For more information, see {@link EventHandlingServiceFeign}
      * </p>
      *
      * @param registerUserVo
@@ -92,15 +87,11 @@ public interface UserServiceFeign {
     /**
      * Update password
      *
-     * @param newPassword new password (in plain text)
-     * @param oldPassword old password (in plain text)
-     * @param userId      user's id
      * @throws UserNotFoundException      when the user with the given id is not found
      * @throws PasswordIncorrectException when the old password is incorrect
      */
     @PostMapping("/password/udpate")
-    Result<Void> updatePassword(@RequestParam("newPassword") String newPassword, @RequestParam("oldPassword") String oldPassword,
-                                @RequestParam("userId") long userId) throws UserNotFoundException, PasswordIncorrectException;
+    Result<Void> updatePassword(@RequestBody UpdatePasswordVo vo) throws UserNotFoundException, PasswordIncorrectException;
 
 
     /**
@@ -115,7 +106,7 @@ public interface UserServiceFeign {
      * @param id
      * @param disabledBy
      */
-    @PostMapping("/disable")
+    @PostMapping(path = "/disable", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     Result<Void> disableUserById(@RequestParam("id") int id, @RequestParam(value = "disabledBy", defaultValue = "") String disabledBy);
 
     /**
@@ -124,7 +115,7 @@ public interface UserServiceFeign {
      * @param id
      * @param enabledBy
      */
-    @PostMapping("/enable")
+    @PostMapping(path = "/enable", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     Result<Void> enableUserById(@RequestParam("id") int id, @RequestParam(value = "enabledBy", defaultValue = "") String enabledBy);
 
     /**
@@ -142,7 +133,7 @@ public interface UserServiceFeign {
     /**
      * Change user's role and enable the user
      */
-    @PostMapping("/change-role-and-enable")
+    @PostMapping(path = "/change-role-and-enable", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     Result<Void> changeRoleAndEnableUser(@RequestParam("userId") int userId, @RequestParam("role") UserRole role,
                                          @RequestParam(value = "updatedBy", defaultValue = "") String updatedBy);
 
@@ -166,13 +157,13 @@ public interface UserServiceFeign {
      * @param userId    user's id
      * @param deletedBy deleted by
      */
-    @DeleteMapping
+    @DeleteMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     Result<Void> deleteUser(@RequestParam("userId") int userId, @RequestParam(value = "deletedBy", defaultValue = "") String deletedBy);
 
     /**
      * Update user role
      */
-    @PostMapping("/role/update")
+    @PostMapping(path = "/role/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     Result<Void> updateRole(@RequestParam("id") int id, @RequestParam("role") UserRole role,
                             @RequestParam(value = "updatedBy", defaultValue = "") String updatedBy);
 

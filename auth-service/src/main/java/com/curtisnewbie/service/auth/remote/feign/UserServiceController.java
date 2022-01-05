@@ -22,17 +22,17 @@ public class UserServiceController implements UserServiceFeign {
     private LocalUserService localUserService;
 
     @Override
-    public Result<UserVo> login(String username, String password) throws UserDisabledException, UsernameNotFoundException,
+    public Result<UserVo> login(LoginVo loginVo) throws UserDisabledException, UsernameNotFoundException,
             PasswordIncorrectException {
 
-        return Result.of(localUserService.login(username, password));
+        return Result.of(localUserService.login(loginVo.getUsername(), loginVo.getPassword()));
     }
 
     @Override
-    public Result<UserVo> login(String username, String password, String appName) throws UserDisabledException, UsernameNotFoundException,
+    public Result<UserVo> loginForApp(LoginVo loginVo) throws UserDisabledException, UsernameNotFoundException,
             PasswordIncorrectException, UserNotAllowedToUseApplicationException {
 
-        return Result.of(localUserService.login(username, password, appName));
+        return Result.of(localUserService.login(loginVo.getUsername(), loginVo.getPassword(), loginVo.getAppName()));
     }
 
     @Override
@@ -49,9 +49,9 @@ public class UserServiceController implements UserServiceFeign {
     }
 
     @Override
-    public Result<Void> updatePassword(String newPassword, String oldPassword, long userId) throws UserNotFoundException,
+    public Result<Void> updatePassword(UpdatePasswordVo vo) throws UserNotFoundException,
             PasswordIncorrectException {
-        localUserService.updatePassword(newPassword, oldPassword, userId);
+        localUserService.updatePassword(vo.getNewPassword(), vo.getOldPassword(), vo.getUserId());
         return Result.ok();
     }
 
