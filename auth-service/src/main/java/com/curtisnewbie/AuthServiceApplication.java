@@ -1,6 +1,5 @@
 package com.curtisnewbie;
 
-import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.mybatis.spring.annotation.MapperScan;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -21,7 +20,6 @@ import java.io.IOException;
 @PropertySources({
         @PropertySource(value = "classpath:dubbo-${spring.profiles.active}.properties"),
 })
-@EnableDubbo
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableRedisHttpSession(redisNamespace = "auth-service:session")
