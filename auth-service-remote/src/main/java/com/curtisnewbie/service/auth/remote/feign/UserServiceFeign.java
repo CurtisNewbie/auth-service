@@ -27,7 +27,7 @@ public interface UserServiceFeign {
      * @throws UsernameNotFoundException  when the username is not found
      * @throws PasswordIncorrectException when the password is incorrect
      */
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     Result<UserVo> login(@RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException;
 
     /**
