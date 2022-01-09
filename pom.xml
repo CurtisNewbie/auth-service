@@ -19,9 +19,11 @@
 
   <properties>
     <java.version>8</java.version>
-    <auth-service-remote.version>1.0.5-SNAPSHOT</auth-service-remote.version>
-    <auth-service-messaging.version>1.0.3-SNAPSHOT</auth-service-messaging.version>
-    <auth-service.version>1.0.5-SNAPSHOT</auth-service.version>
+
+    <client.version>1.0.6-SNAPSHOT</client.version>
+    <auth-service.version>${client.version}</auth-service.version>
+    <auth-service-remote.version>${client.version}</auth-service-remote.version>
+    <auth-service-messaging.version>${client.version}</auth-service-messaging.version>
   </properties>
 
   <modules>
