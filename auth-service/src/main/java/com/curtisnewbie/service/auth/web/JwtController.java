@@ -6,8 +6,10 @@ import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
 import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
 import com.curtisnewbie.module.jwt.vo.DecodeResult;
+import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
+import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
 import com.curtisnewbie.service.auth.vo.ExchangeTokenWebVo;
 import com.curtisnewbie.service.auth.vo.LoginWebVo;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller for JWT retrieval and exchange
@@ -34,22 +37,27 @@ import java.util.Map;
 public class JwtController {
 
     @Autowired
-    private LocalUserService remoteUserService;
-
+    private LocalUserService userService;
+    @Autowired
+    private LocalUserAppService userAppService;
     @Autowired
     private JwtBuilder jwtBuilder;
-
     @Autowired
     private JwtDecoder jwtDecoder;
 
     @LogOperation(name = "/token/login-for-token", description = "get token", enabled = false)
     @PostMapping("/login-for-token")
     public Result<String> getToken(@Validated @RequestBody LoginWebVo loginWebVo) throws UserRelatedException {
-        UserVo user = remoteUserService.login(loginWebVo.getUsername(), loginWebVo.getPassword());
+        UserVo user = userService.login(loginWebVo.getUsername(), loginWebVo.getPassword());
         Map<String, String> claims = new HashMap<>();
         claims.put("id", user.getId().toString());
         claims.put("username", user.getUsername());
         claims.put("role", user.getRole());
+        String appNames = userAppService.getAppsPermittedForUser(user.getId())
+                .stream()
+                .map(AppBriefVo::getName)
+                .collect(Collectors.joining(","));
+        claims.put("appNames", appNames);
 
         // valid for 20 minutes
         return Result.of(jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(20)));
