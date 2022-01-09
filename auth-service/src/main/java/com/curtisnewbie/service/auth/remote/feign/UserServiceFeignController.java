@@ -3,20 +3,21 @@ package com.curtisnewbie.service.auth.remote.feign;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author yongjie.zhuang
  */
+@RequestMapping(value = UserServiceFeign.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class UserServiceController implements UserServiceFeign {
+public class UserServiceFeignController implements UserServiceFeign {
 
     @Autowired
     private LocalUserService localUserService;
@@ -61,14 +62,14 @@ public class UserServiceController implements UserServiceFeign {
     }
 
     @Override
-    public Result<Void> disableUserById(int id, String disabledBy) {
-        localUserService.disableUserById(id, disabledBy);
+    public Result<Void> disableUserById(DisableUserByIdCmd cmd) {
+        localUserService.disableUserById(cmd.getId(), cmd.getDisabledBy());
         return Result.ok();
     }
 
     @Override
-    public Result<Void> enableUserById(int id, String enabledBy) {
-        localUserService.enableUserById(id, enabledBy);
+    public Result<Void> enableUserById(EnableUserByIdCmd cmd) {
+        localUserService.enableUserById(cmd.getId(), cmd.getEnabledBy());
         return Result.ok();
     }
 
@@ -84,8 +85,8 @@ public class UserServiceController implements UserServiceFeign {
     }
 
     @Override
-    public Result<Void> changeRoleAndEnableUser(int userId, UserRole role, String updatedBy) {
-        localUserService.changeRoleAndEnableUser(userId, role, updatedBy);
+    public Result<Void> changeRoleAndEnableUser(ChangeRoleAndEnableUserCmd cmd) {
+        localUserService.changeRoleAndEnableUser(cmd.getUserId(), cmd.getRole(), cmd.getUpdatedBy());
         return Result.ok();
 
     }
@@ -97,19 +98,21 @@ public class UserServiceController implements UserServiceFeign {
     }
 
     @Override
-    public Result<Void> deleteUser(int userId, String deletedBy) {
-        localUserService.deleteUser(userId, deletedBy);
+    public Result<Void> deleteUser(DeleteUserCmd cmd) {
+        localUserService.deleteUser(cmd.getUserId(), cmd.getDeletedBy());
         return Result.ok();
     }
 
     @Override
-    public Result<Void> updateRole(int id, UserRole role, String updatedBy) {
-        localUserService.updateRole(id, role, updatedBy);
+    public Result<Void> updateRole(UpdateRoleCmd cmd) {
+        localUserService.updateRole(cmd.getId(), cmd.getRole(), cmd.getUpdatedBy());
         return Result.ok();
     }
 
     @Override
-    public Result<Map<Integer, String>> fetchUsernameById(List<Integer> userIds) {
-        return Result.of(localUserService.fetchUsernameById(userIds));
+    public Result<FetchUsernameByIdResp> fetchUsernameById(FetchUsernameByIdReq req) {
+        return Result.of(FetchUsernameByIdResp.builder()
+                .idToUsername(localUserService.fetchUsernameById(req.getUserIds()))
+                .build());
     }
 }

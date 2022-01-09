@@ -6,6 +6,8 @@ import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
@@ -14,8 +16,9 @@ import java.util.List;
 /**
  * @author yongjie.zhuang
  */
+@RequestMapping(value = AccessLogServiceFeign.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class AccessLogServiceController implements AccessLogServiceFeign {
+public class AccessLogServiceFeignController implements AccessLogServiceFeign {
 
     @Autowired
     private LocalAccessLogService localAccessLogService;

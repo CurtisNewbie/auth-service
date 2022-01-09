@@ -10,7 +10,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -18,9 +17,10 @@ import java.util.List;
 /**
  * @author yongjie.zhuang
  */
-@RequestMapping("/remote/event")
-@FeignClient(FeignConst.SERVICE_NAME)
+@FeignClient(value = FeignConst.SERVICE_NAME, path = EventHandlingServiceFeign.PATH)
 public interface EventHandlingServiceFeign {
+
+    String PATH = "/remote/event";
 
     /**
      * Create an event to be handled

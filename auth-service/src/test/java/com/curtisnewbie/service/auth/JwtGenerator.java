@@ -26,6 +26,7 @@ public class JwtGenerator {
         claims.put("id", "-1");
         claims.put("username", "system");
         claims.put("role", "admin");
+        claims.put("appNames", "auth-service");
 
         log.info("token: {}", jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(20)));
     }

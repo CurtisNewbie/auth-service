@@ -23,7 +23,7 @@ import java.io.IOException;
 @EnableDiscoveryClient
 @SpringBootApplication
 @EnableRedisHttpSession(redisNamespace = "auth-service:session")
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 public class AuthServiceApplication {
 
     public static void main(String[] args) {

@@ -8,6 +8,8 @@ import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
@@ -16,6 +18,7 @@ import java.util.List;
 /**
  * @author yongjie.zhuang
  */
+@RequestMapping(value = EventHandlingServiceFeign.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class EventHandlingServiceController implements EventHandlingServiceFeign {
 

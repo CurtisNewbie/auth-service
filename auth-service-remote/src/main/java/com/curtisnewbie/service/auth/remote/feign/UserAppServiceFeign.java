@@ -12,9 +12,10 @@ import java.util.List;
 /**
  * @author yongjie.zhuang
  */
-@RequestMapping("/remote/userapp")
-@FeignClient(FeignConst.SERVICE_NAME)
+@FeignClient(value = FeignConst.SERVICE_NAME, path = UserAppServiceFeign.PATH)
 public interface UserAppServiceFeign {
+
+    String PATH = "/remote/userapp";
 
     /**
      * Fetch the apps that the user is allowed to use

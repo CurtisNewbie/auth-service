@@ -2,22 +2,22 @@ package com.curtisnewbie.service.auth.remote.feign;
 
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author yongjie.zhuang
  */
-@RequestMapping("/remote/user")
-@FeignClient(FeignConst.SERVICE_NAME)
+@FeignClient(value = FeignConst.SERVICE_NAME, path = UserServiceFeign.PATH)
 public interface UserServiceFeign {
+
+    String PATH = "/remote/user";
 
     /**
      * Login
@@ -28,7 +28,7 @@ public interface UserServiceFeign {
      * @throws PasswordIncorrectException when the password is incorrect
      */
     @PostMapping(value = "/login")
-    Result<UserVo> login(@RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException;
+    Result<UserVo> login(@Validated @RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException;
 
     /**
      * <p>
@@ -46,7 +46,7 @@ public interface UserServiceFeign {
      * @throws UserNotAllowedToUseApplicationException when the user is not allowed to use this application
      */
     @PostMapping("/login-with-app")
-    Result<UserVo> loginForApp(@RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException,
+    Result<UserVo> loginForApp(@Validated @RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException,
             UserNotAllowedToUseApplicationException;
 
     /**
@@ -63,7 +63,7 @@ public interface UserServiceFeign {
      * @see
      */
     @PostMapping("/register")
-    Result<Void> register(@RequestBody RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException;
+    Result<Void> register(@Validated @RequestBody RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException;
 
     /**
      * <p>
@@ -81,7 +81,7 @@ public interface UserServiceFeign {
      * @see
      */
     @PostMapping("/registration/request-approval")
-    Result<Void> requestRegistrationApproval(@RequestBody RegisterUserVo registerUserVo) throws UserRegisteredException,
+    Result<Void> requestRegistrationApproval(@Validated @RequestBody RegisterUserVo registerUserVo) throws UserRegisteredException,
             ExceededMaxAdminCountException;
 
     /**
@@ -91,7 +91,7 @@ public interface UserServiceFeign {
      * @throws PasswordIncorrectException when the old password is incorrect
      */
     @PostMapping("/password/udpate")
-    Result<Void> updatePassword(@RequestBody UpdatePasswordVo vo) throws UserNotFoundException, PasswordIncorrectException;
+    Result<Void> updatePassword(@Validated @RequestBody UpdatePasswordVo vo) throws UserNotFoundException, PasswordIncorrectException;
 
 
     /**
@@ -102,21 +102,15 @@ public interface UserServiceFeign {
 
     /**
      * Disable user by id
-     *
-     * @param id
-     * @param disabledBy
      */
-    @PostMapping(path = "/disable", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    Result<Void> disableUserById(@RequestParam("id") int id, @RequestParam(value = "disabledBy", defaultValue = "") String disabledBy);
+    @PostMapping(path = "/disable")
+    Result<Void> disableUserById(@RequestBody DisableUserByIdCmd req);
 
     /**
      * Enable user by id
-     *
-     * @param id
-     * @param enabledBy
      */
-    @PostMapping(path = "/enable", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    Result<Void> enableUserById(@RequestParam("id") int id, @RequestParam(value = "enabledBy", defaultValue = "") String enabledBy);
+    @PostMapping(path = "/enable")
+    Result<Void> enableUserById(@RequestBody EnableUserByIdCmd cmd);
 
     /**
      * Find username by id
@@ -128,14 +122,13 @@ public interface UserServiceFeign {
      * Find id by username
      */
     @GetMapping("/id")
-    Result<Integer> findIdByUsername(@RequestParam("username") String username);
+    Result<Integer> findIdByUsername(@NotBlank @RequestParam("username") String username);
 
     /**
      * Change user's role and enable the user
      */
-    @PostMapping(path = "/change-role-and-enable", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    Result<Void> changeRoleAndEnableUser(@RequestParam("userId") int userId, @RequestParam("role") UserRole role,
-                                         @RequestParam(value = "updatedBy", defaultValue = "") String updatedBy);
+    @PostMapping("/change-role-and-enable")
+    Result<Void> changeRoleAndEnableUser(@Validated @RequestBody ChangeRoleAndEnableUserCmd cmd);
 
     /**
      * Update user
@@ -143,7 +136,7 @@ public interface UserServiceFeign {
      * @param param param
      */
     @PostMapping("/update")
-    Result<Void> updateUser(@RequestBody UpdateUserVo param);
+    Result<Void> updateUser(@Validated @RequestBody UpdateUserVo param);
 
     /**
      * Delete user
@@ -153,26 +146,21 @@ public interface UserServiceFeign {
      * <p>
      * Only the disabled user can be deleted
      * </p>
-     *
-     * @param userId    user's id
-     * @param deletedBy deleted by
      */
-    @DeleteMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    Result<Void> deleteUser(@RequestParam("userId") int userId, @RequestParam(value = "deletedBy", defaultValue = "") String deletedBy);
+    @DeleteMapping
+    Result<Void> deleteUser(@RequestBody DeleteUserCmd cmd);
 
     /**
      * Update user role
      */
-    @PostMapping(path = "/role/update", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    Result<Void> updateRole(@RequestParam("id") int id, @RequestParam("role") UserRole role,
-                            @RequestParam(value = "updatedBy", defaultValue = "") String updatedBy);
+    @PostMapping(path = "/role/update")
+    Result<Void> updateRole(@Validated @RequestBody UpdateRoleCmd cmd);
 
     /**
      * Fetch username by ids
      *
-     * @param userIds list of user_id
      * @return user_id -> username map
      */
-    @PostMapping("/username")
-    Result<Map<Integer, String>> fetchUsernameById(@RequestBody List<Integer> userIds);
+    @PostMapping(value = "/username")
+    Result<FetchUsernameByIdResp> fetchUsernameById(@Validated @RequestBody FetchUsernameByIdReq req);
 }

@@ -8,6 +8,8 @@ import com.curtisnewbie.service.auth.remote.exception.PasswordIncorrectException
 import com.curtisnewbie.service.auth.remote.exception.UserRegisteredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,8 +33,8 @@ public class CtrlAdvice {
 
     @ExceptionHandler({AccessDeniedException.class})
     @ResponseBody
-    public Result<?> handleAccessDeniedException(Exception e) {
-        return Result.error("Operation not allowed");
+    public ResponseEntity<Result<?>> handleAccessDeniedException(Exception e) {
+        return wrapResponse(Result.error("Operation not allowed"));
     }
 
     @ExceptionHandler({ExceededMaxAdminCountException.class})
@@ -49,14 +51,14 @@ public class CtrlAdvice {
 
     @ExceptionHandler({InvalidAuthenticationException.class})
     @ResponseBody
-    public Result<?> handleInvalidAuthenticationException(Exception e) {
-        return Result.error("Please login first");
+    public ResponseEntity<Result<?>> handleInvalidAuthenticationException(Exception e) {
+        return wrapResponse(Result.error("Please login first"));
     }
 
     @ExceptionHandler({PasswordIncorrectException.class})
     @ResponseBody
-    public Result<?> handlePasswordIncorrectException(Exception e) {
-        return Result.error("Password Incorrect");
+    public ResponseEntity<Result<?>> handlePasswordIncorrectException(Exception e) {
+        return wrapResponse(Result.error("Password Incorrect"));
     }
 
     @ExceptionHandler({MsgEmbeddedException.class})
@@ -69,4 +71,10 @@ public class CtrlAdvice {
         return Result.error(errorMsg);
     }
 
+    private static ResponseEntity<Result<?>> wrapResponse(Result<?> result) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(result);
+    }
 }

@@ -7,6 +7,8 @@ import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
 import com.curtisnewbie.service.auth.remote.vo.AppVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -14,8 +16,9 @@ import java.util.List;
 /**
  * @author yongjie.zhuang
  */
+@RequestMapping(value = AppServiceFeign.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
-public class AppServiceController implements AppServiceFeign {
+public class AppServiceFeignController implements AppServiceFeign {
 
     @Autowired
     private LocalAppService localAppService;

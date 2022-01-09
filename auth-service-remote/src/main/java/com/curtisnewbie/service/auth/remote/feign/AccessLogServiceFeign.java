@@ -9,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -18,9 +17,10 @@ import java.util.List;
  * @author yongjie.zhuang
  */
 @Validated
-@FeignClient(FeignConst.SERVICE_NAME)
-@RequestMapping("/remote/accesslog/")
+@FeignClient(value = FeignConst.SERVICE_NAME, path = AccessLogServiceFeign.PATH)
 public interface AccessLogServiceFeign {
+
+    String PATH = "/remote/accesslog";
 
     /**
      * Save access_log entity

@@ -8,16 +8,16 @@ import com.curtisnewbie.service.auth.remote.vo.AppVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 /**
  * @author yongjie.zhuang
  */
-@RequestMapping("/remote/app")
-@FeignClient(FeignConst.SERVICE_NAME)
+@FeignClient(value = FeignConst.SERVICE_NAME, path = AppServiceFeign.PATH)
 public interface AppServiceFeign {
+
+    String PATH = "/remote/app";
 
     /**
      * Get all apps information

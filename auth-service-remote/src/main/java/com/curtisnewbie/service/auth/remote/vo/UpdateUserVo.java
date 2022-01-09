@@ -4,8 +4,8 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  * @author yongjie.zhuang
  */
-@Valid
+@NoArgsConstructor
 @Data
 public class UpdateUserVo implements Serializable {
 

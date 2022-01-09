@@ -6,6 +6,8 @@ import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 /**
  * @author yongjie.zhuang
  */
+@RequestMapping(value = OperateLogServiceFeign.PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 @RestController
 public class OperateLogServiceController implements OperateLogServiceFeign {
 

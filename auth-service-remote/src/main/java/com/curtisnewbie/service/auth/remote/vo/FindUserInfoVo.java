@@ -3,10 +3,11 @@ package com.curtisnewbie.service.auth.remote.vo;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -14,7 +15,10 @@ import java.io.Serializable;
  *
  * @author yongjie.zhuang
  */
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
+@Builder
 public class FindUserInfoVo implements Serializable {
 
     /** username */
@@ -27,7 +31,6 @@ public class FindUserInfoVo implements Serializable {
     private UserIsDisabled isDisabled;
 
     /** paging param */
-    @NotNull
-    private PagingVo pagingVo;
+    private PagingVo pagingVo = new PagingVo();
 
 }

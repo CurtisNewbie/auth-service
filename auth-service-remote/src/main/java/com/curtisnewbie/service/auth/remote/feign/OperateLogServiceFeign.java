@@ -8,16 +8,16 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 /**
  * @author yongjie.zhuang
  */
-@RequestMapping("/remote/operatelog")
-@FeignClient(FeignConst.SERVICE_NAME)
+@FeignClient(value = FeignConst.SERVICE_NAME, path = OperateLogServiceFeign.PATH)
 public interface OperateLogServiceFeign {
+
+    String PATH = "/remote/operatelog";
 
     /**
      * Save operate_log info

@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -23,16 +25,19 @@ public class RegisterUserVo implements Serializable {
     /**
      * username
      */
+    @NotBlank
     private String username;
 
     /**
      * password (in plain text)
      */
+    @NotBlank
     private String password;
 
     /**
      * role
      */
+    @NotNull
     private UserRole role;
 
     /**
