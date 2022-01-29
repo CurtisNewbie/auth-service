@@ -5,13 +5,10 @@
   <parent>
     <groupId>com.curtisnewbie</groupId>
     <artifactId>auth-service-parent</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>${revision}</version>
   </parent>
 
-  <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service</artifactId>
-  <version>${auth-service.version}</version>
   <name>auth-service</name>
   <description>Authentication Service</description>
 
@@ -63,13 +60,13 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-messaging</artifactId>
-      <version>${auth-service-messaging.version}</version>
+      <version>${revision}</version>
     </dependency>
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-remote</artifactId>
-      <version>${auth-service-remote.version}</version>
+      <version>${revision}</version>
     </dependency>
 
     <dependency>

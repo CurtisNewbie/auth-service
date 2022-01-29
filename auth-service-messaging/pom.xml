@@ -5,13 +5,10 @@
   <parent>
     <groupId>com.curtisnewbie</groupId>
     <artifactId>auth-service-parent</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
+    <version>${revision}</version>
   </parent>
 
-  <groupId>com.curtisnewbie</groupId>
   <artifactId>auth-service-messaging</artifactId>
-  <version>${auth-service-messaging.version}</version>
   <packaging>jar</packaging>
   <name>auth-service-messaging</name>
   <description>Module that provides required constants to send async messages to auth-service</description>
@@ -35,7 +32,7 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-remote</artifactId>
-      <version>${auth-service-remote.version}</version>
+      <version>${revision}</version>
     </dependency>
 
     <dependency>
