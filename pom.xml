@@ -11,14 +11,13 @@
   </parent>
 
   <artifactId>auth-service-parent</artifactId>
-  <version>${revision}</version>
+  <version>1.0.6-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>auth-service-parent</name>
   <description>Authentication Service Parent</description>
 
   <properties>
     <java.version>8</java.version>
-    <revision>1.0.6-SNAPSHOT</revision>
   </properties>
 
   <modules>
