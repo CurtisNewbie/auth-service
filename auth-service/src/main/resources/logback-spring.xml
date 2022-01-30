@@ -10,7 +10,7 @@
         <totalSizeCap>1GB</totalSizeCap>
       </rollingPolicy>
       <encoder>
-        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - [TRACE_ID:%X{traceId}] - %msg%n</pattern>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - [%X{traceId}] - %msg%n</pattern>
       </encoder>
     </appender>
 
@@ -22,7 +22,7 @@
   <springProfile name="dev">
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
       <encoder>
-        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - [TRACE_ID:%X{traceId}] - %msg%n</pattern>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - [%X{traceId}] - %msg%n</pattern>
       </encoder>
     </appender>
     <root level="info">
