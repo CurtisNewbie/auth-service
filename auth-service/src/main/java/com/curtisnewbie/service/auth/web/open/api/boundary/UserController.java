@@ -70,7 +70,7 @@ public class UserController {
             ValidUtils.requireNonNull(role, "Illegal user role");
         }
         // do not support adding administrator
-        if (Objects.equals(role, UserRole.ADMIN)) {
+        if (role == UserRole.ADMIN) {
             return Result.error("Do not support adding administrator");
         }
         vo.setRole(role);

@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class CreateEventHandlingCmd implements Serializable {
 
     /** type of event {@link EventHandlingType} */
-    private Integer type;
+    private EventHandlingType type;
 
     /** body of the event */
     private String body;

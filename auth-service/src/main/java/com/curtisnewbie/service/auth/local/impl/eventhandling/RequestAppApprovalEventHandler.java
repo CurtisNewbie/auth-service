@@ -1,13 +1,12 @@
 package com.curtisnewbie.service.auth.local.impl.eventhandling;
 
 
-import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.local.api.eventhandling.AuthEventHandler;
+import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
-import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,14 +46,14 @@ public class RequestAppApprovalEventHandler implements AuthEventHandler {
             }
 
             final String handlerName = localUserService.findUsernameById(info.getRecord().getHandlerId());
-            final EventHandlingResult result = EnumUtils.parse(info.getRecord().getHandleResult(), EventHandlingResult.class);
+            final EventHandlingResult result = info.getRecord().getHandleResult();
             if (result == null) {
                 log.warn("Event handling result value illegal, unable to parse it, operation ignored, handle_result: {}",
                         info.getRecord().getHandleResult());
                 return;
             }
 
-            if (result.equals(EventHandlingResult.ACCEPT))
+            if (result != EventHandlingResult.ACCEPT)
                 localUserAppService.addUserApp(cmd.getUserId(), cmd.getAppId(), handlerName);
 
         } catch (Exception e) {

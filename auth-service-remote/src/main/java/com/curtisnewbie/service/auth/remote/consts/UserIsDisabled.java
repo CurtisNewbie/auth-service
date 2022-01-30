@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.remote.consts;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.curtisnewbie.common.enums.IntEnum;
 
 /**
@@ -15,6 +16,7 @@ public enum UserIsDisabled implements IntEnum {
     /** user is disabled */
     DISABLED(1);
 
+    @EnumValue
     private final int v;
 
     UserIsDisabled(int v) {

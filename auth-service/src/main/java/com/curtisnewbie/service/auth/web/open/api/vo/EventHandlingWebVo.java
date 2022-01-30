@@ -1,12 +1,12 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.util.DateUtils;
-import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -23,16 +23,16 @@ public class EventHandlingWebVo {
     private Integer id;
 
     /** type of event, 1-registration */
-    private Integer type;
+    private EventHandlingType type;
 
     /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
-    private Integer status;
+    private EventHandlingStatus status;
 
     /** id of user who handled the event */
     private Integer handlerId;
 
     /** handle result, 1-accept, 2-reject */
-    private Integer handleResult;
+    private EventHandlingResult handleResult;
 
     /** when the event is handled */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
@@ -47,28 +47,13 @@ public class EventHandlingWebVo {
      */
     private String description;
 
-    @Builder
-    public EventHandlingWebVo(Integer id, Integer type, Integer status, Integer handlerId, Integer handleResult,
-                              LocalDateTime handleTime, String description) {
-        this.id = id;
-        this.type = type;
-        this.status = status;
-        this.handlerId = handlerId;
-        this.handleResult = handleResult;
-        this.handleTime = handleTime;
-        this.description = description;
-    }
-
-    public EventHandlingWebVo() {
-    }
+    // todo, store this in database instead, this looks stupid :(
 
     /**
      * Fill {@code description} based on type
      */
     public void fillDescription(LocalUserService localUserService) {
-        EventHandlingType et = EnumUtils.parse(getType(), EventHandlingType.class);
-
-        if (et.equals(EventHandlingType.REGISTRATION_EVENT)) {
+        if (type == EventHandlingType.REGISTRATION_EVENT) {
             String username = localUserService.findUsernameById(Integer.parseInt(getBody()));
             if (username == null)
                 username = "... deleted ...";

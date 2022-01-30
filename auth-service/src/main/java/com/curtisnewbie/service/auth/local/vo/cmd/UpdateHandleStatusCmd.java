@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.local.vo.cmd;
 
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import lombok.Builder;
 import lombok.Data;
@@ -17,11 +18,11 @@ public class UpdateHandleStatusCmd {
     private EventHandlingStatus currStatus;
     private int handlerId;
     private LocalDateTime handleTime;
-    private int handleResult;
+    private EventHandlingResult handleResult;
 
     @Builder
     public UpdateHandleStatusCmd(int id, EventHandlingStatus prevStatus, EventHandlingStatus currStatus, int handlerId,
-                                 LocalDateTime handleTime, int handleResult) {
+                                 LocalDateTime handleTime, EventHandlingResult handleResult) {
         this.id = id;
         this.prevStatus = prevStatus;
         this.currStatus = currStatus;

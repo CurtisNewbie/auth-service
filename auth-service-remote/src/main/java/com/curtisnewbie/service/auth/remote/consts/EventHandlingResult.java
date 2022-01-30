@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.remote.consts;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.curtisnewbie.common.enums.IntEnum;
 
 /**
@@ -21,6 +22,7 @@ public enum EventHandlingResult implements IntEnum {
      */
     REJECT(2);
 
+    @EnumValue
     private final int val;
 
     EventHandlingResult(int v) {

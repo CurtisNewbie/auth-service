@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public class UserVo implements Serializable {
     private String username;
 
     /** role */
-    private String role;
+    private UserRole role;
 
     /** when the user is created */
     private LocalDateTime createTime;

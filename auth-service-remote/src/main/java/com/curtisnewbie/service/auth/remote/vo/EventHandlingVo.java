@@ -1,7 +1,12 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -12,41 +17,29 @@ import java.time.LocalDateTime;
  * @author yongjie.zhuang
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class EventHandlingVo implements Serializable {
 
     /** primary key */
     private Integer id;
 
     /** type of event, 1-registration */
-    private Integer type;
+    private EventHandlingType type;
 
     /** body of the event */
     private String body;
 
     /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
-    private Integer status;
+    private EventHandlingStatus status;
 
     /** id of user who handled the event */
     private Integer handlerId;
 
     /** handle result, 1-accept, 2-reject */
-    private Integer handleResult;
+    private EventHandlingResult handleResult;
 
     /** when the event is handled */
     private LocalDateTime handleTime;
-
-    @Builder
-    public EventHandlingVo(Integer id, Integer type, String body, Integer status, Integer handlerId,
-                           Integer handleResult, LocalDateTime handleTime) {
-        this.id = id;
-        this.type = type;
-        this.body = body;
-        this.status = status;
-        this.handlerId = handlerId;
-        this.handleResult = handleResult;
-        this.handleTime = handleTime;
-    }
-
-    public EventHandlingVo() {
-    }
 }

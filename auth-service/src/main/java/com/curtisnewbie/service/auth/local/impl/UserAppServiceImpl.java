@@ -78,7 +78,7 @@ public class UserAppServiceImpl implements LocalUserAppService {
 
         try {
             localEventHandlingService.createEvent(CreateEventHandlingCmd.builder()
-                    .type(EventHandlingType.REQUEST_APP_APPROVAL.getValue())
+                    .type(EventHandlingType.REQUEST_APP_APPROVAL)
                     .body(JsonUtils.writeValueAsString(cmd))
                     .build());
         } catch (JsonProcessingException e) {

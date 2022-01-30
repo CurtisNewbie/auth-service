@@ -1,9 +1,13 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
 import com.curtisnewbie.common.vo.PageableVo;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.util.Assert;
+import lombok.NoArgsConstructor;
 
 
 /**
@@ -12,28 +16,17 @@ import org.springframework.util.Assert;
  * @author yongjie.zhuang
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FindEventHandlingByPageReqVo extends PageableVo {
 
     /** type of event, 1-registration */
-    private Integer type;
+    private EventHandlingType type;
 
     /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
-    private Integer status;
+    private EventHandlingStatus status;
 
     /** handle result, 1-accept, 2-reject */
-    private Integer handleResult;
-
-    @Builder
-    public FindEventHandlingByPageReqVo(Integer type, Integer status, Integer handleResult) {
-        this.type = type;
-        this.status = status;
-        this.handleResult = handleResult;
-    }
-
-    public FindEventHandlingByPageReqVo() {
-    }
-
-    public void validate() {
-        Assert.notNull(getPagingVo(), "pagingVo == null");
-    }
+    private EventHandlingResult handleResult;
 }

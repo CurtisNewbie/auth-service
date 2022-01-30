@@ -183,7 +183,7 @@ public class TestLocalUserService {
         User e = userService.loadUserByUsername(USERNAME);
         Assertions.assertNotNull(e);
         Assertions.assertNotNull(e.getId());
-        Assertions.assertEquals(e.getIsDisabled(), UserIsDisabled.DISABLED.getValue());
+        Assertions.assertTrue(e.getIsDisabled() == UserIsDisabled.DISABLED);
     }
 
     private void registerTestUser() throws UserRegisteredException, ExceededMaxAdminCountException {

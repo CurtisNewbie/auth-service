@@ -3,7 +3,6 @@ package com.curtisnewbie.service.auth.local.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.util.BeanCopyUtils;
-import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.service.auth.dao.User;
@@ -106,9 +105,9 @@ public class UserServiceImpl implements LocalUserService {
         if (param.getIsDisabled() == null && param.getRole() == null)
             throw new IllegalArgumentException("Nothing to update");
         if (param.getIsDisabled() != null)
-            ue.setIsDisabled(param.getIsDisabled().getValue());
+            ue.setIsDisabled(param.getIsDisabled());
         if (param.getRole() != null)
-            ue.setRole(param.getRole().getValue());
+            ue.setRole(param.getRole());
         ue.setUpdateBy(param.getUpdateBy());
         ue.setUpdateTime(LocalDateTime.now());
         userMapper.updateUser(ue);
@@ -214,11 +213,11 @@ public class UserServiceImpl implements LocalUserService {
         }
 
         // limit the total number of administrators
-        if (registerUserVo.getRole().equals(UserRole.ADMIN.getValue())) {
+        if (registerUserVo.getRole() == UserRole.ADMIN) {
             checkAdminQuota();
         }
         User userEntity = toUserEntity(registerUserVo);
-        userEntity.setIsDisabled(UserIsDisabled.NORMAL.getValue());
+        userEntity.setIsDisabled(UserIsDisabled.NORMAL);
 
         log.info("New user '{}' successfully registered, role: {}", registerUserVo.getUsername(), registerUserVo.getRole().getValue());
         userMapper.insert(userEntity);
@@ -236,13 +235,13 @@ public class UserServiceImpl implements LocalUserService {
         }
 
         // limit the total number of administrators
-        if (registerUserVo.getRole().equals(UserRole.ADMIN.getValue())) {
+        if (registerUserVo.getRole() == UserRole.ADMIN) {
             checkAdminQuota();
         }
 
         // set user disabled, this will be handled by the admin
         User userEntity = toUserEntity(registerUserVo);
-        userEntity.setIsDisabled(UserIsDisabled.DISABLED.getValue());
+        userEntity.setIsDisabled(UserIsDisabled.DISABLED);
         userMapper.insert(userEntity);
 
         log.info("New user '{}' successfully registered, role: {}, currently disabled and waiting for approval",
@@ -253,7 +252,7 @@ public class UserServiceImpl implements LocalUserService {
         eventHandlingService.createEvent(
                 CreateEventHandlingCmd.builder()
                         .body(String.valueOf(userEntity.getId()))
-                        .type(EventHandlingType.REGISTRATION_EVENT.getValue())
+                        .type(EventHandlingType.REGISTRATION_EVENT)
                         .build()
         );
         log.info("Created event_handling for {}'s registration", registerUserVo.getUsername());
@@ -297,9 +296,9 @@ public class UserServiceImpl implements LocalUserService {
     public @NotNull PageablePayloadSingleton<List<UserInfoVo>> findUserInfoByPage(@Valid @NotNull FindUserInfoVo vo) {
         User ue = new User();
         if (vo.getIsDisabled() != null)
-            ue.setIsDisabled(vo.getIsDisabled().getValue());
+            ue.setIsDisabled(vo.getIsDisabled());
         if (vo.getRole() != null)
-            ue.setRole(vo.getRole().getValue());
+            ue.setRole(vo.getRole());
         ue.setUsername(vo.getUsername());
 
         IPage<User> pge = userMapper.findUserInfoBy(forPage(vo.getPagingVo()), ue);
@@ -327,7 +326,7 @@ public class UserServiceImpl implements LocalUserService {
     private User toUserEntity(RegisterUserVo registerUserVo) {
         User u = new User();
         u.setUsername(registerUserVo.getUsername());
-        u.setRole(registerUserVo.getRole().getValue());
+        u.setRole(registerUserVo.getRole());
         u.setSalt(RandomNumUtil.randomNoStr(5));
         u.setPassword(PasswordUtil.encodePassword(registerUserVo.getPassword(), u.getSalt()));
         u.setCreateBy(registerUserVo.getCreateBy());
@@ -366,7 +365,7 @@ public class UserServiceImpl implements LocalUserService {
         if (ue == null) {
             throw new UsernameNotFoundException(username);
         }
-        UserIsDisabled isDisabled = EnumUtils.parse(ue.getIsDisabled(), UserIsDisabled.class);
+        UserIsDisabled isDisabled = ue.getIsDisabled();
         Objects.requireNonNull(isDisabled, "Illegal is_disabled value");
         if (isDisabled == UserIsDisabled.DISABLED) {
             throw new UserDisabledException(username);

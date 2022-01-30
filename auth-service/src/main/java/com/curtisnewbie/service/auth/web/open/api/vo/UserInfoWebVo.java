@@ -1,6 +1,8 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.util.DateUtils;
+import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -25,10 +27,10 @@ public class UserInfoWebVo {
     /**
      * role
      */
-    private String role;
+    private UserRole role;
 
     /** whether the user is disabled, 0-normal, 1-disabled */
-    private Integer isDisabled;
+    private UserIsDisabled isDisabled;
 
     /** when the user is created */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)

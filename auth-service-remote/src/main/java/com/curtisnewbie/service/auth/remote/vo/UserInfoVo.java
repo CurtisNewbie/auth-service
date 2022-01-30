@@ -1,5 +1,7 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,10 +26,10 @@ public class UserInfoVo implements Serializable {
     /**
      * role
      */
-    private String role;
+    private UserRole role;
 
     /** whether the user is disabled, 0-normal, 1-disabled */
-    private Integer isDisabled;
+    private UserIsDisabled isDisabled;
 
     /** when the user is created */
     private LocalDateTime createTime;

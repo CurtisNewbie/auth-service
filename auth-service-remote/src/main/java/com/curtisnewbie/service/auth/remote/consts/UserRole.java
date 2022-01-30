@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.remote.consts;
 
+import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.curtisnewbie.common.enums.ValueEnum;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -22,6 +23,7 @@ public enum UserRole implements ValueEnum<String> {
     /** Guest */
     GUEST("guest");
 
+    @EnumValue
     @JsonValue
     private final String val;
 

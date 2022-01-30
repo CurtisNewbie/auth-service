@@ -123,7 +123,7 @@ public class TestLocalEventHandlingService {
 
         return CreateEventHandlingCmd.builder()
                 .body(String.valueOf(userId))
-                .type(EventHandlingType.REGISTRATION_EVENT.getValue())
+                .type(EventHandlingType.REGISTRATION_EVENT)
                 .build();
     }
 

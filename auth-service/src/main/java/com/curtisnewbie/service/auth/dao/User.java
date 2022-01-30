@@ -1,11 +1,12 @@
 package com.curtisnewbie.service.auth.dao;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.curtisnewbie.common.dao.DaoSkeleton;
+import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * User entity
@@ -14,11 +15,8 @@ import lombok.Data;
  */
 @Data
 @TableName("user")
+@EqualsAndHashCode
 public class User extends DaoSkeleton {
-
-    /** primary key */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
 
     /** username (must be unique) */
     @TableField("username")
@@ -34,9 +32,9 @@ public class User extends DaoSkeleton {
 
     /** role */
     @TableField("role")
-    private String role;
+    private UserRole role;
 
     /** whether the user is disabled, 0-normal, 1-disabled */
     @TableField("is_disabled")
-    private Integer isDisabled;
+    private UserIsDisabled isDisabled;
 }

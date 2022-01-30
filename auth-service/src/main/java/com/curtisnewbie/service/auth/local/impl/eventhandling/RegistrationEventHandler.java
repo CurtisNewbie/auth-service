@@ -39,7 +39,7 @@ public class RegistrationEventHandler implements AuthEventHandler {
         try {
             final int registeredUserid = Integer.parseInt(info.getRecord().getBody());
             final String handlerName = localUserService.findUsernameById(info.getRecord().getHandlerId());
-            final EventHandlingResult result = EnumUtils.parse(info.getRecord().getHandleResult(), EventHandlingResult.class);
+            final EventHandlingResult result = info.getRecord().getHandleResult();
             if (result == null) {
                 log.warn("Event handling result value illegal, unable to parse it, operation ignored, handle_result: {}",
                         info.getRecord().getHandleResult());
@@ -50,7 +50,7 @@ public class RegistrationEventHandler implements AuthEventHandler {
             log.info("Handled event {}, result: {}, extra: {}", info.getRecord(), result, extra);
 
             // only "accept" will actually update the user role and status
-            if (!result.equals(EventHandlingResult.ACCEPT))
+            if (result != EventHandlingResult.ACCEPT)
                 return;
 
             // default user role is guest
