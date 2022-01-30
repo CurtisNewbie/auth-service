@@ -2,6 +2,7 @@ package com.curtisnewbie.service.auth.remote.consts;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.curtisnewbie.common.enums.IntEnum;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Status of event, 0-no need to handle, 1-to be handled, 2-handled
@@ -25,6 +26,7 @@ public enum EventHandlingStatus implements IntEnum {
      */
     HANDLED(2);
 
+    @JsonValue
     @EnumValue
     public final int val;
 

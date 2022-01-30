@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.remote.consts;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.curtisnewbie.common.enums.IntEnum;
 import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Type of event that will be handled
@@ -21,6 +22,7 @@ public enum EventHandlingType implements IntEnum {
      */
     REQUEST_APP_APPROVAL(2);
 
+    @JsonValue
     @EnumValue
     public final int val;
 
