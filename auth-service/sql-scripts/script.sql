@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS user (
     create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the user is created',
     create_by VARCHAR(255) NOT NULL COMMENT 'who created this user',
     update_time DATETIME COMMENT 'when the user is updated',
-    update_by VARCHAR(255) COMMENT 'who updated this user'
+    update_by VARCHAR(255) COMMENT 'who updated this user',
+    is_del TINYINT NOT NULL DEFAULT '0' COMMENT '0-normal, 1-deleted'
 ) ENGINE=InnoDB COMMENT 'user';
 
 CREATE table if not exists user_key (
@@ -41,6 +42,7 @@ CREATE TABLE IF NOT EXISTS user_app (
     create_by VARCHAR(255) COMMENT 'who created this record',
     update_time DATETIME COMMENT 'when the record is updated',
     update_by VARCHAR(255) COMMENT 'who updated this record',
+    is_del TINYINT NOT NULL DEFAULT '0' COMMENT '0-normal, 1-deleted',
     CONSTRAINT uk_user_app UNIQUE (user_id, app_id)
 ) ENGINE=InnoDB COMMENT 'join table between application and user';
 
