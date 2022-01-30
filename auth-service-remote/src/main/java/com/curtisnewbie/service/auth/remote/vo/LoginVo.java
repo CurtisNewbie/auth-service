@@ -27,5 +27,4 @@ public class LoginVo {
     /** application name that the user is trying to use */
     @NotBlank
     private String appName;
-
 }

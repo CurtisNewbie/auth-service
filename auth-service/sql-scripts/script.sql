@@ -5,12 +5,23 @@ CREATE TABLE IF NOT EXISTS user (
     password VARCHAR(255) NOT NULL COMMENT "password in hash",
     salt VARCHAR(10) NOT NULL COMMENT "salt",
     role VARCHAR(20) NOT NULL COMMENT "role",
+    is_disabled INT NOT NULL DEFAULT 0 COMMENT 'whether the user is disabled, 0-normal, 1-disabled',
     create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the user is created',
     create_by VARCHAR(255) NOT NULL COMMENT 'who created this user',
-    is_disabled INT NOT NULL DEFAULT 0 COMMENT 'whether the user is disabled, 0-normal, 1-disabled',
     update_time DATETIME COMMENT 'when the user is updated',
     update_by VARCHAR(255) COMMENT 'who updated this user'
 ) ENGINE=InnoDB COMMENT 'user';
+
+CREATE table if not exists user_key (
+    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
+    user_id INT UNSIGNED NOT NULL COMMENT "user.id",
+    secret_key VARCHAR(255) NOT NULL UNIQUE COMMENT "secret key",
+    expiration_time DATETIME NOT NULL COMMENT 'when the key is expired',
+    create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the user is created',
+    create_by VARCHAR(255) NOT NULL COMMENT 'who created this user',
+    update_time DATETIME COMMENT 'when the user is updated',
+    update_by VARCHAR(255) COMMENT 'who updated this user'
+) ENGINE=InnoDB COMMENT "user's key";
 
 CREATE TABLE IF NOT EXISTS app (
     id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",

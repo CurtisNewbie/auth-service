@@ -2,12 +2,11 @@ package com.curtisnewbie.service.auth.dao;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.curtisnewbie.common.dao.DaoSkeleton;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -21,7 +20,7 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 @TableName("user_app")
-public class UserApp {
+public class UserApp extends DaoSkeleton {
 
     /** user's id */
     @TableField("user_id")
@@ -31,18 +30,4 @@ public class UserApp {
     @TableField("app_id")
     private Integer appId;
 
-    /** when the record is created */
-    @TableField("create_time")
-    private LocalDateTime createTime;
-
-    /** who created this record */
-    @TableField("create_by")
-    private String createBy;
-
-    /** when the record is updated */
-    @TableField("update_time")
-    private LocalDateTime updateTime;
-
-    /** who updated this record */
-    private String updateBy;
 }

@@ -86,7 +86,7 @@ public interface LocalUserService {
      * <p>
      * User registered with this method is disabled by default, it requires the admin to 'approve' the registration by
      * enabling it. To do this, this method will generate a {@code event_handling} record, that will later be received
-     * by the admin and handled. For more information, see {@link RemoteEventHandlingService}
+     * by the admin and handled. For more information, see {@link com.curtisnewbie.service.auth.remote.feign.EventHandlingServiceFeign}
      * </p>
      *
      * @param registerUserVo

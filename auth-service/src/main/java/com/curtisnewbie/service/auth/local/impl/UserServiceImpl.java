@@ -7,7 +7,9 @@ import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.service.auth.dao.User;
+import com.curtisnewbie.service.auth.dao.UserKey;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
+import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserKeyMapper;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
@@ -47,6 +49,8 @@ public class UserServiceImpl implements LocalUserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserKeyMapper userKeyMapper;
     @Autowired
     private LocalEventHandlingService eventHandlingService;
     @Autowired
@@ -149,25 +153,27 @@ public class UserServiceImpl implements LocalUserService {
     public UserVo login(@NotEmpty String username, @NotEmpty String password) throws UserDisabledException, UsernameNotFoundException,
             PasswordIncorrectException {
 
-        User ue = loadUserByUsername(username);
-        if (ue == null) {
-            log.info("User '{}' attempt to login, but username is not found.", username);
-            throw new UsernameNotFoundException(username);
-        }
-        UserIsDisabled isDisabled = EnumUtils.parse(ue.getIsDisabled(), UserIsDisabled.class);
-        Objects.requireNonNull(isDisabled, "Illegal is_disabled value");
-        if (isDisabled == UserIsDisabled.DISABLED) {
-            log.info("User '{}' attempt to login, but user is disabled.", username);
-            throw new UserDisabledException(username);
-        }
+        final User ue = validateUserStatusForLogin(username);
 
-        boolean isPwdCorrect = PasswordUtil.getValidator()
+        // validate the password first
+        final boolean isPwdCorrect = PasswordUtil.getValidator()
                 .givenPasswordAndSalt(password, ue.getSalt())
                 .compareToPasswordHash(ue.getPassword())
                 .isMatched();
+
+        // if the password is incorrect, may it's a token, validate it
         if (!isPwdCorrect) {
-            log.info("User '{}' attempt to login, but password is incorrect.", username);
-            throw new PasswordIncorrectException(username);
+            final QueryWrapper<UserKey> cond = new QueryWrapper<UserKey>()
+                    .eq("user_id", ue.getId())
+                    .eq("secret_key", password)
+                    .ge("expiration_time", LocalDateTime.now())
+                    .last("limit 1");
+
+            // it's not a token, or it's just incorrect as well
+            if (userKeyMapper.selectOne(cond) == null) {
+                log.info("User '{}' attempt to login, but password is incorrect.", username);
+                throw new PasswordIncorrectException(username);
+            }
         }
 
         log.info("User '{}' login successful, user_info returned", username);
@@ -180,7 +186,7 @@ public class UserServiceImpl implements LocalUserService {
             UserNotAllowedToUseApplicationException {
 
         // validate the credentials first
-        UserVo uv = login(username, password);
+        final UserVo uv = login(username, password);
 
         // validate whether current user is allowed to use this application
         if (!userAppService.isUserAllowedToUseApp(uv.getId(), appName)) {
@@ -350,6 +356,21 @@ public class UserServiceImpl implements LocalUserService {
                         optInt.get(), currCntOfAdmin));
             }
         }
+    }
+
+    private User validateUserStatusForLogin(String username) throws UsernameNotFoundException, UserDisabledException {
+        final User ue = loadUserByUsername(username);
+        if (ue == null) {
+            log.info("User '{}' attempt to login, but username is not found.", username);
+            throw new UsernameNotFoundException(username);
+        }
+        UserIsDisabled isDisabled = EnumUtils.parse(ue.getIsDisabled(), UserIsDisabled.class);
+        Objects.requireNonNull(isDisabled, "Illegal is_disabled value");
+        if (isDisabled == UserIsDisabled.DISABLED) {
+            log.info("User '{}' attempt to login, but user is disabled.", username);
+            throw new UserDisabledException(username);
+        }
+        return ue;
     }
 
 }
