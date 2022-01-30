@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 import lombok.ToString;
 
@@ -22,7 +23,7 @@ public class RegisterUserWebVo {
     /**
      * User role
      */
-    private String userRole;
+    private UserRole userRole;
 
     @ToString.Include(name = "password")
     public String passwordMask() {

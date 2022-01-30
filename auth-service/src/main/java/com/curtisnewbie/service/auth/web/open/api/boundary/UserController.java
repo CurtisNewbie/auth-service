@@ -66,8 +66,7 @@ public class UserController {
         // if not specified, the role will be guest
         UserRole role = UserRole.GUEST;
         if (registerUserVo.getUserRole() != null) {
-            role = UserRole.parseUserRole(registerUserVo.getUserRole());
-            ValidUtils.requireNonNull(role, "Illegal user role");
+            role = registerUserVo.getUserRole();
         }
         // do not support adding administrator
         if (role == UserRole.ADMIN) {

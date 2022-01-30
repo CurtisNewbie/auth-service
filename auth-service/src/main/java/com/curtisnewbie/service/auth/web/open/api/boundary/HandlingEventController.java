@@ -2,15 +2,12 @@ package com.curtisnewbie.service.auth.web.open.api.boundary;
 
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.BeanCopyUtils;
-import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.util.AuthUtil;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
-import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
-import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
@@ -47,8 +44,6 @@ public class HandlingEventController {
     public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v)
             throws MsgEmbeddedException {
 
-        v.validate();
-
         PageablePayloadSingleton<List<EventHandlingVo>> pi = eventHandlingService.findEventHandlingByPage(
                 BeanCopyUtils.toType(v, FindEventHandlingByPageReqVo.class)
         );
@@ -61,15 +56,13 @@ public class HandlingEventController {
 
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/handle")
-    public Result<Void> handleEvent(@RequestBody HandleEventReqWebVo v) throws InvalidAuthenticationException,
-            MsgEmbeddedException {
+    public Result<Void> handleEvent(@RequestBody HandleEventReqWebVo v) throws MsgEmbeddedException {
         ValidUtils.requireNonNull(v.getId());
         ValidUtils.requireNonNull(v.getResult());
-        EventHandlingResult result = EnumUtils.parse(v.getResult(), EventHandlingResult.class);
-        ValidUtils.requireNonNull(result);
+        ValidUtils.requireNonNull(v.getResult());
         eventHandlingService.handleEvent(HandleEventReqVo.builder()
                 .id(v.getId())
-                .result(result)
+                .result(v.getResult())
                 .extra(v.getExtra())
                 .handlerId(AuthUtil.getUserId())
                 .build());
