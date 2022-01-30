@@ -3,9 +3,8 @@ package com.curtisnewbie.service.auth.remote.consts;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.curtisnewbie.common.enums.ValueEnum;
 import com.curtisnewbie.common.util.EnumUtils;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
-import java.util.Objects;
 
 /**
  * User's role enum
@@ -31,8 +30,9 @@ public enum UserRole implements ValueEnum<String> {
         this.val = v;
     }
 
+    @JsonCreator
     public static UserRole parseUserRole(String userRole) {
-        Objects.requireNonNull(userRole);
+        if (userRole == null) return null;
         return EnumUtils.parse(userRole, UserRole.class);
     }
 

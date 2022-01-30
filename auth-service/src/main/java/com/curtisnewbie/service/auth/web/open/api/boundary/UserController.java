@@ -133,9 +133,9 @@ public class UserController {
         infoVo.setUsername(reqVo.getUsername());
         infoVo.setPagingVo(reqVo.getPagingVo());
         if (reqVo.getIsDisabled() != null)
-            infoVo.setIsDisabled(EnumUtils.parse(reqVo.getIsDisabled(), UserIsDisabled.class));
+            infoVo.setIsDisabled(reqVo.getIsDisabled());
         if (reqVo.getRole() != null)
-            infoVo.setRole(EnumUtils.parse(reqVo.getRole(), UserRole.class));
+            infoVo.setRole(reqVo.getRole());
         return infoVo;
     }
 

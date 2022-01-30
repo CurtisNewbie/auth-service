@@ -2,6 +2,8 @@ package com.curtisnewbie.service.auth.remote.consts;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.curtisnewbie.common.enums.IntEnum;
+import com.curtisnewbie.common.util.EnumUtils;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
@@ -37,5 +39,11 @@ public enum EventHandlingStatus implements IntEnum {
     @Override
     public int getValue() {
         return val;
+    }
+
+    @JsonCreator
+    public static EventHandlingStatus from(Integer v) {
+        if (v == null) return null;
+        return EnumUtils.parse(v, EventHandlingStatus.class);
     }
 }

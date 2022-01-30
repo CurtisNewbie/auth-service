@@ -1,6 +1,8 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.vo.PageableVo;
+import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,11 +23,11 @@ public class GetUserListReqWebVo extends PageableVo implements Serializable {
     /**
      * role
      */
-    private String role;
+    private UserRole role;
 
     /**
      * is user disabled
      */
-    private Integer isDisabled;
+    private UserIsDisabled isDisabled;
 
 }
