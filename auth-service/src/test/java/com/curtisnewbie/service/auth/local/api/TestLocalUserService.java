@@ -117,11 +117,6 @@ public class TestLocalUserService {
     }
 
     @Test
-    public void shouldFindAllUserInfoList() {
-        Assertions.assertNotNull(userService.findAllUserInfoList());
-    }
-
-    @Test
     public void shouldDisableAndEnableUserById() {
         Assertions.assertDoesNotThrow(() -> {
             // create a test user
