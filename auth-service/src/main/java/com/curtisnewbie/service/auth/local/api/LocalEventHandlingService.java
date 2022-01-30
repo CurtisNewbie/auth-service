@@ -6,6 +6,7 @@ import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
 import com.curtisnewbie.service.auth.local.vo.cmd.UpdateHandleStatusCmd;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -36,7 +37,7 @@ public interface LocalEventHandlingService {
      *
      * @return id of the event
      */
-    int createEvent(@NotNull CreateEventHandlingCmd cmd);
+    int createEvent(@Validated @NotNull CreateEventHandlingCmd cmd);
 
     /**
      * Find events with pagination

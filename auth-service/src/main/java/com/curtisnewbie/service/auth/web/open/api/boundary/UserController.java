@@ -68,7 +68,7 @@ public class UserController {
         if (registerUserVo.getUserRole() != null) {
             role = registerUserVo.getUserRole();
         }
-        // do not support adding administrator
+        // todo do not support adding administrator
         if (role == UserRole.ADMIN) {
             return Result.error("Do not support adding administrator");
         }

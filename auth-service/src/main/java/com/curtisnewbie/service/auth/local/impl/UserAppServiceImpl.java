@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static java.lang.String.format;
 import static java.util.Objects.nonNull;
 
 /**
@@ -80,6 +81,7 @@ public class UserAppServiceImpl implements LocalUserAppService {
             localEventHandlingService.createEvent(CreateEventHandlingCmd.builder()
                     .type(EventHandlingType.REQUEST_APP_APPROVAL)
                     .body(JsonUtils.writeValueAsString(cmd))
+                    .description(format("User '%s' requests access to '%s'", cmd.getUserId(), cmd.getAppId()))
                     .build());
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(e);

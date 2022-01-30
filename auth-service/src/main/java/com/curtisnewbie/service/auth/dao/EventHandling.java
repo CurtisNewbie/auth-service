@@ -32,6 +32,10 @@ public class EventHandling {
     @TableField("body")
     private String body;
 
+    /** description of the event */
+    @TableField("description")
+    private String description;
+
     /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
     @TableField("status")
     private EventHandlingStatus status;

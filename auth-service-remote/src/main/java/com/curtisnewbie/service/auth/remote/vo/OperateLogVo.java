@@ -20,7 +20,6 @@ public class OperateLogVo implements Serializable {
     /** description of operation */
     private String operateDesc;
 
-    // todo fix bug, unable to deserialize this
     /** when the operation happens */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime operateTime;

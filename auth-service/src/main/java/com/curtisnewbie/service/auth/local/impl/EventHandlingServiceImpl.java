@@ -49,7 +49,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     private EventHandlingConverter cvtr;
 
     @Override
-    public int createEvent(@NotNull CreateEventHandlingCmd cmd) {
+    public int createEvent(CreateEventHandlingCmd cmd) {
         final EventHandling eventHandling = cvtr.toDo(cmd);
         eventHandling.setStatus(TO_BE_HANDLED);
         mapper.insert(eventHandling);

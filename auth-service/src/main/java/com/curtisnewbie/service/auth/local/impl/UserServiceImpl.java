@@ -240,19 +240,20 @@ public class UserServiceImpl implements LocalUserService {
         }
 
         // set user disabled, this will be handled by the admin
-        User userEntity = toUserEntity(registerUserVo);
-        userEntity.setIsDisabled(UserIsDisabled.DISABLED);
-        userMapper.insert(userEntity);
+        User user = toUserEntity(registerUserVo);
+        user.setIsDisabled(UserIsDisabled.DISABLED);
+        userMapper.insert(user);
 
         log.info("New user '{}' successfully registered, role: {}, currently disabled and waiting for approval",
                 registerUserVo.getUsername(), registerUserVo.getRole().getValue());
 
         // generate a handling_event for registration request
-        Objects.requireNonNull(userEntity.getId());
+        Objects.requireNonNull(user.getId());
         eventHandlingService.createEvent(
                 CreateEventHandlingCmd.builder()
-                        .body(String.valueOf(userEntity.getId()))
+                        .body(String.valueOf(user.getId()))
                         .type(EventHandlingType.REGISTRATION_EVENT)
+                        .description(format("User '%s' requests registration approval", user.getUsername()))
                         .build()
         );
         log.info("Created event_handling for {}'s registration", registerUserVo.getUsername());
