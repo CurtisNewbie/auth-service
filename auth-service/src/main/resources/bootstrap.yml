@@ -6,6 +6,8 @@ spring:
 
 mybatis:
   config-location: classpath:mybatis-config.xml
+mybatis-plus:
+  typeEnumsPackage: com.curtisnewbie.common.dao
 
 distributed-task-module:
   application-group: auth-service
