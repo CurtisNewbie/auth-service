@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.service.auth.dao.User;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 /**
  * @author yongjie.zhuang
  */
@@ -38,17 +36,7 @@ public interface UserMapper extends BaseMapper<User> {
      * @param hashedPwd hashed password
      * @param id        id
      */
-    void updatePwd(@Param("hashedPwd") String hashedPwd, @Param("id") Long id);
-
-    /**
-     * Select id, username, role of normal users
-     */
-    List<User> findNormalUserInfoList();
-
-    /**
-     * Select id, username, role, is_disabled of all users
-     */
-    List<User> findAllUserInfoList();
+    int updatePwd(@Param("hashedPwd") String hashedPwd, @Param("id") Long id);
 
     /**
      * Select *
@@ -71,14 +59,4 @@ public interface UserMapper extends BaseMapper<User> {
      * Update role, is_disabled, update_by, update_time
      */
     void updateUser(User ue);
-
-    /**
-     * Move disabled user to deleted_user
-     */
-    int moveDisabledUser(@Param("id") int id, @Param("deletedBy") String deletedBy);
-
-    /**
-     * Delete record
-     */
-    void deleteUser(@Param("id") int id);
 }

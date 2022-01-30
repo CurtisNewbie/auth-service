@@ -92,16 +92,3 @@ CREATE TABLE IF NOT EXISTS operate_log_history (
     username VARCHAR(255) NOT NULL COMMENT 'username',
     user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user'
 ) ENGINE=InnoDB COMMENT "operate log history (for history only)";
-
-CREATE TABLE IF NOT EXISTS deleted_user (
-    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT 'primary key',
-    user_id INT UNSIGNED NOT NULL COMMENT "user's id before deletion",
-    username VARCHAR(255) NOT NULL COMMENT "username",
-    password VARCHAR(255) NOT NULL COMMENT "password in hash",
-    salt VARCHAR(10) NOT NULL COMMENT "salt",
-    role VARCHAR(20) NOT NULL COMMENT "role",
-    create_time DATETIME NOT NULL COMMENT 'when the user was created',
-    create_by VARCHAR(255) NOT NULL COMMENT 'who created this user',
-    delete_time DATETIME COMMENT 'when the user was delete',
-    deleted_by VARCHAR(255) NOT NULL COMMENT 'who deleted the user'
-) ENGINE=InnoDB COMMENT 'deleted user';

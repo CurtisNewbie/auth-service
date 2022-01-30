@@ -111,18 +111,6 @@ public interface LocalUserService {
             PasswordIncorrectException;
 
     /**
-     * Fetch list of user info, excluding disabled users
-     */
-    @NotNull
-    List<UserInfoVo> findNormalUserInfoList();
-
-    /**
-     * Fetch list of user info, including disabled users
-     */
-    @NotNull
-    List<UserInfoVo> findAllUserInfoList();
-
-    /**
      * Fetch list of user info based on the provided arguments
      */
     @NotNull
@@ -178,7 +166,7 @@ public interface LocalUserService {
      * @param userId    user's id
      * @param deletedBy deleted by
      */
-    void deleteUser(int userId, @NotEmpty String deletedBy);
+    boolean deleteUser(int userId, @NotEmpty String deletedBy);
 
     /**
      * Update user role

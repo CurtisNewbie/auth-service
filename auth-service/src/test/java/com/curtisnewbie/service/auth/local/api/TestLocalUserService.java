@@ -117,11 +117,6 @@ public class TestLocalUserService {
     }
 
     @Test
-    public void shouldFindNormalUserInfoList() {
-        Assertions.assertNotNull(userService.findNormalUserInfoList());
-    }
-
-    @Test
     public void shouldFindAllUserInfoList() {
         Assertions.assertNotNull(userService.findAllUserInfoList());
     }

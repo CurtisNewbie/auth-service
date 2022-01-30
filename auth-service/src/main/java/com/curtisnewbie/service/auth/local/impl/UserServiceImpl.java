@@ -2,7 +2,7 @@ package com.curtisnewbie.service.auth.local.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.curtisnewbie.common.util.BeanCopyUtils;
+import com.curtisnewbie.common.dao.IsDel;
 import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.service.auth.dao.User;
@@ -35,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.curtisnewbie.common.util.PagingUtil.forPage;
+import static com.curtisnewbie.service.auth.util.PasswordUtil.encodePassword;
 import static java.lang.String.format;
 
 /**
@@ -114,11 +115,16 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void deleteUser(final int userId, @NotEmpty String deletedBy) {
-        int c = userMapper.moveDisabledUser(userId, deletedBy);
-        if (c > 0) {
-            userMapper.deleteUser(userId);
-        }
+    public boolean deleteUser(final int userId, @NotEmpty String deletedBy) {
+        final QueryWrapper<User> where = new QueryWrapper<User>()
+                .eq("id", userId)
+                .eq("is_del", IsDel.NORMAL);
+
+        final User param = new User();
+        param.setIsDel(IsDel.DELETED);
+        param.setUpdateBy(deletedBy);
+
+        return userMapper.update(param, where) > 0;
     }
 
     @Override
@@ -138,7 +144,8 @@ public class UserServiceImpl implements LocalUserService {
         QueryWrapper<User> cond = new QueryWrapper<>();
         cond.lambda()
                 .select(User::getId, User::getUsername)
-                .in(User::getId, userIds);
+                .in(User::getId, userIds)
+                .eq(User::getIsDel, IsDel.NORMAL);
 
         List<User> users = userMapper.selectList(cond);
         Map<Integer, String> idToName = new HashMap<>();
@@ -173,6 +180,7 @@ public class UserServiceImpl implements LocalUserService {
                     .eq("user_id", ue.getId())
                     .eq("secret_key", password)
                     .ge("expiration_time", LocalDateTime.now())
+                    .eq("is_del", IsDel.NORMAL)
                     .last("limit 1");
 
             // it's not a token, or it's just incorrect as well
@@ -276,20 +284,9 @@ public class UserServiceImpl implements LocalUserService {
             throw new PasswordIncorrectException("user.id: " + id);
         }
 
-        log.info("User_id '{}' successfully changed password.", id);
-        userMapper.updatePwd(PasswordUtil.encodePassword(newPassword, ue.getSalt()), id);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public @NotNull List<UserInfoVo> findNormalUserInfoList() {
-        return BeanCopyUtils.toTypeList(userMapper.findNormalUserInfoList(), UserInfoVo.class);
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
-    public @NotNull List<UserInfoVo> findAllUserInfoList() {
-        return BeanCopyUtils.toTypeList(userMapper.findAllUserInfoList(), UserInfoVo.class);
+        final boolean isUpdated = userMapper.updatePwd(encodePassword(newPassword, ue.getSalt()), id) > 0;
+        if (isUpdated)
+            log.info("User_id '{}' successfully changed password.", id);
     }
 
     @Override
@@ -329,7 +326,7 @@ public class UserServiceImpl implements LocalUserService {
         u.setUsername(registerUserVo.getUsername());
         u.setRole(registerUserVo.getRole());
         u.setSalt(RandomNumUtil.randomNoStr(5));
-        u.setPassword(PasswordUtil.encodePassword(registerUserVo.getPassword(), u.getSalt()));
+        u.setPassword(encodePassword(registerUserVo.getPassword(), u.getSalt()));
         u.setCreateBy(registerUserVo.getCreateBy());
         u.setCreateTime(LocalDateTime.now());
         return u;
