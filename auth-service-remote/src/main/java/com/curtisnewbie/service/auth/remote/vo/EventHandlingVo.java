@@ -34,6 +34,9 @@ public class EventHandlingVo implements Serializable {
     /** status of event, 0-no need to handle, 1-to be handled, 2-handled */
     private EventHandlingStatus status;
 
+    /** description of the event */
+    private String description;
+
     /** id of user who handled the event */
     private Integer handlerId;
 

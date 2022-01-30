@@ -41,15 +41,14 @@ public class HandlingEventController {
 
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
-    public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v)
-            throws MsgEmbeddedException {
+    public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v) {
 
-        PageablePayloadSingleton<List<EventHandlingVo>> pi = eventHandlingService.findEventHandlingByPage(
+        final PageablePayloadSingleton<List<EventHandlingVo>> pi = eventHandlingService.findEventHandlingByPage(
                 BeanCopyUtils.toType(v, FindEventHandlingByPageReqVo.class)
         );
 
-        FindEventHandlingByPageRespWebVo resp = new FindEventHandlingByPageRespWebVo();
-        resp.setList(mapTo(pi.getPayload(), this::fillTextDescription));
+        final FindEventHandlingByPageRespWebVo resp = new FindEventHandlingByPageRespWebVo();
+        resp.setList(mapTo(pi.getPayload(), e -> BeanCopyUtils.toType(e, EventHandlingWebVo.class)));
         resp.setPagingVo(pi.getPagingVo());
         return Result.of(resp);
     }
@@ -67,11 +66,5 @@ public class HandlingEventController {
                 .handlerId(AuthUtil.getUserId())
                 .build());
         return Result.ok();
-    }
-
-    private EventHandlingWebVo fillTextDescription(EventHandlingVo e) {
-        EventHandlingWebVo wv = BeanCopyUtils.toType(e, EventHandlingWebVo.class);
-        wv.fillDescription(userService);
-        return wv;
     }
 }

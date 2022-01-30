@@ -1,7 +1,6 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.util.DateUtils;
-import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
@@ -46,18 +45,4 @@ public class EventHandlingWebVo {
      * A description of the event
      */
     private String description;
-
-    // todo, store this in database instead, this looks stupid :(
-
-    /**
-     * Fill {@code description} based on type
-     */
-    public void fillDescription(LocalUserService localUserService) {
-        if (type == EventHandlingType.REGISTRATION_EVENT) {
-            String username = localUserService.findUsernameById(Integer.parseInt(getBody()));
-            if (username == null)
-                username = "... deleted ...";
-            setDescription(String.format("User '%s' requests registration approval", username));
-        }
-    }
 }
