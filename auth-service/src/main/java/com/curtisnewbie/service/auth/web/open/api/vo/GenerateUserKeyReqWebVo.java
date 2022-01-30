@@ -11,10 +11,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class GenerateUserKeyReqWebVo {
 
-    /** username */
-    @NotBlank
-    private String username;
-
     /** password */
     @NotBlank
     private String password;

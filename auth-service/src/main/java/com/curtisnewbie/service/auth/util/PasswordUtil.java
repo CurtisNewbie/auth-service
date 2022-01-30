@@ -1,6 +1,8 @@
 package com.curtisnewbie.service.auth.util;
 
 
+import com.curtisnewbie.service.auth.dao.User;
+
 import java.util.Objects;
 
 /**
@@ -20,16 +22,15 @@ public final class PasswordUtil {
      * Get {@code PasswordValidator} for password validation
      * <p>
      * Use it as follows:
+     *
      * <pre>
-     * boolean isPasswordMatched = PasswordValidUtil.getValidator()
-     *  .givenPassword(enteredPassword)
-     *  .compareTo(userEntity.getPassword())
-     *  .withSalt(userEntity.getSalt())
-     *  .isMatched();
+     * final boolean isPwdCorrect = PasswordUtil.getValidator(user)
+     *      .givenPassword(password)
+     *      .isMatched();
      * </pre>
      */
-    public static PasswordValidator getValidator() {
-        return new PasswordValidator();
+    public static PasswordValidator getValidator(User u) {
+        return new PasswordValidator(u);
     }
 
     /**
@@ -55,30 +56,21 @@ public final class PasswordUtil {
 
     public static class PasswordValidator {
         private String passwordAndSalt;
-        private String passwordHash;
+        private final User user;
 
-        private PasswordValidator() {
+        private PasswordValidator(User user) {
+            this.user = user;
         }
 
         /**
          * The password that is being validated (which is the one user entered)
          *
          * @param password the password provided by the user
-         * @param salt     the salt of the user
          */
-        public PasswordValidator givenPasswordAndSalt(String password, String salt) {
+        public PasswordValidator givenPassword(String password) {
             Objects.requireNonNull(password);
-            Objects.requireNonNull(salt);
-            this.passwordAndSalt = concatPasswordAndSalt(password, salt);
-            return this;
-        }
-
-        /**
-         * The correct password in database (the hashed password)
-         */
-        public PasswordValidator compareToPasswordHash(String passwordHash) {
-            Objects.requireNonNull(passwordHash);
-            this.passwordHash = passwordHash;
+            Objects.requireNonNull(user);
+            this.passwordAndSalt = concatPasswordAndSalt(password, user.getSalt());
             return this;
         }
 
@@ -86,7 +78,7 @@ public final class PasswordUtil {
          * Check if the passwords are matched
          */
         public boolean isMatched() {
-            return passwordEncoder.matches(passwordAndSalt, passwordHash);
+            return passwordEncoder.matches(passwordAndSalt, user.getPassword());
         }
     }
 }

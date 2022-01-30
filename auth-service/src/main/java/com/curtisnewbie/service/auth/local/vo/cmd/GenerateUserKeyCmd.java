@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.local.vo.cmd;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 public class GenerateUserKeyCmd {
 
     private final int userId;
+
     @NonNull
     private final LocalDateTime expirationTime;
+
     private final String createBy;
 }

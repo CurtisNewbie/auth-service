@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>auth-service-parent</artifactId>
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.0.8-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>auth-service-parent</name>
   <description>Authentication Service Parent</description>

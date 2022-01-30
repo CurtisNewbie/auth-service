@@ -8,6 +8,7 @@ import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.lang.Nullable;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -190,5 +191,10 @@ public interface LocalUserService {
      * @param userIds list of user_id
      * @return user_id -> username map
      */
-    Map<Integer, String> fetchUsernameById(List<Integer> userIds);
+    Map<Integer, String> fetchUsernameById(@NotNull List<Integer> userIds);
+
+    /**
+     * Check if the password (not secret key) is correct
+     */
+    boolean validateUserPassword(@NotBlank String username, @NotBlank String password) throws UserDisabledException, UsernameNotFoundException;
 }

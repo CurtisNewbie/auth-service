@@ -150,15 +150,22 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    public boolean validateUserPassword(String username, String password) throws UserDisabledException, UsernameNotFoundException {
+        final User ue = validateUserStatusForLogin(username);
+        return PasswordUtil.getValidator(ue)
+                .givenPassword(password)
+                .isMatched();
+    }
+
+    @Override
     public UserVo login(@NotEmpty String username, @NotEmpty String password) throws UserDisabledException, UsernameNotFoundException,
             PasswordIncorrectException {
 
         final User ue = validateUserStatusForLogin(username);
 
         // validate the password first
-        final boolean isPwdCorrect = PasswordUtil.getValidator()
-                .givenPasswordAndSalt(password, ue.getSalt())
-                .compareToPasswordHash(ue.getPassword())
+        final boolean isPwdCorrect = PasswordUtil.getValidator(ue)
+                .givenPassword(password)
                 .isMatched();
 
         // if the password is incorrect, may it's a token, validate it
@@ -261,9 +268,8 @@ public class UserServiceImpl implements LocalUserService {
             log.info("User_id '{}' attempt to change password, but user is not found.", id);
             throw new UserNotFoundException("user.id: " + id);
         }
-        boolean isPasswordMatched = PasswordUtil.getValidator()
-                .givenPasswordAndSalt(oldPassword, ue.getSalt())
-                .compareToPasswordHash(ue.getPassword())
+        boolean isPasswordMatched = PasswordUtil.getValidator(ue)
+                .givenPassword(oldPassword)
                 .isMatched();
         if (!isPasswordMatched) {
             log.info("User_id '{}' attempt to change password, but the old password is unmatched.", id);
@@ -358,13 +364,11 @@ public class UserServiceImpl implements LocalUserService {
     private User validateUserStatusForLogin(String username) throws UsernameNotFoundException, UserDisabledException {
         final User ue = loadUserByUsername(username);
         if (ue == null) {
-            log.info("User '{}' attempt to login, but username is not found.", username);
             throw new UsernameNotFoundException(username);
         }
         UserIsDisabled isDisabled = EnumUtils.parse(ue.getIsDisabled(), UserIsDisabled.class);
         Objects.requireNonNull(isDisabled, "Illegal is_disabled value");
         if (isDisabled == UserIsDisabled.DISABLED) {
-            log.info("User '{}' attempt to login, but user is disabled.", username);
             throw new UserDisabledException(username);
         }
         return ue;
