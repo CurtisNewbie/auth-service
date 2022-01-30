@@ -9,7 +9,7 @@ import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.UpdateUserVo;
-import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.beans.factory.annotation.Autowired;

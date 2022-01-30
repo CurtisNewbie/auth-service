@@ -7,8 +7,8 @@ import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.local.api.eventhandling.AuthEventHandler;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
-import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
-import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.UpdateHandleStatusCmd;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -57,7 +57,7 @@ public class DelegatingAuthEventListener {
     public void _handle(HandleEventInfoVo info) {
         // mark the event as handled, semantic lock is used here
         if (localEventHandlingService.updateHandleStatus(
-                UpdateHandleStatusReqVo.builder()
+                UpdateHandleStatusCmd.builder()
                         .id(info.getRecord().getId())
                         .prevStatus(EventHandlingStatus.TO_BE_HANDLED)
                         .currStatus(EventHandlingStatus.HANDLED)

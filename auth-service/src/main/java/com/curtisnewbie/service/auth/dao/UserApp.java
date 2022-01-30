@@ -15,9 +15,6 @@ import lombok.NoArgsConstructor;
  *
  * @author yongjie.zhuang
  */
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Data
 @TableName("user_app")
 public class UserApp extends DaoSkeleton {

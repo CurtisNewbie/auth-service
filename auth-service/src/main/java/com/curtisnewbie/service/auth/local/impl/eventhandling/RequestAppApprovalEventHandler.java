@@ -7,7 +7,7 @@ import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.local.api.eventhandling.AuthEventHandler;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingResult;
 import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
-import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.beans.factory.annotation.Autowired;

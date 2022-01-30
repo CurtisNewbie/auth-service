@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.local.api.eventhandling;
 
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
-import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
 
 /**
  * Handler of events

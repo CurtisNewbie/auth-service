@@ -1,11 +1,12 @@
 package com.curtisnewbie.service.auth.dao;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.curtisnewbie.common.dao.DaoSkeleton;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -15,10 +16,6 @@ import java.time.LocalDateTime;
 @Data
 @TableName("user_key")
 public class UserKey extends DaoSkeleton {
-
-    /** primary key */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
 
     /** user.id */
     @TableField("user_id")

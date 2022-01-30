@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.infrastructure.converters;
 
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
-import com.curtisnewbie.service.auth.vo.EventHandlingWebVo;
+import com.curtisnewbie.service.auth.web.open.api.vo.EventHandlingWebVo;
 import org.mapstruct.Mapper;
 
 /**

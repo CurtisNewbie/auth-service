@@ -9,7 +9,7 @@ import com.curtisnewbie.service.auth.infrastructure.converters.AccessLogConverte
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
-import com.curtisnewbie.service.auth.vo.MoveAccessLogToHistoryCmd;
+import com.curtisnewbie.service.auth.local.vo.cmd.MoveAccessLogToHistoryCmd;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

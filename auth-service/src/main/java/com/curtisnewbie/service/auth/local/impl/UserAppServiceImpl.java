@@ -98,11 +98,12 @@ public class UserAppServiceImpl implements LocalUserAppService {
         if (nonNull(userAppMapper.selectOne(condition)))
             return;
 
-        userAppMapper.insert(UserApp.builder()
-                .appId(appId)
-                .userId(userId)
-                .createBy(createdBy)
-                .createTime(LocalDateTime.now())
-                .build());
+        UserApp ua = new UserApp();
+        ua.setAppId(appId);
+        ua.setUserId(userId);
+        ua.setCreateBy(createdBy);
+        ua.setCreateTime(LocalDateTime.now());
+
+        userAppMapper.insert(ua);
     }
 }

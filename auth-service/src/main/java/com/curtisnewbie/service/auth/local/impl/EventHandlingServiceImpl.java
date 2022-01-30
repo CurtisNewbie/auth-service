@@ -16,8 +16,8 @@ import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
-import com.curtisnewbie.service.auth.vo.HandleEventInfoVo;
-import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.UpdateHandleStatusCmd;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +102,7 @@ public class EventHandlingServiceImpl implements LocalEventHandlingService {
     }
 
     @Override
-    public boolean updateHandleStatus(@NotNull UpdateHandleStatusReqVo vo) {
+    public boolean updateHandleStatus(@NotNull UpdateHandleStatusCmd vo) {
         return mapper.updateHandlingResult(vo.getId(),
                 vo.getPrevStatus().getValue(),
                 vo.getCurrStatus().getValue(),

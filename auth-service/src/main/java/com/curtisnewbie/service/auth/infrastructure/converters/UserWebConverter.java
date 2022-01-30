@@ -2,8 +2,8 @@ package com.curtisnewbie.service.auth.infrastructure.converters;
 
 import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
-import com.curtisnewbie.service.auth.vo.UserInfoWebVo;
-import com.curtisnewbie.service.auth.vo.UserWebVo;
+import com.curtisnewbie.service.auth.web.open.api.vo.UserInfoWebVo;
+import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import org.mapstruct.Mapper;
 
 /**

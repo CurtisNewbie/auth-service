@@ -2,8 +2,8 @@ package com.curtisnewbie.service.auth.infrastructure.converters;
 
 import com.curtisnewbie.module.task.vo.ListTaskByPageReqVo;
 import com.curtisnewbie.module.task.vo.ListTaskByPageRespVo;
-import com.curtisnewbie.service.auth.vo.ListTaskByPageReqAsVo;
-import com.curtisnewbie.service.auth.vo.TaskAsVo;
+import com.curtisnewbie.service.auth.web.open.api.vo.ListTaskByPageReqAsVo;
+import com.curtisnewbie.service.auth.web.open.api.vo.TaskAsVo;
 import org.mapstruct.Mapper;
 
 /**

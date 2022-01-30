@@ -15,7 +15,7 @@ import com.curtisnewbie.service.auth.remote.exception.ExceededMaxAdminCountExcep
 import com.curtisnewbie.service.auth.remote.exception.UserRegisteredException;
 import com.curtisnewbie.service.auth.remote.exception.UsernameNotFoundException;
 import com.curtisnewbie.service.auth.remote.vo.*;
-import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.UpdateHandleStatusCmd;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -68,7 +68,7 @@ public class TestLocalEventHandlingService {
             final int id = createEvent();
 
             Assertions.assertTrue(
-                    localEventHandlingService.updateHandleStatus(UpdateHandleStatusReqVo.builder()
+                    localEventHandlingService.updateHandleStatus(UpdateHandleStatusCmd.builder()
                             .id(id)
                             .prevStatus(EventHandlingStatus.TO_BE_HANDLED)
                             .currStatus(EventHandlingStatus.HANDLED)

@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.local.api;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
-import com.curtisnewbie.service.auth.vo.MoveOperateLogToHistoryCmd;
+import com.curtisnewbie.service.auth.local.vo.cmd.MoveOperateLogToHistoryCmd;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;

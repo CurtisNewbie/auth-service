@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.infrastructure.converters;
 
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
-import com.curtisnewbie.service.auth.vo.AccessLogInfoWebVo;
+import com.curtisnewbie.service.auth.web.open.api.vo.AccessLogInfoWebVo;
 import org.mapstruct.Mapper;
 
 /**

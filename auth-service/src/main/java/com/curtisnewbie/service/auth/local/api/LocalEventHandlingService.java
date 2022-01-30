@@ -5,7 +5,7 @@ import com.curtisnewbie.service.auth.remote.vo.CreateEventHandlingCmd;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
 import com.curtisnewbie.service.auth.remote.vo.FindEventHandlingByPageReqVo;
 import com.curtisnewbie.service.auth.remote.vo.HandleEventReqVo;
-import com.curtisnewbie.service.auth.vo.UpdateHandleStatusReqVo;
+import com.curtisnewbie.service.auth.local.vo.cmd.UpdateHandleStatusCmd;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -22,7 +22,7 @@ public interface LocalEventHandlingService {
      *
      * @return record updated
      */
-    boolean updateHandleStatus(@NotNull UpdateHandleStatusReqVo param);
+    boolean updateHandleStatus(@NotNull UpdateHandleStatusCmd param);
 
     /**
      * Find by id

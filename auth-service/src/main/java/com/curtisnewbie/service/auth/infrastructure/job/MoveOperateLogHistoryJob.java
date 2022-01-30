@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.infrastructure.job;
 import com.curtisnewbie.module.task.scheduling.AbstractJob;
 import com.curtisnewbie.module.task.vo.TaskVo;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
-import com.curtisnewbie.service.auth.vo.MoveOperateLogToHistoryCmd;
+import com.curtisnewbie.service.auth.local.vo.cmd.MoveOperateLogToHistoryCmd;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
