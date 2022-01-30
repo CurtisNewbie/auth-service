@@ -4,6 +4,7 @@ import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
+import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.service.auth.infrastructure.converters.AppWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
@@ -65,6 +66,7 @@ public class UserAppController {
         return Result.of(userAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 
+    @LogOperation(name = "app/user/update", description = "update apps that user is permitted to use")
     @PostMapping("/user/update")
     @PreAuthorize("hasAuthority('admin')")
     public Result<Void> updateUserApps(@RequestBody UpdateUserAppReqWebVo reqVo) throws MsgEmbeddedException {

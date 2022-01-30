@@ -4,7 +4,6 @@ import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.service.auth.infrastructure.converters.AccessLogWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
@@ -34,7 +33,6 @@ public class AccessLogController {
     @Autowired
     private AccessLogWebConverter accessLogWebConverter;
 
-    @LogOperation(name = "/access/history", description = "list access log info")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/history")
     public Result<ListAccessLogInfoRespWebVo> listAccessLogInfo(@RequestBody ListAccessLogInfoReqWebVo vo)

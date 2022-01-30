@@ -55,7 +55,6 @@ public class TaskController {
     @Autowired
     private TaskHistoryAsConverter taskHistoryAsConverter;
 
-    @LogOperation(name = "/task/list", description = "list tasks")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
     public Result<ListTaskByPageRespAsVo> listTaskByPage(@RequestBody ListTaskByPageReqAsVo reqVo) throws MsgEmbeddedException {
@@ -74,7 +73,6 @@ public class TaskController {
         return Result.of(resp);
     }
 
-    @LogOperation(name = "/task/history", description = "list task history")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/history")
     public Result<ListTaskHistoryByPageRespWebVo> listTaskHistoryByPage(@RequestBody ListTaskHistoryByPageReqWebVo reqVo)

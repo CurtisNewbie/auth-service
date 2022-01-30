@@ -106,7 +106,6 @@ public class UserController {
         return Result.ok();
     }
 
-    @LogOperation(name = "/user/list", description = "get user list")
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
     public Result<GetUserListRespWebVo> getUserList(@RequestBody GetUserListReqWebVo reqVo) {
@@ -169,7 +168,6 @@ public class UserController {
         return Result.ok();
     }
 
-    @LogOperation(name = "/user/info", description = "get user info", enabled = false)
     @GetMapping("/info")
     public Result<UserWebVo> getUserInfo() throws InvalidAuthenticationException {
         // user is not authenticated yet

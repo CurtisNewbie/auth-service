@@ -5,7 +5,6 @@ import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
@@ -33,7 +32,6 @@ public class OperateLogController {
     private OperateLogWebConverter cvtr;
 
     @PreAuthorize("hasAuthority('admin')")
-    @LogOperation(name = "/operate/history", description = "find operate log history in pages", enabled = false)
     @PostMapping("/history")
     public Result<FindOperateLogRespWebVo> findByPage(@RequestBody PagingVo pagingVo) throws MsgEmbeddedException {
         PageablePayloadSingleton<List<OperateLogVo>> pv = operateLogService.findOperateLogInfoInPages(pagingVo);
