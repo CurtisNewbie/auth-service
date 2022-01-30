@@ -1,9 +1,6 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
@@ -27,4 +24,9 @@ public class LoginVo {
     /** application name that the user is trying to use */
     @NotBlank
     private String appName;
+
+    @ToString.Include(name = "password")
+    public String passwordMask() {
+        return "****";
+    }
 }

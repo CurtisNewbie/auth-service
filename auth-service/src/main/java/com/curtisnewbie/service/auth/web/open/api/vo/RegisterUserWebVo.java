@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author yongjie.zhuang
@@ -22,4 +23,9 @@ public class RegisterUserWebVo {
      * User role
      */
     private String userRole;
+
+    @ToString.Include(name = "password")
+    public String passwordMask() {
+        return "****";
+    }
 }

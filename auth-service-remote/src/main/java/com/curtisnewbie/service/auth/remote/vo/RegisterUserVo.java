@@ -2,10 +2,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 
 
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -44,4 +41,9 @@ public class RegisterUserVo implements Serializable {
      * create by
      */
     private String createBy;
+
+    @ToString.Include(name = "password")
+    public String passwordMask() {
+        return "****";
+    }
 }
