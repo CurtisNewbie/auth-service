@@ -12,7 +12,7 @@ public class UserNotAllowedToUseApplicationException extends UserRelatedExceptio
     }
 
     public UserNotAllowedToUseApplicationException(String msg) {
-        super(msg);
+        super("You are not allowed to use this application");
     }
 
     public UserNotAllowedToUseApplicationException(String msg, Throwable t) {

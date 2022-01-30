@@ -12,6 +12,6 @@ public class UserRegisteredException extends UserRelatedException {
     }
 
     public UserRegisteredException(String m) {
-        super(m);
+        super("User with the given name is already registered");
     }
 }

@@ -10,4 +10,8 @@ public class UsernameNotFoundException extends UserRelatedException {
     public UsernameNotFoundException(String msg) {
         super(msg);
     }
+
+    public UsernameNotFoundException() {
+        super("Username is not found");
+    }
 }

@@ -11,4 +11,7 @@ public class InvalidAuthenticationException extends UserRelatedException {
         super(msg);
     }
 
+    public InvalidAuthenticationException() {
+        super("Please login first");
+    }
 }

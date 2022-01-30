@@ -32,11 +32,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static com.curtisnewbie.common.util.PagingUtil.forPage;
+import static java.lang.String.format;
 
 /**
  * @author yongjie.zhuang
@@ -203,8 +203,7 @@ public class UserServiceImpl implements LocalUserService {
         Objects.requireNonNull(registerUserVo.getRole());
 
         if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
-            log.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
-            throw new UserRegisteredException(registerUserVo.getUsername());
+            throw new UserRegisteredException(format("User %s is already registered", registerUserVo.getUsername()));
         }
 
         // limit the total number of administrators
@@ -226,8 +225,7 @@ public class UserServiceImpl implements LocalUserService {
         Objects.requireNonNull(registerUserVo.getRole());
 
         if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
-            log.info("Try to register user '{}', but username is already used.", registerUserVo.getUsername());
-            throw new UserRegisteredException(registerUserVo.getUsername());
+            throw new UserRegisteredException(format("User %s is already registered", registerUserVo.getUsername()));
         }
 
         // limit the total number of administrators
@@ -352,8 +350,7 @@ public class UserServiceImpl implements LocalUserService {
             // exceeded the max num of administrators
             if (currCntOfAdmin >= optInt.get()) {
                 log.info("Try to register user as admin, but the maximum number of admin ({}) is exceeded.", optInt.get());
-                throw new ExceededMaxAdminCountException(MessageFormat.format("Max: {0}, curr: {1}",
-                        optInt.get(), currCntOfAdmin));
+                throw new ExceededMaxAdminCountException();
             }
         }
     }

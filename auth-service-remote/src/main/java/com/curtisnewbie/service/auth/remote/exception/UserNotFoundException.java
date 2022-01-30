@@ -12,6 +12,6 @@ public class UserNotFoundException extends UserRelatedException {
     }
 
     public UserNotFoundException(String m) {
-        super(m);
+        super("User is not found");
     }
 }

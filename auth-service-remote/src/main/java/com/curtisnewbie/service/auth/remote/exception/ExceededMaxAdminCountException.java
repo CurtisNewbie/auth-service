@@ -12,6 +12,7 @@ public class ExceededMaxAdminCountException extends UserRelatedException {
     }
 
     public ExceededMaxAdminCountException() {
+        super("Maximum number of admin is exceeded");
     }
 
 }

@@ -12,6 +12,6 @@ public class PasswordIncorrectException extends UserRelatedException {
     }
 
     public PasswordIncorrectException(String m) {
-        super(m);
+        super("Password Incorrect");
     }
 }

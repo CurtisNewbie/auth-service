@@ -12,6 +12,6 @@ public class UserDisabledException extends UserRelatedException {
     }
 
     public UserDisabledException(String m) {
-        super(m);
+        super("User is disabled");
     }
 }
