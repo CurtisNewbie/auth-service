@@ -202,8 +202,8 @@ public class UserServiceImpl implements LocalUserService {
         // validate the credentials first
         final UserVo uv = login(username, password);
 
-        // validate whether current user is allowed to use this application
-        if (!userAppService.isUserAllowedToUseApp(uv.getId(), appName)) {
+        // validate whether current user is allowed to use this application, admin is allowed to use all applications
+        if (uv.getRole() != UserRole.ADMIN && !userAppService.isUserAllowedToUseApp(uv.getId(), appName)) {
             throw new UserNotAllowedToUseApplicationException(appName);
         }
         return uv;
@@ -360,13 +360,8 @@ public class UserServiceImpl implements LocalUserService {
 
     private User validateUserStatusForLogin(String username) throws UsernameNotFoundException, UserDisabledException {
         final User ue = loadUserByUsername(username);
-        if (ue == null) {
-            throw new UsernameNotFoundException(username);
-        }
-        UserIsDisabled isDisabled = ue.getIsDisabled();
-        Objects.requireNonNull(isDisabled, "Illegal is_disabled value");
-        if (isDisabled == UserIsDisabled.DISABLED) {
-            throw new UserDisabledException(username);
+        if (ue.getIsDisabled() == UserIsDisabled.DISABLED) {
+            throw new UserDisabledException(String.format("User '%s' is disabled", username));
         }
         return ue;
     }
