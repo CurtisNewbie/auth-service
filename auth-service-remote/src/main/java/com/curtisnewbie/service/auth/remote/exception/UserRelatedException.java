@@ -1,13 +1,13 @@
 package com.curtisnewbie.service.auth.remote.exception;
 
-import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
+import com.curtisnewbie.common.exceptions.UnrecoverableException;
 
 /**
  * Exceptions related to user
  *
  * @author yongjie.zhuang
  */
-public class UserRelatedException extends MsgEmbeddedException  {
+public class UserRelatedException extends UnrecoverableException {
 
     public UserRelatedException(String msg) {
         super(msg);

@@ -23,12 +23,9 @@ public interface UserServiceFeign {
      * Login
      *
      * @return user's info when it was successful
-     * @throws UserDisabledException      when the user is disabled
-     * @throws UsernameNotFoundException  when the username is not found
-     * @throws PasswordIncorrectException when the password is incorrect
      */
     @PostMapping(value = "/login")
-    Result<UserVo> login(@Validated @RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException;
+    Result<UserVo> login(@Validated @RequestBody LoginVo vo);
 
     /**
      * <p>
@@ -40,14 +37,9 @@ public interface UserServiceFeign {
      * </p>
      *
      * @return user's info when it was successful
-     * @throws UserDisabledException                   when the user is disabled
-     * @throws UsernameNotFoundException               when the username is not found
-     * @throws PasswordIncorrectException              when the password is incorrect
-     * @throws UserNotAllowedToUseApplicationException when the user is not allowed to use this application
      */
     @PostMapping("/login-with-app")
-    Result<UserVo> loginForApp(@Validated @RequestBody LoginVo vo) throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException,
-            UserNotAllowedToUseApplicationException;
+    Result<UserVo> loginForApp(@Validated @RequestBody LoginVo vo);
 
     /**
      * <p>
@@ -56,14 +48,9 @@ public interface UserServiceFeign {
      * <p>
      * This method should only be called by admin, since it doesn't require any approve/reject processes.
      * </p>
-     *
-     * @param registerUserVo
-     * @throws UserRegisteredException        username is already registered
-     * @throws ExceededMaxAdminCountException the max number of admin exceeded
-     * @see
      */
     @PostMapping("/register")
-    Result<Void> register(@Validated @RequestBody RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException;
+    Result<Void> register(@Validated @RequestBody RegisterUserVo registerUserVo);
 
     /**
      * <p>
@@ -74,24 +61,15 @@ public interface UserServiceFeign {
      * enabling it. To do this, this method will generate a {@code event_handling} record, that will later be received
      * by the admin and handled. For more information, see {@link EventHandlingServiceFeign}
      * </p>
-     *
-     * @param registerUserVo
-     * @throws UserRegisteredException        username is already registered
-     * @throws ExceededMaxAdminCountException the max number of admin exceeded
-     * @see
      */
     @PostMapping("/registration/request-approval")
-    Result<Void> requestRegistrationApproval(@Validated @RequestBody RegisterUserVo registerUserVo) throws UserRegisteredException,
-            ExceededMaxAdminCountException;
+    Result<Void> requestRegistrationApproval(@Validated @RequestBody RegisterUserVo registerUserVo);
 
     /**
      * Update password
-     *
-     * @throws UserNotFoundException      when the user with the given id is not found
-     * @throws PasswordIncorrectException when the old password is incorrect
      */
     @PostMapping("/password/udpate")
-    Result<Void> updatePassword(@Validated @RequestBody UpdatePasswordVo vo) throws UserNotFoundException, PasswordIncorrectException;
+    Result<Void> updatePassword(@Validated @RequestBody UpdatePasswordVo vo);
 
 
     /**

@@ -3,7 +3,6 @@ package com.curtisnewbie.service.auth.remote.feign;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
-import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -23,35 +22,29 @@ public class UserServiceFeignController implements UserServiceFeign {
     private LocalUserService localUserService;
 
     @Override
-    public Result<UserVo> login(LoginVo loginVo) throws UserDisabledException, UsernameNotFoundException,
-            PasswordIncorrectException {
-
+    public Result<UserVo> login(LoginVo loginVo) {
         return Result.of(localUserService.login(loginVo.getUsername(), loginVo.getPassword()));
     }
 
     @Override
-    public Result<UserVo> loginForApp(LoginVo loginVo) throws UserDisabledException, UsernameNotFoundException,
-            PasswordIncorrectException, UserNotAllowedToUseApplicationException {
-
+    public Result<UserVo> loginForApp(LoginVo loginVo) {
         return Result.of(localUserService.login(loginVo.getUsername(), loginVo.getPassword(), loginVo.getAppName()));
     }
 
     @Override
-    public Result<Void> register(RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException {
+    public Result<Void> register(RegisterUserVo registerUserVo) {
         localUserService.register(registerUserVo);
         return Result.ok();
     }
 
     @Override
-    public Result<Void> requestRegistrationApproval(RegisterUserVo registerUserVo) throws UserRegisteredException,
-            ExceededMaxAdminCountException {
+    public Result<Void> requestRegistrationApproval(RegisterUserVo registerUserVo) {
         localUserService.requestRegistrationApproval(registerUserVo);
         return Result.ok();
     }
 
     @Override
-    public Result<Void> updatePassword(UpdatePasswordVo vo) throws UserNotFoundException,
-            PasswordIncorrectException {
+    public Result<Void> updatePassword(UpdatePasswordVo vo) {
         localUserService.updatePassword(vo.getNewPassword(), vo.getOldPassword(), vo.getUserId());
         return Result.ok();
     }
