@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.exceptions.UnrecoverableMsgEmbeddedException;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.module.auth.util.AuthUtil;
@@ -23,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
+import static com.curtisnewbie.common.util.AssertUtils.isTrue;
+
 /**
  * @author yongjie.zhuang
  */
@@ -44,9 +45,7 @@ public class UserKeyController {
         // before we generate a secret key for current user, we do a password validation
         final String username = AuthUtil.getUsername();
         final boolean isCorrect = userService.validateUserPassword(username, req.getPassword());
-        if (!isCorrect) {
-            throw new UnrecoverableMsgEmbeddedException("Password incorrect, unable to generate user secret key");
-        }
+        isTrue(isCorrect, "Password incorrect, unable to generate user secret key");
 
         final GenerateUserKeyResp resp = userKeyService.generateUserKey(GenerateUserKeyCmd.builder()
                 .userId(AuthUtil.getUserId())

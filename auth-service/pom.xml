@@ -18,8 +18,8 @@
     <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
     <messaging-module.version>2.0.3-SNAPSHOT</messaging-module.version>
     <distributed-task-module.version>2.0.5-SNAPSHOT</distributed-task-module.version>
-    <auth-module.version>2.0.6-SNAPSHOT</auth-module.version>
-    <common-module.version>2.0.7-SNAPSHOT</common-module.version>
+    <auth-module.version>2.0.7-SNAPSHOT</auth-module.version>
+    <common-module.version>2.0.8-SNAPSHOT</common-module.version>
     <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
     <redis-util-module.version>2.0.2-SNAPSHOT</redis-util-module.version>
   </properties>
