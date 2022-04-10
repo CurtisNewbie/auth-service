@@ -7,8 +7,10 @@
     <groupId>com.curtisnewbie</groupId>
     <artifactId>auth-service-parent</artifactId>
     <version>1.0.10-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
 
+  <version>${api.version}</version>
   <artifactId>auth-service-remote</artifactId>
   <name>auth-service-remote</name>
   <description>Authentication service api module for rpc</description>
@@ -16,14 +18,12 @@
 
   <properties>
     <java.version>8</java.version>
-    <common-module.version>2.0.8-SNAPSHOT</common-module.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>common-module</artifactId>
-      <version>${common-module.version}</version>
     </dependency>
 
     <dependency>

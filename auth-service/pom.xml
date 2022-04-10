@@ -12,16 +12,8 @@
   <name>auth-service</name>
   <description>Authentication Service</description>
 
-
   <properties>
     <java.version>8</java.version>
-    <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
-    <messaging-module.version>2.0.3-SNAPSHOT</messaging-module.version>
-    <distributed-task-module.version>2.0.5-SNAPSHOT</distributed-task-module.version>
-    <auth-module.version>2.0.7-SNAPSHOT</auth-module.version>
-    <common-module.version>2.0.8-SNAPSHOT</common-module.version>
-    <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
-    <redis-util-module.version>2.0.2-SNAPSHOT</redis-util-module.version>
   </properties>
 
   <dependencies>
@@ -29,7 +21,6 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>common-module</artifactId>
-      <version>${common-module.version}</version>
     </dependency>
 
     <dependency>
@@ -40,7 +31,6 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-module</artifactId>
-      <version>${auth-module.version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.curtisnewbie</groupId>
@@ -67,7 +57,7 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-messaging</artifactId>
-      <version>${project.version}</version>
+      <version>${api.version}</version>
       <exclusions>
         <exclusion>
           <groupId>com.curtisnewbie</groupId>
@@ -79,13 +69,7 @@
     <dependency>
       <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-remote</artifactId>
-      <version>${project.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.curtisnewbie</groupId>
-          <artifactId>common-module</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>${api.version}</version>
     </dependency>
 
     <dependency>

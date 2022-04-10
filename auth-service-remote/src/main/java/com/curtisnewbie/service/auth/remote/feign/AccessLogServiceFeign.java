@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -33,7 +32,6 @@ public interface AccessLogServiceFeign {
      *
      * @param paging pagination param
      */
-    @NotNull
     @PostMapping("/list")
     Result<PageablePayloadSingleton<List<AccessLogInfoVo>>> findAccessLogInfoByPage(@RequestBody PagingVo paging);
 }

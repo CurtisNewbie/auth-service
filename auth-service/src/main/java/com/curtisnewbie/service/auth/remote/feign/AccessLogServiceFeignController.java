@@ -30,7 +30,7 @@ public class AccessLogServiceFeignController implements AccessLogServiceFeign {
     }
 
     @Override
-    public @NotNull Result<PageablePayloadSingleton<List<AccessLogInfoVo>>> findAccessLogInfoByPage(PagingVo paging) {
+    public Result<PageablePayloadSingleton<List<AccessLogInfoVo>>> findAccessLogInfoByPage(PagingVo paging) {
         return Result.of(localAccessLogService.findAccessLogInfoByPage(paging));
     }
 }
