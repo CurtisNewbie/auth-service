@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.curtisnewbie.common.dao.DaoSkeleton;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
+import com.curtisnewbie.service.auth.remote.consts.UserType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,6 +30,10 @@ public class User extends DaoSkeleton {
     /** salt */
     @TableField("salt")
     private String salt;
+
+    /** user type */
+    @TableField("type")
+    private UserType type;
 
     /** role */
     @TableField("role")

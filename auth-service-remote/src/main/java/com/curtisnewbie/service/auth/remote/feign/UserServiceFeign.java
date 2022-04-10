@@ -11,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
+ * Feign for User
+ *
  * @author yongjie.zhuang
  */
 @FeignClient(value = FeignConst.SERVICE_NAME, path = UserServiceFeign.PATH)
@@ -22,6 +24,9 @@ public interface UserServiceFeign {
      * Login
      *
      * @return user's info when it was successful
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
     @PostMapping(value = "/login")
     Result<UserVo> login(@Validated @RequestBody LoginVo vo);
@@ -36,6 +41,10 @@ public interface UserServiceFeign {
      * </p>
      *
      * @return user's info when it was successful
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_PERMITTED
      */
     @PostMapping("/login-with-app")
     Result<UserVo> loginForApp(@Validated @RequestBody LoginVo vo);
@@ -47,6 +56,9 @@ public interface UserServiceFeign {
      * <p>
      * This method should only be called by admin, since it doesn't require any approve/reject processes.
      * </p>
+     *
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#ADMIN_REG_NOT_ALLOWED
      */
     @PostMapping("/register")
     Result<Void> register(@Validated @RequestBody RegisterUserVo registerUserVo);
@@ -60,12 +72,18 @@ public interface UserServiceFeign {
      * enabling it. To do this, this method will generate a {@code event_handling} record, that will later be received
      * by the admin and handled. For more information, see {@link EventHandlingServiceFeign}
      * </p>
+     *
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#ADMIN_REG_NOT_ALLOWED
      */
     @PostMapping("/registration/request-approval")
     Result<Void> requestRegistrationApproval(@Validated @RequestBody RegisterUserVo registerUserVo);
 
     /**
      * Update password
+     *
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
      */
     @PostMapping("/password/udpate")
     Result<Void> updatePassword(@Validated @RequestBody UpdatePasswordVo vo);
@@ -137,4 +155,15 @@ public interface UserServiceFeign {
      */
     @PostMapping(value = "/username")
     Result<FetchUsernameByIdResp> fetchUsernameById(@Validated @RequestBody FetchUsernameByIdReq req);
+
+    /**
+     * Exchange JWT token
+     *
+     * @return token
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
+     */
+    @PostMapping("/token")
+    Result<String> exchangeToken(@Validated @RequestBody LoginVo vo);
 }

@@ -108,4 +108,9 @@ public class UserServiceFeignController implements UserServiceFeign {
                 .idToUsername(localUserService.fetchUsernameById(req.getUserIds()))
                 .build());
     }
+
+    @Override
+    public Result<String> exchangeToken(LoginVo vo) {
+        return Result.of(localUserService.exchangeToken(vo.getUsername(), vo.getPassword()));
+    }
 }

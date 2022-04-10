@@ -3,8 +3,10 @@ package com.curtisnewbie.service.auth.local.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
+import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.dao.UserKey;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
@@ -16,25 +18,23 @@ import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
-import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
 import com.curtisnewbie.service.auth.util.RandomNumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.PagingUtil.forPage;
+import static com.curtisnewbie.service.auth.remote.consts.AuthServiceError.*;
 import static com.curtisnewbie.service.auth.util.PasswordUtil.encodePassword;
 import static java.lang.String.format;
 
@@ -59,14 +59,16 @@ public class UserServiceImpl implements LocalUserService {
     private Environment environment;
     @Autowired
     private UserConverter cvtr;
+    @Autowired
+    private JwtBuilder jwtBuilder;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public User loadUserByUsername(@NotEmpty String s) throws UsernameNotFoundException {
+    public User loadUserByUsername(String s) {
         Objects.requireNonNull(s);
         User userEntity = userMapper.findByUsername(s);
-        if (userEntity == null)
-            throw new UsernameNotFoundException("Username '" + s + "' not found");
+        notNull(userEntity, USER_NOT_FOUND);
+
         return userEntity;
     }
 
@@ -78,7 +80,7 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public Integer findIdByUsername(@NotEmpty String username) {
+    public Integer findIdByUsername(String username) {
         QueryWrapper<User> condition = new QueryWrapper<>();
         condition.select("id")
                 .eq("username", username)
@@ -90,7 +92,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy) {
+    public void changeRoleAndEnableUser(int userId, UserRole role, String updatedBy) {
         updateUser(UpdateUserVo.builder()
                 .id(userId)
                 .role(role)
@@ -100,7 +102,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void updateUser(@NotNull UpdateUserVo param) {
+    public void updateUser(UpdateUserVo param) {
         User ue = new User();
         ue.setId(param.getId());
         if (param.getIsDisabled() == null && param.getRole() == null)
@@ -115,7 +117,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public boolean deleteUser(final int userId, @NotEmpty String deletedBy) {
+    public boolean deleteUser(final int userId, String deletedBy) {
         final QueryWrapper<User> where = new QueryWrapper<User>()
                 .eq("id", userId)
                 .eq("is_del", IsDel.NORMAL);
@@ -128,7 +130,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy) {
+    public void updateRole(int id, UserRole role, String updatedBy) {
         updateUser(UpdateUserVo.builder()
                 .id(id)
                 .role(role)
@@ -156,7 +158,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public boolean validateUserPassword(String username, String password) throws UserDisabledException, UsernameNotFoundException {
+    public boolean validateUserPassword(String username, String password) {
         final User ue = validateUserStatusForLogin(username);
         return PasswordUtil.getValidator(ue)
                 .givenPassword(password)
@@ -164,66 +166,54 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public UserVo login(@NotEmpty String username, @NotEmpty String password) throws UserDisabledException, UsernameNotFoundException,
-            PasswordIncorrectException {
+    public String exchangeToken(String username, String password) {
+        final UserVo user = login(username, password);
 
-        final User ue = validateUserStatusForLogin(username);
+        Map<String, String> claims = new HashMap<>();
+        claims.put("id", user.getId().toString());
+        claims.put("username", user.getUsername());
+        claims.put("role", user.getRole().getValue());
 
-        // validate the password first
-        final boolean isPwdCorrect = PasswordUtil.getValidator(ue)
-                .givenPassword(password)
-                .isMatched();
+        final String appNames = userAppService.getAppsPermittedForUser(user.getId())
+                .stream()
+                .map(AppBriefVo::getName)
+                .collect(Collectors.joining(","));
+        claims.put("appNames", appNames);
 
-        // if the password is incorrect, may it's a token, validate it
-        if (!isPwdCorrect) {
-            final QueryWrapper<UserKey> cond = new QueryWrapper<UserKey>()
-                    .eq("user_id", ue.getId())
-                    .eq("secret_key", password)
-                    .ge("expiration_time", LocalDateTime.now())
-                    .eq("is_del", IsDel.NORMAL)
-                    .last("limit 1");
-
-            // it's not a token, or it's just incorrect as well
-            if (userKeyMapper.selectOne(cond) == null) {
-                log.info("User '{}' attempt to login, but password is incorrect.", username);
-                throw new PasswordIncorrectException(username);
-            }
-        }
-
-        log.info("User '{}' login successful, user_info returned", username);
-        return cvtr.toVo(ue);
+        // by default valid for 20 minutes
+        return jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(20));
     }
 
     @Override
-    public @NotNull UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName)
-            throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException,
-            UserNotAllowedToUseApplicationException {
+    public UserVo login(String username, String password) {
+        final User user = userLogin(username, password);
 
+        log.info("User '{}' login successful, user_info returned", username);
+        return cvtr.toVo(user);
+    }
+
+    @Override
+    public UserVo login(String username, String password, String appName) {
         // validate the credentials first
         final UserVo uv = login(username, password);
 
         // validate whether current user is allowed to use this application, admin is allowed to use all applications
-        if (uv.getRole() != UserRole.ADMIN && !userAppService.isUserAllowedToUseApp(uv.getId(), appName)) {
-            throw new UserNotAllowedToUseApplicationException(appName);
-        }
+        isFalse(uv.getRole() != UserRole.ADMIN && !userAppService.isUserAllowedToUseApp(uv.getId(), appName), USER_NOT_PERMITTED);
         return uv;
     }
 
     @Override
-    public void register(@NotNull RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException {
-        Objects.requireNonNull(registerUserVo);
-        Objects.requireNonNull(registerUserVo.getUsername());
-        Objects.requireNonNull(registerUserVo.getPassword());
-        Objects.requireNonNull(registerUserVo.getRole());
-
-        if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
-            throw new UserRegisteredException(format("User %s is already registered", registerUserVo.getUsername()));
-        }
+    public void register(RegisterUserVo registerUserVo) {
+        notNull(registerUserVo.getUsername());
+        notNull(registerUserVo.getPassword());
+        notNull(registerUserVo.getRole());
+        isNull(userMapper.findIdByUsername(registerUserVo.getUsername()), USER_ALREADY_REGISTERED);
 
         // limit the total number of administrators
         if (registerUserVo.getRole() == UserRole.ADMIN) {
             checkAdminQuota();
         }
+
         User userEntity = toUserEntity(registerUserVo);
         userEntity.setIsDisabled(UserIsDisabled.NORMAL);
 
@@ -232,15 +222,11 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void requestRegistrationApproval(@NotNull RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException {
-        Objects.requireNonNull(registerUserVo);
-        Objects.requireNonNull(registerUserVo.getUsername());
-        Objects.requireNonNull(registerUserVo.getPassword());
-        Objects.requireNonNull(registerUserVo.getRole());
-
-        if (userMapper.findIdByUsername(registerUserVo.getUsername()) != null) {
-            throw new UserRegisteredException(format("User %s is already registered", registerUserVo.getUsername()));
-        }
+    public void requestRegistrationApproval(RegisterUserVo registerUserVo) {
+        notNull(registerUserVo.getUsername());
+        notNull(registerUserVo.getPassword());
+        notNull(registerUserVo.getRole());
+        isNull(userMapper.findIdByUsername(registerUserVo.getUsername()), USER_ALREADY_REGISTERED);
 
         // limit the total number of administrators
         if (registerUserVo.getRole() == UserRole.ADMIN) {
@@ -256,7 +242,6 @@ public class UserServiceImpl implements LocalUserService {
                 registerUserVo.getUsername(), registerUserVo.getRole().getValue());
 
         // generate a handling_event for registration request
-        Objects.requireNonNull(user.getId());
         eventHandlingService.createEvent(
                 CreateEventHandlingCmd.builder()
                         .body(String.valueOf(user.getId()))
@@ -268,21 +253,14 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void updatePassword(final String newPassword, final String oldPassword, long id) throws UserNotFoundException,
-            PasswordIncorrectException {
+    public void updatePassword(final String newPassword, final String oldPassword, long id) {
+        final User ue = userMapper.findById(id);
+        notNull(ue, USER_NOT_FOUND);
 
-        User ue = userMapper.findById(id);
-        if (ue == null) {
-            log.info("User_id '{}' attempt to change password, but user is not found.", id);
-            throw new UserNotFoundException("user.id: " + id);
-        }
-        boolean isPasswordMatched = PasswordUtil.getValidator(ue)
+        final boolean isPasswordMatched = PasswordUtil.getValidator(ue)
                 .givenPassword(oldPassword)
                 .isMatched();
-        if (!isPasswordMatched) {
-            log.info("User_id '{}' attempt to change password, but the old password is unmatched.", id);
-            throw new PasswordIncorrectException("user.id: " + id);
-        }
+        isTrue(isPasswordMatched, PASSWORD_INCORRECT);
 
         final boolean isUpdated = userMapper.updatePwd(encodePassword(newPassword, ue.getSalt()), id) > 0;
         if (isUpdated)
@@ -291,7 +269,7 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public @NotNull PageablePayloadSingleton<List<UserInfoVo>> findUserInfoByPage(@Valid @NotNull FindUserInfoVo vo) {
+    public PageablePayloadSingleton<List<UserInfoVo>> findUserInfoByPage(FindUserInfoVo vo) {
         User ue = new User();
         if (vo.getIsDisabled() != null)
             ue.setIsDisabled(vo.getIsDisabled());
@@ -321,6 +299,29 @@ public class UserServiceImpl implements LocalUserService {
                 .build());
     }
 
+    private User userLogin(String username, String password) {
+        final User ue = validateUserStatusForLogin(username);
+
+        // validate the password first
+        final boolean isPwdCorrect = PasswordUtil.getValidator(ue)
+                .givenPassword(password)
+                .isMatched();
+
+        // if the password is incorrect, may it's a token, validate it
+        if (!isPwdCorrect) {
+            final QueryWrapper<UserKey> cond = new QueryWrapper<UserKey>()
+                    .eq("user_id", ue.getId())
+                    .eq("secret_key", password)
+                    .ge("expiration_time", LocalDateTime.now())
+                    .eq("is_del", IsDel.NORMAL)
+                    .last("limit 1");
+
+            // it's not a token, or it's just incorrect as well
+            notNull(userKeyMapper.selectOne(cond), PASSWORD_INCORRECT);
+        }
+        return ue;
+    }
+
     private User toUserEntity(RegisterUserVo registerUserVo) {
         User u = new User();
         u.setUsername(registerUserVo.getUsername());
@@ -345,7 +346,7 @@ public class UserServiceImpl implements LocalUserService {
         }
     }
 
-    private void checkAdminQuota() throws ExceededMaxAdminCountException {
+    private void checkAdminQuota() {
         // limit the total number of administrators
         Optional<Integer> optInt = parseInteger(environment.getProperty(ADMIN_LIMIT_COUNT_KEY));
         if (optInt.isPresent()) {
@@ -353,16 +354,14 @@ public class UserServiceImpl implements LocalUserService {
             // exceeded the max num of administrators
             if (currCntOfAdmin >= optInt.get()) {
                 log.info("Try to register user as admin, but the maximum number of admin ({}) is exceeded.", optInt.get());
-                throw new ExceededMaxAdminCountException();
+                throw new UnrecoverableException(ADMIN_REG_NOT_ALLOWED);
             }
         }
     }
 
-    private User validateUserStatusForLogin(String username) throws UsernameNotFoundException, UserDisabledException {
+    private User validateUserStatusForLogin(String username) {
         final User ue = loadUserByUsername(username);
-        if (ue.getIsDisabled() == UserIsDisabled.DISABLED) {
-            throw new UserDisabledException(String.format("User '%s' is disabled", username));
-        }
+        isTrue(ue.getIsDisabled() == UserIsDisabled.NORMAL, USER_DISABLED);
         return ue;
     }
 

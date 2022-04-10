@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 
@@ -22,7 +23,7 @@ public class LoginVo {
     private String password;
 
     /** application name that the user is trying to use */
-    @NotBlank
+    @Nullable
     private String appName;
 
     @ToString.Include(name = "password")

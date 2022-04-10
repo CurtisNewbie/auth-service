@@ -3,9 +3,9 @@ package com.curtisnewbie.service.auth.local.api;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
-import com.curtisnewbie.service.auth.remote.exception.*;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -20,14 +20,15 @@ import java.util.Map;
  *
  * @author yongjie.zhuang
  */
+@Validated
 public interface LocalUserService {
 
     /**
      * Find user by username
      *
-     * @throws UsernameNotFoundException user with given username is not found
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
      */
-    User loadUserByUsername(@NotEmpty String username) throws UsernameNotFoundException;
+    User loadUserByUsername(@NotEmpty String username);
 
     /**
      * Login
@@ -35,13 +36,12 @@ public interface LocalUserService {
      * @param username username
      * @param password password
      * @return user's info when it was successful
-     * @throws UserDisabledException      when the user is disabled
-     * @throws UsernameNotFoundException  when the username is not found
-     * @throws PasswordIncorrectException when the password is incorrect
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
     @NotNull
-    UserVo login(@NotEmpty String username, @NotEmpty String password) throws UserDisabledException, UsernameNotFoundException,
-            PasswordIncorrectException;
+    UserVo login(@NotEmpty String username, @NotEmpty String password);
 
     /**
      * <p>
@@ -56,14 +56,13 @@ public interface LocalUserService {
      * @param password password
      * @param appName  application name that the user is trying to use
      * @return user's info when it was successful
-     * @throws UserDisabledException                   when the user is disabled
-     * @throws UsernameNotFoundException               when the username is not found
-     * @throws PasswordIncorrectException              when the password is incorrect
-     * @throws UserNotAllowedToUseApplicationException when the user is not allowed to use this application
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_PERMITTED
      */
     @NotNull
-    UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName)
-            throws UserDisabledException, UsernameNotFoundException, PasswordIncorrectException, UserNotAllowedToUseApplicationException;
+    UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName);
 
     /**
      * <p>
@@ -73,12 +72,10 @@ public interface LocalUserService {
      * This method should only be called by admin, since it doesn't require any approve/reject processes.
      * </p>
      *
-     * @param registerUserVo
-     * @throws UserRegisteredException        username is already registered
-     * @throws ExceededMaxAdminCountException the max number of admin exceeded
-     * @see
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#ADMIN_REG_NOT_ALLOWED
      */
-    void register(@NotNull RegisterUserVo registerUserVo) throws UserRegisteredException, ExceededMaxAdminCountException;
+    void register(@NotNull RegisterUserVo registerUserVo);
 
     /**
      * <p>
@@ -90,13 +87,10 @@ public interface LocalUserService {
      * by the admin and handled. For more information, see {@link com.curtisnewbie.service.auth.remote.feign.EventHandlingServiceFeign}
      * </p>
      *
-     * @param registerUserVo
-     * @throws UserRegisteredException        username is already registered
-     * @throws ExceededMaxAdminCountException the max number of admin exceeded
-     * @see
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#ADMIN_REG_NOT_ALLOWED
      */
-    void requestRegistrationApproval(@NotNull RegisterUserVo registerUserVo) throws UserRegisteredException,
-            ExceededMaxAdminCountException;
+    void requestRegistrationApproval(@NotNull RegisterUserVo registerUserVo);
 
     /**
      * Update password
@@ -104,11 +98,10 @@ public interface LocalUserService {
      * @param newPassword new password (in plain text)
      * @param oldPassword old password (in plain text)
      * @param id          id
-     * @throws UserNotFoundException      when the user with the given id is not found
-     * @throws PasswordIncorrectException when the old password is incorrect
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
      */
-    void updatePassword(@NotEmpty String newPassword, @NotEmpty String oldPassword, long id) throws UserNotFoundException,
-            PasswordIncorrectException;
+    void updatePassword(@NotEmpty String newPassword, @NotEmpty String oldPassword, long id);
 
     /**
      * Fetch list of user info based on the provided arguments
@@ -118,17 +111,11 @@ public interface LocalUserService {
 
     /**
      * Disable user by id
-     *
-     * @param id
-     * @param disabledBy
      */
     void disableUserById(int id, @Nullable String disabledBy);
 
     /**
      * Enable user by id
-     *
-     * @param id
-     * @param enabledBy
      */
     void enableUserById(int id, @Nullable String enabledBy);
 
@@ -184,5 +171,15 @@ public interface LocalUserService {
     /**
      * Check if the password (not secret key) is correct
      */
-    boolean validateUserPassword(@NotBlank String username, @NotBlank String password) throws UserDisabledException, UsernameNotFoundException;
+    boolean validateUserPassword(@NotBlank String username, @NotBlank String password);
+
+    /**
+     * Exchange JWT token
+     *
+     * @return token
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
+     */
+    String exchangeToken(@NotEmpty String username, @NotEmpty String password);
 }

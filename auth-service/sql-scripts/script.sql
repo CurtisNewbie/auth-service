@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS user (
     password VARCHAR(255) NOT NULL COMMENT "password in hash",
     salt VARCHAR(10) NOT NULL COMMENT "salt",
     role VARCHAR(20) NOT NULL COMMENT "role",
+    type VARCHAR(20) NOT NULL DEFAULT 'USER' COMMENT 'type',
     is_disabled INT NOT NULL DEFAULT 0 COMMENT 'whether the user is disabled, 0-normal, 1-disabled',
     create_time DATETIME NOT NULL DEFAULT NOW() COMMENT 'when the user is created',
     create_by VARCHAR(255) NOT NULL COMMENT 'who created this user',

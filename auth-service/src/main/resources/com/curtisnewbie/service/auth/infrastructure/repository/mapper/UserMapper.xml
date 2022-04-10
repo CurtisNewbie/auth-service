@@ -70,6 +70,7 @@
         and is_disabled = #{u.isDisabled}
       </if>
       and is_del = 0
+      and type = 'USER'
     </where>
   </select>
 

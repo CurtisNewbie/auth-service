@@ -29,6 +29,7 @@ authmodule:
     - "/api/token/exchange-token"
     - "/remote/user/login"
     - "/remote/user/login-with-app"
+    - "/remote/user/token"
   loginProcessingUrl: "/api/login"
   customLoginPage: "/"
   logoutUrl: "/api/logout"
