@@ -182,4 +182,12 @@ public interface LocalUserService {
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
     String exchangeToken(@NotEmpty String username, @NotEmpty String password);
+
+    /**
+     * Exchange JWT token
+     *
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#TOKEN_EXPIRED
+     */
+    String exchangeToken(@NotEmpty String token);
+
 }

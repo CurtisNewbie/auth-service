@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
+import com.curtisnewbie.common.util.AssertUtils;
 import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
+import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
+import com.curtisnewbie.module.jwt.vo.DecodeResult;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.dao.UserKey;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
@@ -28,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,6 +65,8 @@ public class UserServiceImpl implements LocalUserService {
     private UserConverter cvtr;
     @Autowired
     private JwtBuilder jwtBuilder;
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -168,20 +174,17 @@ public class UserServiceImpl implements LocalUserService {
     @Override
     public String exchangeToken(String username, String password) {
         final UserVo user = login(username, password);
+        return buildToken(user);
+    }
 
-        Map<String, String> claims = new HashMap<>();
-        claims.put("id", user.getId().toString());
-        claims.put("username", user.getUsername());
-        claims.put("role", user.getRole().getValue());
+    @Override
+    public String exchangeToken(@NotEmpty String token) {
+        DecodeResult decodeResult = jwtDecoder.decode(token);
+        AssertUtils.isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
 
-        final String appNames = userAppService.getAppsPermittedForUser(user.getId())
-                .stream()
-                .map(AppBriefVo::getName)
-                .collect(Collectors.joining(","));
-        claims.put("appNames", appNames);
-
-        // by default valid for 20 minutes
-        return jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(20));
+        final String idAsStr = decodeResult.getDecodedJWT().getClaim("id").asString();
+        final User ue = userMapper.findById(Long.parseLong(idAsStr));
+        return buildToken(cvtr.toVo(ue));
     }
 
     @Override
@@ -297,6 +300,24 @@ public class UserServiceImpl implements LocalUserService {
                 .isDisabled(UserIsDisabled.NORMAL)
                 .updateBy(enabledBy)
                 .build());
+    }
+
+    // ---------------------- private helper methods -----------------
+
+    private String buildToken(UserVo user) {
+        Map<String, String> claims = new HashMap<>();
+        claims.put("id", user.getId().toString());
+        claims.put("username", user.getUsername());
+        claims.put("role", user.getRole().getValue());
+
+        final String appNames = userAppService.getAppsPermittedForUser(user.getId())
+                .stream()
+                .map(AppBriefVo::getName)
+                .collect(Collectors.joining(","));
+        claims.put("appNames", appNames);
+
+        // by default valid for 20 minutes
+        return jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(20));
     }
 
     private User userLogin(String username, String password) {
