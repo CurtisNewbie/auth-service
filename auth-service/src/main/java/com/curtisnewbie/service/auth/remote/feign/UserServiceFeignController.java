@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -110,7 +111,12 @@ public class UserServiceFeignController implements UserServiceFeign {
     }
 
     @Override
-    public Result<String> exchangeToken(LoginVo vo) {
+    public Result<String> retrieveToken(LoginVo vo) {
         return Result.of(localUserService.exchangeToken(vo.getUsername(), vo.getPassword()));
+    }
+
+    @Override
+    public Result<String> exchangeToken(@NotEmpty String token) {
+        return Result.of(localUserService.exchangeToken(token));
     }
 }

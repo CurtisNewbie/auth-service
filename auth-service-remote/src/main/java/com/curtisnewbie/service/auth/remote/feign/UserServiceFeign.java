@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -164,6 +165,14 @@ public interface UserServiceFeign {
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
-    @PostMapping("/token")
-    Result<String> exchangeToken(@Validated @RequestBody LoginVo vo);
+    @PostMapping("/token/retrieve")
+    Result<String> retrieveToken(@Validated @RequestBody LoginVo vo);
+
+    /**
+     * Exchange JWT token
+     *
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#TOKEN_EXPIRED
+     */
+    @GetMapping("/token/{token}")
+    Result<String> exchangeToken(@RequestParam("token") @NotEmpty String token);
 }
