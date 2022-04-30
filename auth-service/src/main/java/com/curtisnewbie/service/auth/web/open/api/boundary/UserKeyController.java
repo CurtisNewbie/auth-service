@@ -1,8 +1,8 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
+import com.curtisnewbie.common.trace.TUser;
+import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.module.auth.aop.LogOperation;
-import com.curtisnewbie.module.auth.util.AuthUtil;
 import com.curtisnewbie.service.auth.local.api.LocalUserKeyService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.local.vo.cmd.GenerateUserKeyCmd;
@@ -37,18 +37,18 @@ public class UserKeyController {
     @Autowired
     private LocalUserService userService;
 
-    @LogOperation(name = "/user/key/generate", description = "Generate user key")
     @PostMapping("/generate")
     public Result<GenerateUserKeyRespWebVo> generateUserKey(@Validated @RequestBody GenerateUserKeyReqWebVo req) throws InvalidAuthenticationException,
             UserDisabledException, UsernameNotFoundException {
 
         // before we generate a secret key for current user, we do a password validation
-        final String username = AuthUtil.getUsername();
+        TUser tUser = TraceUtils.tUser();
+        final String username = tUser.getUsername();
         final boolean isCorrect = userService.validateUserPassword(username, req.getPassword());
         isTrue(isCorrect, "Password incorrect, unable to generate user secret key");
 
         final GenerateUserKeyResp resp = userKeyService.generateUserKey(GenerateUserKeyCmd.builder()
-                .userId(AuthUtil.getUserId())
+                .userId(tUser.getUserId())
                 .createBy(username)
                 .expirationTime(LocalDateTime.now().plusMonths(3)) // by default expire in three months
                 .build());

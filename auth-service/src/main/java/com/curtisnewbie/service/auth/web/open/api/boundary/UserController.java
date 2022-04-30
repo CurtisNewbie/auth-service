@@ -1,30 +1,32 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
+import com.curtisnewbie.common.trace.TUser;
+import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.module.auth.aop.LogOperation;
-import com.curtisnewbie.module.auth.util.AuthUtil;
+import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
-import com.curtisnewbie.service.auth.remote.vo.*;
+import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
+import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
+import com.curtisnewbie.service.auth.remote.vo.UpdateUserVo;
+import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 
@@ -44,8 +46,6 @@ public class UserController {
     @Autowired
     private UserWebConverter cvtr;
 
-    @LogOperation(name = "/user/register", description = "add user")
-    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/register")
     public Result<?> addUser(@RequestBody RegisterUserWebVo registerUserVo) throws UserRelatedException,
             MsgEmbeddedException {
@@ -73,12 +73,11 @@ public class UserController {
             return Result.error("Do not support adding administrator");
         }
         vo.setRole(role);
-        vo.setCreateBy(AuthUtil.getUsername());
+        vo.setCreateBy(TraceUtils.tUser().getUsername());
         userService.register(vo);
         return Result.ok();
     }
 
-    @LogOperation(name = "/user/register/request", description = "User request's registration approval")
     @PostMapping("/register/request")
     public Result<?> requestRegistration(@RequestBody RequestRegisterUserWebVo registerUserVo) throws UserRelatedException,
             MsgEmbeddedException {
@@ -105,7 +104,6 @@ public class UserController {
         return Result.ok();
     }
 
-    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
     public Result<GetUserListRespWebVo> getUserList(@RequestBody GetUserListReqWebVo reqVo) {
         FindUserInfoVo searchParam = toFindUserInfoVo(reqVo);
@@ -116,11 +114,9 @@ public class UserController {
         return Result.of(resp);
     }
 
-    @LogOperation(name = "/user/delete", description = "delete user")
-    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/delete")
     public Result<Void> deleteUser(@RequestBody DeleteUserReqWebVo reqVo) throws InvalidAuthenticationException {
-        final String deletedBy = AuthUtil.getUsername();
+        final String deletedBy = TraceUtils.tUser().getUsername();
         log.info("Delete user {} by {}", reqVo.getId(), deletedBy);
         userService.deleteUser(reqVo.getId(), deletedBy);
         return Result.ok();
@@ -138,12 +134,10 @@ public class UserController {
         return infoVo;
     }
 
-    @LogOperation(name = "/user/info/update", description = "update user info")
-    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/info/update")
     public Result<Void> changeUserRole(@RequestBody UpdateUserInfoReqVo param) throws MsgEmbeddedException, InvalidAuthenticationException {
         ValidUtils.requireNonNull(param.getId());
-        if (Objects.equals(param.getId(), AuthUtil.getUser().getId())) {
+        if (Objects.equals(param.getId(), TraceUtils.tUser().getUserId())) {
             throw new MsgEmbeddedException("You cannot update yourself");
         }
 
@@ -162,23 +156,18 @@ public class UserController {
                 .id(param.getId())
                 .isDisabled(isDisabled)
                 .role(role)
-                .updateBy(AuthUtil.getUsername())
+                .updateBy(TraceUtils.tUser().getUsername())
                 .build());
         return Result.ok();
     }
 
     @GetMapping("/info")
     public Result<UserWebVo> getUserInfo() throws InvalidAuthenticationException {
-        // user is not authenticated yet
-        Optional<UserVo> optionalUser = AuthUtil.getOptionalUser();
-        if (!optionalUser.isPresent()) {
-            return Result.ok();
-        }
-        UserVo ue = optionalUser.get();
-        return Result.of(BeanCopyUtils.toType(ue, UserWebVo.class));
+        final String username = TraceUtils.tUser().getUsername();
+        User user = userService.loadUserByUsername(username);
+        return Result.of(BeanCopyUtils.toType(user, UserWebVo.class));
     }
 
-    @LogOperation(name = "/user/password/update", description = "update password")
     @PostMapping("/password/update")
     public Result<Void> updatePassword(@RequestBody UpdatePasswordWebVo vo) throws MsgEmbeddedException, InvalidAuthenticationException {
         ValidUtils.requireNotEmpty(vo.getNewPassword());
@@ -191,9 +180,9 @@ public class UserController {
         if (vo.getNewPassword().length() < PASSWORD_LENGTH)
             return Result.error("Password must have at least " + PASSWORD_LENGTH + " characters");
 
-        UserVo uv = AuthUtil.getUser();
+        TUser tUser = TraceUtils.tUser();
         try {
-            userService.updatePassword(vo.getNewPassword(), vo.getPrevPassword(), uv.getId());
+            userService.updatePassword(vo.getNewPassword(), vo.getPrevPassword(), tUser.getUserId());
         } catch (UserRelatedException ignore) {
             return Result.error("Password incorrect");
         }

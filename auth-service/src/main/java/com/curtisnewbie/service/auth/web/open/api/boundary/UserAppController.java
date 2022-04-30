@@ -4,7 +4,6 @@ import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.module.auth.aop.LogOperation;
 import com.curtisnewbie.service.auth.infrastructure.converters.AppWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
@@ -15,7 +14,6 @@ import com.curtisnewbie.service.auth.web.open.api.vo.AppWebVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.GetAppsForUserReqVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.UpdateUserAppReqWebVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,7 +38,6 @@ public class UserAppController {
     private AppWebConverter cvtr;
 
     @PostMapping("/list/all")
-    @PreAuthorize("hasAuthority('admin')")
     public Result<PageablePayloadSingleton<List<AppWebVo>>> listApps(@RequestBody PageablePayloadSingleton<AppWebVo> req)
             throws MsgEmbeddedException {
         ValidUtils.requireNonNull(req.getPagingVo());
@@ -53,22 +50,18 @@ public class UserAppController {
     }
 
     @GetMapping("/list/brief/all")
-    @PreAuthorize("hasAuthority('admin')")
     public Result<List<AppBriefVo>> listAppsBriefInfo() {
         return Result.of(appService.getAllAppBriefInfo());
     }
 
     @PostMapping("/list/user")
-    @PreAuthorize("hasAuthority('admin')")
     public Result<List<AppBriefVo>> getAppsForUser(@RequestBody GetAppsForUserReqVo vo) throws MsgEmbeddedException {
 
         vo.validate();
         return Result.of(userAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 
-    @LogOperation(name = "app/user/update", description = "update apps that user is permitted to use")
     @PostMapping("/user/update")
-    @PreAuthorize("hasAuthority('admin')")
     public Result<Void> updateUserApps(@RequestBody UpdateUserAppReqWebVo reqVo) throws MsgEmbeddedException {
         reqVo.validate();
         userAppService.updateUserApp(toType(reqVo, UpdateUserAppReqCmd.class));

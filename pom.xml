@@ -24,14 +24,16 @@
     <messaging-module.version>2.0.4-SNAPSHOT</messaging-module.version>
     <distributed-task-module.version>2.0.5-SNAPSHOT</distributed-task-module.version>
     <auth-module.version>2.0.7-SNAPSHOT</auth-module.version>
+    <jwt-module.version>1.0.1-SNAPSHOT</jwt-module.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+
       <dependency>
         <groupId>com.curtisnewbie</groupId>
-        <artifactId>auth-module</artifactId>
-        <version>${auth-module.version}</version>
+        <artifactId>jwt-module</artifactId>
+        <version>${jwt-module.version}</version>
       </dependency>
 
       <dependency>

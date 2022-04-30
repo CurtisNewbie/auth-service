@@ -33,12 +33,6 @@ namingPollingThreadCount: 2
 org.quartz.threadPool:
   threadCount: 2
 
-authmodule:
-  enableAccessLog: true
-  enableOperateLog: true
-  enableControllerConsoleLog: false
-  appAuthorizationChecked: true
-
 jwt-module:
   publicKey: ${jwt-module.publicKey}
   privateKey: ${jwt-module.privateKey}

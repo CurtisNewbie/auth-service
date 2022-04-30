@@ -1,11 +1,11 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
+import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.module.auth.util.AuthUtil;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.vo.EventHandlingVo;
@@ -16,7 +16,6 @@ import com.curtisnewbie.service.auth.web.open.api.vo.FindEventHandlingByPageReqW
 import com.curtisnewbie.service.auth.web.open.api.vo.FindEventHandlingByPageRespWebVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.HandleEventReqWebVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +38,6 @@ public class HandlingEventController {
     @Autowired
     private LocalUserService userService;
 
-    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/list")
     public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v) {
 
@@ -53,7 +51,6 @@ public class HandlingEventController {
         return Result.of(resp);
     }
 
-    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/handle")
     public Result<Void> handleEvent(@RequestBody HandleEventReqWebVo v) throws MsgEmbeddedException {
         ValidUtils.requireNonNull(v.getId());
@@ -63,7 +60,7 @@ public class HandlingEventController {
                 .id(v.getId())
                 .result(v.getResult())
                 .extra(v.getExtra())
-                .handlerId(AuthUtil.getUserId())
+                .handlerId(TraceUtils.tUser().getUserId())
                 .build());
         return Result.ok();
     }

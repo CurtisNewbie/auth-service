@@ -188,6 +188,19 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    public User getUserInfo(@NotEmpty String token) {
+        DecodeResult decodeResult = jwtDecoder.decode(token);
+        AssertUtils.isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
+
+        final String idAsStr = decodeResult.getDecodedJWT().getClaim("id").asString();
+        User user = userMapper.findById(Long.parseLong(idAsStr));
+        AssertUtils.notNull(user, USER_NOT_FOUND);
+        AssertUtils.isFalse(user.isDeleted(), USER_NOT_FOUND);
+        AssertUtils.equals(user.getIsDisabled(), UserIsDisabled.NORMAL, USER_DISABLED);
+        return user;
+    }
+
+    @Override
     public UserVo login(String username, String password) {
         final User user = userLogin(username, password);
 

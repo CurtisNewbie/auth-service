@@ -3,9 +3,16 @@ spring:
     name: auth-service
   profiles:
     active: dev
+  sleuth:
+    baggage:
+      remote-fields:
+        - id
+        - username
+        - role
 
 mybatis:
   config-location: classpath:mybatis-config.xml
+
 mybatis-plus:
   typeEnumsPackage: com.curtisnewbie.common.dao;com.curtisnewbie.service.auth.remote.consts
 
@@ -14,36 +21,6 @@ distributed-task-module:
 
 web:
   base-path: "/api/"
-
-authmodule:
-  permittedAntPatterns:
-    - "/"
-    - "/api/login"
-    - "/api/logout"
-    - "/api/user/info"
-    - "/api/user/register/request"
-    - "/**/*.js"
-    - "/**/*.css"
-    - "/favicon.ico"
-    - "/api/token/login-for-token"
-    - "/api/token/exchange-token"
-    - "/remote/user/login"
-    - "/remote/user/login-with-app"
-    - "/remote/user/token"
-  loginProcessingUrl: "/api/login"
-  customLoginPage: "/"
-  logoutUrl: "/api/logout"
-  enableAccessLog: true
-  enableOperateLog: true
-  permitAdminLoginOnly: true
-  appAuthorizationChecked: true
-  enableControllerConsoleLog: false
-  cors:
-    isFilterEnabled: false
-    allowOrigin: "*"
-    allowMethods: "GET,PUT,POST,DELETE,OPTION"
-    allowCredential: true
-    allowHeaders: "content-type, x-gwt-module-base, x-gwt-permutation, clientid, longpush, set-cookie"
 
 management.endpoints.web.exposure.include: "*"
 

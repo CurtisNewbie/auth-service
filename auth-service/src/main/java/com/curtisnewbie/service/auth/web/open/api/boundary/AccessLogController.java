@@ -10,7 +10,6 @@ import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.ListAccessLogInfoReqWebVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.ListAccessLogInfoRespWebVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +32,6 @@ public class AccessLogController {
     @Autowired
     private AccessLogWebConverter accessLogWebConverter;
 
-    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/history")
     public Result<ListAccessLogInfoRespWebVo> listAccessLogInfo(@RequestBody ListAccessLogInfoReqWebVo vo)
             throws MsgEmbeddedException {

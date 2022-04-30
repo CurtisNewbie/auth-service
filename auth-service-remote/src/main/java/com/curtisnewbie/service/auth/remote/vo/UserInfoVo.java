@@ -18,14 +18,10 @@ public class UserInfoVo implements Serializable {
     /** user id */
     private Integer id;
 
-    /**
-     * username
-     */
+    /** username */
     private String username;
 
-    /**
-     * role
-     */
+    /** role */
     private UserRole role;
 
     /** whether the user is disabled, 0-normal, 1-disabled */

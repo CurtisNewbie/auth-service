@@ -20,23 +20,22 @@
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
+      <artifactId>jwt-module</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-sleuth</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.curtisnewbie</groupId>
       <artifactId>common-module</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.session</groupId>
       <artifactId>spring-session-data-redis</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.curtisnewbie</groupId>
-      <artifactId>auth-module</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>com.curtisnewbie</groupId>
-          <artifactId>common-module</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
 
     <dependency>

@@ -190,4 +190,13 @@ public interface LocalUserService {
      */
     String exchangeToken(@NotEmpty String token);
 
+    /**
+     * Get user info
+     *
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#TOKEN_EXPIRED
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
+     */
+    User getUserInfo(@NotEmpty String token);
+
 }
