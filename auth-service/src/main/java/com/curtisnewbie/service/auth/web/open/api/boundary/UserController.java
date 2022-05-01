@@ -187,10 +187,23 @@ public class UserController {
      * Get user info (no role control)
      */
     @GetMapping("/info")
-    public Result<UserWebVo> getUserInfo() throws InvalidAuthenticationException {
+    public Result<UserWebVo> getUserInfo() {
         final String username = TraceUtils.tUser().getUsername();
         User user = userService.loadUserByUsername(username);
         return Result.of(BeanCopyUtils.toType(user, UserWebVo.class));
+    }
+
+    /**
+     * Get user info (no role control)
+     */
+    @GetMapping("/detail")
+    public Result<UserDetailVo> getUserDetail() {
+        final String username = TraceUtils.tUser().getUsername();
+        User user = userService.loadUserByUsername(username);
+        UserDetailVo userDetailVo = BeanCopyUtils.toType(user, UserDetailVo.class);
+        if (user.getCreateTime() != null)
+            userDetailVo.setRegisterDate(user.getCreateTime().toLocalDate().toString());
+        return Result.of(userDetailVo);
     }
 
     /**
