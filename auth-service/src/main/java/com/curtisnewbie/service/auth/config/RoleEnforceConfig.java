@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 /**
  * @author yongj.zhuang
  */
-//@Profile("test")
 @Configuration
 public class RoleEnforceConfig {
 
