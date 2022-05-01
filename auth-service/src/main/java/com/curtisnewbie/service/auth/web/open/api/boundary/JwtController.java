@@ -4,9 +4,7 @@ import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
-import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
 import com.curtisnewbie.service.auth.web.open.api.vo.ExchangeTokenWebVo;
-import com.curtisnewbie.service.auth.web.open.api.vo.LoginWebVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +24,6 @@ public class JwtController {
 
     @Autowired
     private LocalUserService userService;
-
-    @PostMapping("/login-for-token")
-    public Result<String> getToken(@Validated @RequestBody LoginWebVo loginWebVo) throws UserRelatedException {
-        return Result.of(userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword()));
-    }
 
     @PostMapping("/exchange-token")
     public Result<String> exchangeToken(@Validated @RequestBody ExchangeTokenWebVo exchangeTokenWebVo) {

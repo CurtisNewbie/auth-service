@@ -3,7 +3,6 @@ package com.curtisnewbie.service.auth.remote.feign;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
-import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqCmd;
 import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -25,12 +24,6 @@ public class UserAppServiceController implements UserAppServiceFeign {
     @Override
     public Result<List<AppBriefVo>> getAppsPermittedForUser(int userId) {
         return Result.of(localUserAppService.getAppsPermittedForUser(userId));
-    }
-
-    @Override
-    public Result<Void> updateUserApp(UpdateUserAppReqCmd vo) {
-        localUserAppService.updateUserApp(vo);
-        return Result.ok();
     }
 
     @Override

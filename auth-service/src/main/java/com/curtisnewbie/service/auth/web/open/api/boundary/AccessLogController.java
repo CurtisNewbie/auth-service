@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
-import com.curtisnewbie.common.util.ValidUtils;
+import com.curtisnewbie.common.advice.RoleRequired;
+import com.curtisnewbie.common.util.AssertUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.infrastructure.converters.AccessLogWebConverter;
@@ -32,10 +32,10 @@ public class AccessLogController {
     @Autowired
     private AccessLogWebConverter accessLogWebConverter;
 
+    @RoleRequired(role = "admin")
     @PostMapping("/history")
-    public Result<ListAccessLogInfoRespWebVo> listAccessLogInfo(@RequestBody ListAccessLogInfoReqWebVo vo)
-            throws MsgEmbeddedException {
-        ValidUtils.requireNonNull(vo.getPagingVo());
+    public Result<ListAccessLogInfoRespWebVo> listAccessLogInfo(@RequestBody ListAccessLogInfoReqWebVo vo) {
+        AssertUtils.nonNull(vo.getPagingVo());
         PageablePayloadSingleton<List<AccessLogInfoVo>> pps = accessLogService.findAccessLogInfoByPage(vo.getPagingVo());
         ListAccessLogInfoRespWebVo res = new ListAccessLogInfoRespWebVo();
         res.setAccessLogInfoList(mapTo(pps.getPayload(), accessLogWebConverter::toWebVo));

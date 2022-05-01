@@ -30,14 +30,27 @@ public enum UserRole implements ValueEnum<String> {
         this.val = v;
     }
 
+    @Override
+    public String getValue() {
+        return this.val;
+    }
+
     @JsonCreator
     public static UserRole parseUserRole(String userRole) {
         if (userRole == null) return null;
         return EnumUtils.parse(userRole, UserRole.class);
     }
 
-    @Override
-    public String getValue() {
-        return this.val;
+    public static boolean isRole(String s, UserRole userRole) {
+        UserRole role = parseUserRole(s);
+        if (role == null)
+            return false;
+
+        return role == userRole;
     }
+
+    public static boolean isAdmin(String s) {
+        return isRole(s, UserRole.ADMIN);
+    }
+
 }

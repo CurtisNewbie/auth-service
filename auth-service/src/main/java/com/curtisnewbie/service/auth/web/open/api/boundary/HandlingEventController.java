@@ -1,9 +1,8 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
+import com.curtisnewbie.common.advice.RoleRequired;
 import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
-import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.curtisnewbie.common.util.AssertUtils.nonNull;
 import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 
 /**
@@ -38,9 +38,9 @@ public class HandlingEventController {
     @Autowired
     private LocalUserService userService;
 
+    @RoleRequired(role = "admin")
     @PostMapping("/list")
     public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v) {
-
         final PageablePayloadSingleton<List<EventHandlingVo>> pi = eventHandlingService.findEventHandlingByPage(
                 BeanCopyUtils.toType(v, FindEventHandlingByPageReqVo.class)
         );
@@ -51,11 +51,12 @@ public class HandlingEventController {
         return Result.of(resp);
     }
 
+    @RoleRequired(role = "admin")
     @PostMapping("/handle")
-    public Result<Void> handleEvent(@RequestBody HandleEventReqWebVo v) throws MsgEmbeddedException {
-        ValidUtils.requireNonNull(v.getId());
-        ValidUtils.requireNonNull(v.getResult());
-        ValidUtils.requireNonNull(v.getResult());
+    public Result<Void> handleEvent(@RequestBody HandleEventReqWebVo v) {
+        nonNull(v.getId());
+        nonNull(v.getResult());
+        nonNull(v.getResult());
         eventHandlingService.handleEvent(HandleEventReqVo.builder()
                 .id(v.getId())
                 .result(v.getResult())

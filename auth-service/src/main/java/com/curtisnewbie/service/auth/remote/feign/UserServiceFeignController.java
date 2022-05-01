@@ -1,16 +1,13 @@
 package com.curtisnewbie.service.auth.remote.feign;
 
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
-import com.curtisnewbie.service.auth.remote.vo.*;
+import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdReq;
+import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 /**
  * @author yongjie.zhuang
@@ -23,84 +20,13 @@ public class UserServiceFeignController implements UserServiceFeign {
     private LocalUserService localUserService;
 
     @Override
-    public Result<UserVo> login(LoginVo loginVo) {
-        return Result.of(localUserService.login(loginVo.getUsername(), loginVo.getPassword()));
-    }
-
-    @Override
-    public Result<UserVo> loginForApp(LoginVo loginVo) {
-        return Result.of(localUserService.login(loginVo.getUsername(), loginVo.getPassword(), loginVo.getAppName()));
-    }
-
-    @Override
-    public Result<Void> register(RegisterUserVo registerUserVo) {
-        localUserService.register(registerUserVo);
-        return Result.ok();
-    }
-
-    @Override
-    public Result<Void> requestRegistrationApproval(RegisterUserVo registerUserVo) {
-        localUserService.requestRegistrationApproval(registerUserVo);
-        return Result.ok();
-    }
-
-    @Override
-    public Result<Void> updatePassword(UpdatePasswordVo vo) {
-        localUserService.updatePassword(vo.getNewPassword(), vo.getOldPassword(), vo.getUserId());
-        return Result.ok();
-    }
-
-    @Override
-    public Result<PageablePayloadSingleton<List<UserInfoVo>>> findUserInfoByPage(FindUserInfoVo vo) {
-        return Result.of(localUserService.findUserInfoByPage(vo));
-    }
-
-    @Override
-    public Result<Void> disableUserById(DisableUserByIdCmd cmd) {
-        localUserService.disableUserById(cmd.getId(), cmd.getDisabledBy());
-        return Result.ok();
-    }
-
-    @Override
-    public Result<Void> enableUserById(EnableUserByIdCmd cmd) {
-        localUserService.enableUserById(cmd.getId(), cmd.getEnabledBy());
-        return Result.ok();
-    }
-
-    @Override
     public Result<String> findUsernameById(int id) {
-        localUserService.findUsernameById(id);
-        return null;
+        return Result.of(localUserService.findUsernameById(id));
     }
 
     @Override
     public Result<Integer> findIdByUsername(String username) {
         return Result.of(localUserService.findIdByUsername(username));
-    }
-
-    @Override
-    public Result<Void> changeRoleAndEnableUser(ChangeRoleAndEnableUserCmd cmd) {
-        localUserService.changeRoleAndEnableUser(cmd.getUserId(), cmd.getRole(), cmd.getUpdatedBy());
-        return Result.ok();
-
-    }
-
-    @Override
-    public Result<Void> updateUser(UpdateUserVo param) {
-        localUserService.updateUser(param);
-        return Result.ok();
-    }
-
-    @Override
-    public Result<Void> deleteUser(DeleteUserCmd cmd) {
-        localUserService.deleteUser(cmd.getUserId(), cmd.getDeletedBy());
-        return Result.ok();
-    }
-
-    @Override
-    public Result<Void> updateRole(UpdateRoleCmd cmd) {
-        localUserService.updateRole(cmd.getId(), cmd.getRole(), cmd.getUpdatedBy());
-        return Result.ok();
     }
 
     @Override
@@ -110,13 +36,4 @@ public class UserServiceFeignController implements UserServiceFeign {
                 .build());
     }
 
-    @Override
-    public Result<String> retrieveToken(LoginVo vo) {
-        return Result.of(localUserService.exchangeToken(vo.getUsername(), vo.getPassword()));
-    }
-
-    @Override
-    public Result<String> exchangeToken(@NotEmpty String token) {
-        return Result.of(localUserService.exchangeToken(token));
-    }
 }

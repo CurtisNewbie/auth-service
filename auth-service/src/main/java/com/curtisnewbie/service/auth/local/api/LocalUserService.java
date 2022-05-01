@@ -142,10 +142,7 @@ public interface LocalUserService {
     void updateUser(@NotNull UpdateUserVo param);
 
     /**
-     * Delete user
-     * <p>
-     * Move user to table 'deleted_user'
-     * </p>
+     * Delete user logically
      * <p>
      * Only the disabled user can be deleted
      * </p>
@@ -153,7 +150,7 @@ public interface LocalUserService {
      * @param userId    user's id
      * @param deletedBy deleted by
      */
-    boolean deleteUser(int userId, @NotEmpty String deletedBy);
+    boolean deleteUserLogically(int userId, @NotEmpty String deletedBy);
 
     /**
      * Update user role

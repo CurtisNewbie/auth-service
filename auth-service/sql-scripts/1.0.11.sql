@@ -1,1 +1,0 @@
-alter table user add column type VARCHAR(20) NOT NULL DEFAULT 'USER' COMMENT 'type' after role;

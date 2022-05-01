@@ -37,6 +37,9 @@ public class UserKeyController {
     @Autowired
     private LocalUserService userService;
 
+    /**
+     * Generate user key, the user key can be used as a password
+     */
     @PostMapping("/generate")
     public Result<GenerateUserKeyRespWebVo> generateUserKey(@Validated @RequestBody GenerateUserKeyReqWebVo req) throws InvalidAuthenticationException,
             UserDisabledException, UsernameNotFoundException {

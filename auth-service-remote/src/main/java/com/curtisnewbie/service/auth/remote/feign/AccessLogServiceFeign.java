@@ -1,16 +1,11 @@
 package com.curtisnewbie.service.auth.remote.feign;
 
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
-import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 /**
  * @author yongjie.zhuang
@@ -27,11 +22,4 @@ public interface AccessLogServiceFeign {
     @PutMapping
     Result<Void> save(@RequestBody AccessLogInfoVo accessLogVo);
 
-    /**
-     * Find access log info in pages
-     *
-     * @param paging pagination param
-     */
-    @PostMapping("/list")
-    Result<PageablePayloadSingleton<List<AccessLogInfoVo>>> findAccessLogInfoByPage(@RequestBody PagingVo paging);
 }

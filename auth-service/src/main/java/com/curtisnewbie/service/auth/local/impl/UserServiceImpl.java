@@ -123,7 +123,7 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public boolean deleteUser(final int userId, String deletedBy) {
+    public boolean deleteUserLogically(final int userId, String deletedBy) {
         final QueryWrapper<User> where = new QueryWrapper<User>()
                 .eq("id", userId)
                 .eq("is_del", IsDel.NORMAL);

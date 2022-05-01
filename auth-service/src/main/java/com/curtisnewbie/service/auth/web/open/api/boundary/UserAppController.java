@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
+import com.curtisnewbie.common.advice.RoleRequired;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.ValidUtils;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
@@ -37,6 +38,7 @@ public class UserAppController {
     @Autowired
     private AppWebConverter cvtr;
 
+    @RoleRequired(role = "admin")
     @PostMapping("/list/all")
     public Result<PageablePayloadSingleton<List<AppWebVo>>> listApps(@RequestBody PageablePayloadSingleton<AppWebVo> req)
             throws MsgEmbeddedException {
@@ -49,11 +51,13 @@ public class UserAppController {
         return Result.of(resp);
     }
 
+    @RoleRequired(role = "admin")
     @GetMapping("/list/brief/all")
     public Result<List<AppBriefVo>> listAppsBriefInfo() {
         return Result.of(appService.getAllAppBriefInfo());
     }
 
+    @RoleRequired(role = "admin")
     @PostMapping("/list/user")
     public Result<List<AppBriefVo>> getAppsForUser(@RequestBody GetAppsForUserReqVo vo) throws MsgEmbeddedException {
 
@@ -61,6 +65,7 @@ public class UserAppController {
         return Result.of(userAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 
+    @RoleRequired(role = "admin")
     @PostMapping("/user/update")
     public Result<Void> updateUserApps(@RequestBody UpdateUserAppReqWebVo reqVo) throws MsgEmbeddedException {
         reqVo.validate();

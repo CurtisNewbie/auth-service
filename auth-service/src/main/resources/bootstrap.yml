@@ -20,7 +20,7 @@ distributed-task-module:
   application-group: auth-service
 
 web:
-  base-path: "/api/"
+  base-path: "/open/api/"
 
 management.endpoints.web.exposure.include: "*"
 
