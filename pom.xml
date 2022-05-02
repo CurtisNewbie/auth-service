@@ -18,16 +18,22 @@
 
   <properties>
     <java.version>8</java.version>
+    <distributed-task-web-module.version>1.0.0-SNAPSHOT</distributed-task-web-module.version>
+    <distributed-task-module.version>2.0.6-SNAPSHOT</distributed-task-module.version>
     <common-module.version>2.0.9-SNAPSHOT</common-module.version>
     <api.version>1.0.11-SNAPSHOT</api.version>
     <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
     <messaging-module.version>2.0.4-SNAPSHOT</messaging-module.version>
-    <distributed-task-module.version>2.0.5-SNAPSHOT</distributed-task-module.version>
     <jwt-module.version>1.0.1-SNAPSHOT</jwt-module.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>com.curtisnewbie</groupId>
+        <artifactId>distributed-task-web-module</artifactId>
+        <version>${distributed-task-web-module.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>com.curtisnewbie</groupId>

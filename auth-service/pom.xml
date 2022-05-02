@@ -20,6 +20,11 @@
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
+      <artifactId>distributed-task-web-module</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.curtisnewbie</groupId>
       <artifactId>jwt-module</artifactId>
     </dependency>
 
