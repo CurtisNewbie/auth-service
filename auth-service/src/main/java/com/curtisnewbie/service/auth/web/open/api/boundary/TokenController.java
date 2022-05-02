@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("${web.base-path}/token")
-public class JwtController {
+public class TokenController {
 
     @Autowired
     private LocalUserService userService;
 
-    @PostMapping("/exchange-token")
+    @PostMapping("/exchange")
     public Result<String> exchangeToken(@Validated @RequestBody ExchangeTokenWebVo exchangeTokenWebVo) {
         return Result.of(userService.exchangeToken(exchangeTokenWebVo.getToken()));
     }
