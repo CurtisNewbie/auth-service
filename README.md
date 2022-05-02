@@ -1,6 +1,6 @@
 # auth-service
 
-Service for managing users, access log and operation log, it internally uses Dubbo RPC framework. The API layer for Dubbo is under **`/auth-service-remote`**, and the exposed routing information for messaging/MQ is under **`/auth-service-messaging`**.
+Service for managing users, access log and operation log.
 
 ***Do not run the 'build' scripts, these are written for my development environment only***
 
@@ -34,36 +34,28 @@ This project depends on the following modules that you must manually install (us
 - curtisnewbie-bom
     - description: BOM file for dependency management
     - url: https://github.com/CurtisNewbie/curtisnewbie-bom
-    - branch: main
     - under `/microservice` folder
+
+- jwt-module
+    - description: module for JWT encoding / decoding 
+    - url: https://github.com/CurtisNewbie/jwt-module
 
 - service-module
     - description: import dependencies for a Dubbo service
     - url: https://github.com/CurtisNewbie/service-module
-    - branch: main
-
-- log-tracing-module
-    - description: for log tracing between web endpoints and service layers
-    - url: https://github.com/CurtisNewbie/log-tracing-module
-    - branch: main
 
 - messaging-module
     - description: for RabbitMQ-based messaging 
     - url: https://github.com/CurtisNewbie/messaging-module
-    - branch: main
-
-- auth-module
-    - description: for user authentication, security and integration with auth-service (this is used by `auth-service-web`) 
-    - url: https://github.com/CurtisNewbie/auth-module
-    - branch: main 
 
 - distributed-task-module
     - description: for distributed task scheduling
     - url: https://github.com/CurtisNewbie/distributed-task-module
-    - branch: main
 
 ## Projects that uses this service (examples)
 
-1. FileServer
-    - url: https://github.com/CurtisNewbie/file-server/
-    - branch: main 
+1. file-server 
+    - url: https://github.com/CurtisNewbie/file-server
+
+2. auth-gateway 
+    - url: https://github.com/CurtisNewbie/auth-gateway
