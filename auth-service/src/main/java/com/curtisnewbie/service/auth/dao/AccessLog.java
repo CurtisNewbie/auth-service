@@ -36,4 +36,8 @@ public class AccessLog {
     /** primary key of user */
     @TableField("user_id")
     private Integer userId;
+
+    /** request url */
+    @TableField("url")
+    private String url;
 }

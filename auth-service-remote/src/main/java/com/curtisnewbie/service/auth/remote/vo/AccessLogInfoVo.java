@@ -26,4 +26,7 @@ public class AccessLogInfoVo implements Serializable {
 
     /** primary key of user */
     private Integer userId;
+
+    /** request url */
+    private String url;
 }
