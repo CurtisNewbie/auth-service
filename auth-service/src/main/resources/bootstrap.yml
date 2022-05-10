@@ -19,6 +19,9 @@ mybatis-plus:
 distributed-task-module:
   application-group: auth-service
 
+messaging:
+  concurrent-declaration: true
+
 web:
   base-path: "/open/api/"
 

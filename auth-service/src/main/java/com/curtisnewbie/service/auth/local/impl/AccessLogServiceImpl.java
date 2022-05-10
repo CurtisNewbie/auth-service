@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.local.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.common.vo.PagingVo;
@@ -43,7 +44,7 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public PageablePayloadSingleton<List<AccessLogInfoVo>> findAccessLogInfoByPage(@NotNull PagingVo paging) {
         IPage<AccessLog> list = m.selectAllBasicInfo(PagingUtil.forPage(paging));
-        return PagingUtil.toPageList(list, converter::toVo);
+        return PagingUtil.toPageList(list, v -> BeanCopyUtils.toType(v, AccessLogInfoVo.class));
     }
 
     @Override

@@ -68,7 +68,7 @@
   </select>
 
   <select id="selectAllBasicInfo" resultType="com.curtisnewbie.service.auth.dao.AccessLog">
-    select access_time, ip_address, username, user_id
+    select id, access_time, ip_address, username, user_id, url
     from access_log
     order by id desc
   </select>

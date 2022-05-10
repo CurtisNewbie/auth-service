@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @Data
 public class AccessLogInfoVo implements Serializable {
 
+    private Integer id;
+
     /** when the user signed in */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime accessTime;
