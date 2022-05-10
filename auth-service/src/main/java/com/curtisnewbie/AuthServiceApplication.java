@@ -1,5 +1,6 @@
 package com.curtisnewbie;
 
+import com.curtisnewbie.module.messaging.listener.EnableMsgListener;
 import org.mybatis.spring.annotation.MapperScan;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 
+@EnableMsgListener
 @MapperScan("com.curtisnewbie.service.auth.infrastructure.repository.mapper")
 @EnableDiscoveryClient
 @SpringBootApplication

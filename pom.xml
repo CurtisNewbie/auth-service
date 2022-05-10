@@ -23,7 +23,7 @@
     <common-module.version>2.0.9-SNAPSHOT</common-module.version>
     <api.version>1.0.11-SNAPSHOT</api.version>
     <log-tracing-module.version>2.0.2-SNAPSHOT</log-tracing-module.version>
-    <messaging-module.version>2.0.4-SNAPSHOT</messaging-module.version>
+    <messaging-module.version>2.0.5-SNAPSHOT</messaging-module.version>
     <jwt-module.version>1.0.1-SNAPSHOT</jwt-module.version>
   </properties>
 

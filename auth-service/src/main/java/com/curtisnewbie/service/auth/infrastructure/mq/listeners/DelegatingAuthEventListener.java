@@ -2,19 +2,16 @@ package com.curtisnewbie.service.auth.infrastructure.mq.listeners;
 
 
 import com.curtisnewbie.common.util.EnumUtils;
+import com.curtisnewbie.module.messaging.listener.MsgListener;
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.local.api.eventhandling.AuthEventHandler;
-import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
-import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import com.curtisnewbie.service.auth.local.vo.cmd.HandleEventInfoVo;
 import com.curtisnewbie.service.auth.local.vo.cmd.UpdateHandleStatusCmd;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingStatus;
+import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,14 +43,7 @@ public class DelegatingAuthEventListener {
     @Autowired
     private Map<String, AuthEventHandler> nameToAuthEventHandlers;
 
-    @RabbitListener(
-            bindings = @QueueBinding(
-                    value = @Queue(name = EVENT_HANDLER_QUEUE),
-                    exchange = @Exchange(name = EVENT_HANDLER_EXCHANGE),
-                    key = ROUTING_KEY
-            ),
-            ackMode = "AUTO"
-    )
+    @MsgListener(queue = EVENT_HANDLER_QUEUE, exchange = EVENT_HANDLER_EXCHANGE, routingKey = ROUTING_KEY)
     public void _handle(HandleEventInfoVo info) {
         // mark the event as handled, semantic lock is used here
         if (localEventHandlingService.updateHandleStatus(
