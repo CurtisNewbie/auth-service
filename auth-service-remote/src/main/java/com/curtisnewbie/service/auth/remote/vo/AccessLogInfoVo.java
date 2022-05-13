@@ -31,4 +31,7 @@ public class AccessLogInfoVo implements Serializable {
 
     /** request url */
     private String url;
+
+    /** token */
+    private String token;
 }
