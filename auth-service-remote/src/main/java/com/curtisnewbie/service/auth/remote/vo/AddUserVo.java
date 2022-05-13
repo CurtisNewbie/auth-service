@@ -1,9 +1,11 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
 
+import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -15,7 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Builder
-public class RegisterUserVo implements Serializable {
+public class AddUserVo implements Serializable {
 
     /**
      * username
@@ -29,9 +31,18 @@ public class RegisterUserVo implements Serializable {
     @NotBlank
     private String password;
 
+    /**
+     * role
+     */
+    @NotNull
+    private UserRole role;
+
     @ToString.Include(name = "password")
     public String passwordMask() {
         return "****";
     }
 
+    public boolean isAdmin() {
+        return role == UserRole.ADMIN;
+    }
 }

@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.dao;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.curtisnewbie.common.dao.DaoSkeleton;
+import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
@@ -29,6 +30,10 @@ public class User extends DaoSkeleton {
     /** salt */
     @TableField("salt")
     private String salt;
+
+    /** Audit Status */
+    @TableField("review_status")
+    private ReviewStatus reviewStatus;
 
     /** role */
     @TableField("role")

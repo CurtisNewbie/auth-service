@@ -2,15 +2,16 @@ package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.AuthServiceApplication;
 import com.curtisnewbie.service.auth.dao.*;
-import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
-import com.curtisnewbie.service.auth.remote.exception.*;
-import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
+import com.curtisnewbie.service.auth.remote.exception.ExceededMaxAdminCountException;
+import com.curtisnewbie.service.auth.remote.exception.UserDisabledException;
+import com.curtisnewbie.service.auth.remote.exception.UserRegisteredException;
+import com.curtisnewbie.service.auth.remote.exception.UsernameNotFoundException;
+import com.curtisnewbie.service.auth.remote.vo.AddUserVo;
 import com.curtisnewbie.service.auth.remote.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -149,43 +150,22 @@ public class TestLocalUserService {
 
     @Test
     public void shouldLoadUserByUsername() throws UsernameNotFoundException {
-        Assertions.assertDoesNotThrow(() -> {
-            registerTestUser();
-        });
+        Assertions.assertDoesNotThrow(this::registerTestUser);
 
         User e = userService.loadUserByUsername(USERNAME);
         Assertions.assertNotNull(e);
         Assertions.assertNotNull(e.getId());
-    }
-
-    @Test
-    public void shouldRequestRegistrationApproval() throws UsernameNotFoundException {
-        // mock the createEvent method, return random id
-        Mockito.when(eventHandlingServiceMock.createEvent(Mockito.any())).thenAnswer(invok -> {
-            log.info("Mocked LocalEventHandlingService.createEvent(...) method");
-            return 1;
-        });
-
-        Assertions.assertDoesNotThrow(() -> {
-            userService.requestRegistrationApproval(getRegisterUser());
-        });
-
-        User e = userService.loadUserByUsername(USERNAME);
-        Assertions.assertNotNull(e);
-        Assertions.assertNotNull(e.getId());
-        Assertions.assertTrue(e.getIsDisabled() == UserIsDisabled.DISABLED);
     }
 
     private void registerTestUser() throws UserRegisteredException, ExceededMaxAdminCountException {
-        userService.register(getRegisterUser());
+        userService.addUser(getAddUserVo());
     }
 
-    private RegisterUserVo getRegisterUser() {
-        RegisterUserVo v = new RegisterUserVo();
+    private AddUserVo getAddUserVo() {
+        AddUserVo v = new AddUserVo();
         v.setUsername(USERNAME);
         v.setPassword(PASSWORD);
         v.setRole(ROLE);
-        v.setCreateBy(CREATE_BY);
         return v;
     }
 

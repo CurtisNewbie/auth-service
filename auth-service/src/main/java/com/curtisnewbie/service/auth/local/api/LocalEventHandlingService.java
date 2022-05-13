@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @author yongjie.zhuang
  */
+@Deprecated // todo delete this
 public interface LocalEventHandlingService {
 
     /**

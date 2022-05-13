@@ -18,7 +18,7 @@ import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper
 import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
-import com.curtisnewbie.service.auth.remote.consts.EventHandlingType;
+import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
@@ -36,11 +36,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.curtisnewbie.common.trace.TraceUtils.tUser;
 import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.PagingUtil.forPage;
 import static com.curtisnewbie.service.auth.remote.consts.AuthServiceError.*;
 import static com.curtisnewbie.service.auth.util.PasswordUtil.encodePassword;
-import static java.lang.String.format;
+import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
+import static com.curtisnewbie.service.auth.util.UserValidator.validateUsername;
 
 /**
  * @author yongjie.zhuang
@@ -219,58 +221,77 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public void register(RegisterUserVo registerUserVo) {
-        notNull(registerUserVo.getUsername());
-        notNull(registerUserVo.getPassword());
-        notNull(registerUserVo.getRole());
-        isNull(userMapper.findIdByUsername(registerUserVo.getUsername()), USER_ALREADY_REGISTERED);
+    public void addUser(AddUserVo addUserVo) {
+        // validate whether username and password is entered
+        final String username = addUserVo.getUsername();
+        hasText(username, "Username is required");
+        validateUsername(username);
 
-        // limit the total number of administrators
-        if (registerUserVo.getRole() == UserRole.ADMIN) {
-            checkAdminQuota();
-        }
+        final String password = addUserVo.getPassword();
+        hasText(password, "Password is required");
+        validatePassword(password);
 
-        User userEntity = toUserEntity(registerUserVo);
+        // validate if the username and password is the same
+        notEquals(username, password, "Username and password must be different");
+
+        // if not specified, the role will be guest
+        if (addUserVo.getRole() == null)
+            addUserVo.setRole(UserRole.GUEST);
+
+        // do not support adding administrator
+        isFalse(addUserVo.isAdmin(), "Do not support adding administrator");
+
+        // user is already registered
+        isNull(userMapper.findIdByUsername(addUserVo.getUsername()), USER_ALREADY_REGISTERED);
+
+        // save user
+        User userEntity = prepNewUserCred(addUserVo.getPassword());
+        userEntity.setUsername(addUserVo.getUsername());
+        userEntity.setRole(addUserVo.getRole());
+        userEntity.setCreateBy(tUser().getUsername());
+        userEntity.setCreateTime(LocalDateTime.now());
         userEntity.setIsDisabled(UserIsDisabled.NORMAL);
 
-        log.info("New user '{}' successfully registered, role: {}", registerUserVo.getUsername(), registerUserVo.getRole().getValue());
+        log.info("New user '{}' successfully registered, role: {}", addUserVo.getUsername(), addUserVo.getRole().getValue());
         userMapper.insert(userEntity);
     }
 
     @Override
-    public void requestRegistrationApproval(RegisterUserVo registerUserVo) {
-        notNull(registerUserVo.getUsername());
-        notNull(registerUserVo.getPassword());
-        notNull(registerUserVo.getRole());
-        isNull(userMapper.findIdByUsername(registerUserVo.getUsername()), USER_ALREADY_REGISTERED);
+    public void register(RegisterUserVo v) {
+        final String username = v.getUsername();
+        hasText(username, "Please enter username");
+        validateUsername(username);
 
-        // limit the total number of administrators
-        if (registerUserVo.getRole() == UserRole.ADMIN) {
-            checkAdminQuota();
-        }
+        final String password = v.getPassword();
+        hasText(password, "Please enter password");
 
-        // set user disabled, this will be handled by the admin
-        User user = toUserEntity(registerUserVo);
+        // validate if the username and password are the same
+        notEquals(v.getUsername(), password, "Username and password must be different");
+
+        // validate if the password is too short
+        validatePassword(v.getPassword());
+
+        // user is already registered
+        isNull(userMapper.findIdByUsername(v.getUsername()), USER_ALREADY_REGISTERED);
+
+        // build user
+        User user = prepNewUserCred(v.getPassword());
+        user.setUsername(v.getUsername());
+        user.setRole(UserRole.GUEST);
+        user.setCreateTime(LocalDateTime.now());
+        user.setCreateBy(v.getUsername());
+
+        // user will be reviewed by admin
         user.setIsDisabled(UserIsDisabled.DISABLED);
+        user.setReviewStatus(ReviewStatus.PENDING);
         userMapper.insert(user);
 
-        log.info("New user '{}' successfully registered, role: {}, currently disabled and waiting for approval",
-                registerUserVo.getUsername(), registerUserVo.getRole().getValue());
-
-        // generate a handling_event for registration request
-        eventHandlingService.createEvent(
-                CreateEventHandlingCmd.builder()
-                        .body(String.valueOf(user.getId()))
-                        .type(EventHandlingType.REGISTRATION_EVENT)
-                        .description(format("User '%s' requests registration approval", user.getUsername()))
-                        .build()
-        );
-        log.info("Created event_handling for {}'s registration", registerUserVo.getUsername());
+        log.info("New user '{}' successfully registered, waiting for approval", v.getUsername());
     }
 
     @Override
-    public void updatePassword(final String newPassword, final String oldPassword, long id) {
-        final User ue = userMapper.findById(id);
+    public void updatePassword(final String newPassword, final String oldPassword, long userId) {
+        final User ue = userMapper.findById(userId);
         notNull(ue, USER_NOT_FOUND);
 
         final boolean isPasswordMatched = PasswordUtil.getValidator(ue)
@@ -278,9 +299,9 @@ public class UserServiceImpl implements LocalUserService {
                 .isMatched();
         isTrue(isPasswordMatched, PASSWORD_INCORRECT);
 
-        final boolean isUpdated = userMapper.updatePwd(encodePassword(newPassword, ue.getSalt()), id) > 0;
+        final boolean isUpdated = userMapper.updatePwd(encodePassword(newPassword, ue.getSalt()), userId) > 0;
         if (isUpdated)
-            log.info("User_id '{}' successfully changed password.", id);
+            log.info("User_id '{}' successfully changed password.", userId);
     }
 
     @Override
@@ -356,14 +377,11 @@ public class UserServiceImpl implements LocalUserService {
         return ue;
     }
 
-    private User toUserEntity(RegisterUserVo registerUserVo) {
+    /** Prepare new user object's credential (salt and encoded password) */
+    private static User prepNewUserCred(String password) {
         User u = new User();
-        u.setUsername(registerUserVo.getUsername());
-        u.setRole(registerUserVo.getRole());
         u.setSalt(RandomNumUtil.randomNoStr(5));
-        u.setPassword(encodePassword(registerUserVo.getPassword(), u.getSalt()));
-        u.setCreateBy(registerUserVo.getCreateBy());
-        u.setCreateTime(LocalDateTime.now());
+        u.setPassword(encodePassword(password, u.getSalt()));
         return u;
     }
 
@@ -395,6 +413,14 @@ public class UserServiceImpl implements LocalUserService {
 
     private User validateUserStatusForLogin(String username) {
         final User ue = loadUserByUsername(username);
+
+        // waiting for approval
+        isFalse(ue.getReviewStatus() == ReviewStatus.PENDING, REG_REVIEW_PENDING);
+
+        // registration is rejected
+        isFalse(ue.getReviewStatus() == ReviewStatus.REJECTED, REG_REVIEW_REJECTED);
+
+        // user disabled
         isTrue(ue.getIsDisabled() == UserIsDisabled.NORMAL, USER_DISABLED);
         return ue;
     }

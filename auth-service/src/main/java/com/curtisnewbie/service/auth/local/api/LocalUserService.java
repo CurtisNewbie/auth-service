@@ -66,7 +66,7 @@ public interface LocalUserService {
 
     /**
      * <p>
-     * Register user of different role
+     * Add user (by admin)
      * </p>
      * <p>
      * This method should only be called by admin, since it doesn't require any approve/reject processes.
@@ -75,22 +75,19 @@ public interface LocalUserService {
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#ADMIN_REG_NOT_ALLOWED
      */
-    void register(@NotNull RegisterUserVo registerUserVo);
+    void addUser(@NotNull AddUserVo addUserVo);
 
     /**
+     * Register user
      * <p>
-     * Register user of different role
-     * </p>
+     * User registered here must be reviewed by the admins, only the approved user can be used
      * <p>
-     * User registered with this method is disabled by default, it requires the admin to 'approve' the registration by
-     * enabling it. To do this, this method will generate a {@code event_handling} record, that will later be received
-     * by the admin and handled. For more information, see {@link com.curtisnewbie.service.auth.remote.feign.EventHandlingServiceFeign}
-     * </p>
+     * Users registered here are by default {@link UserRole#GUEST}
+     * <p>
      *
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
-     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#ADMIN_REG_NOT_ALLOWED
      */
-    void requestRegistrationApproval(@NotNull RegisterUserVo registerUserVo);
+    void register(@NotNull RegisterUserVo registerUserVo);
 
     /**
      * Update password

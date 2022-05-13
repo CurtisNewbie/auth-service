@@ -19,8 +19,9 @@ public enum AuthServiceError implements ErrorType {
     USER_NOT_PERMITTED("AUTH0004", "Not permitted to use this functionality"),
     USER_ALREADY_REGISTERED("AUTH0005", "User is already registered"),
     ADMIN_REG_NOT_ALLOWED("AUTH0006", "Not allowed to register as Admin"),
-    TOKEN_EXPIRED("AUTH0007", "Token has expired");
-
+    TOKEN_EXPIRED("AUTH0007", "Token has expired"),
+    REG_REVIEW_PENDING("AUTH0008", "Your Registration is being reviewed, please wait for approval"),
+    REG_REVIEW_REJECTED("AUTH0009", "Your are not permitted to login, please contact administrator");
 
     private final String code;
     private final String msg;

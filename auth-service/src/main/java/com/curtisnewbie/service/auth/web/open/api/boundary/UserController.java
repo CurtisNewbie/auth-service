@@ -14,13 +14,9 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
-import com.curtisnewbie.service.auth.remote.vo.FindUserInfoVo;
-import com.curtisnewbie.service.auth.remote.vo.RegisterUserVo;
-import com.curtisnewbie.service.auth.remote.vo.UpdateUserVo;
-import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
+import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -30,6 +26,7 @@ import java.util.List;
 
 import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
+import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
 
 /**
  * User Controller
@@ -40,8 +37,6 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 @RestController
 @RequestMapping("${web.base-path}/user")
 public class UserController {
-
-    private static final int PASSWORD_LENGTH = 6;
 
     @Autowired
     private LocalUserService userService;
@@ -62,38 +57,8 @@ public class UserController {
      */
     @RoleRequired(role = "admin")
     @PostMapping("/add")
-    public Result<?> addUser(@RequestBody RegisterUserWebVo registerUserVo) {
-        TUser tUser = TraceUtils.tUser();
-        Assert.isTrue(UserRole.isAdmin(tUser.getRole()), "Not permitted");
-
-        RegisterUserVo vo = new RegisterUserVo();
-        BeanUtils.copyProperties(registerUserVo, vo);
-
-        // validate whether username and password is entered
-        hasText(vo.getUsername(), "Please enter username");
-        hasText(vo.getPassword(), "Please enter password");
-
-        // validate if the username and password is the same
-        notEquals(vo.getUsername(), vo.getPassword(), "Username and password must be different");
-
-        // validate if the password is too short
-        if (vo.getPassword().length() < PASSWORD_LENGTH)
-            return Result.error("Password must have at least " + PASSWORD_LENGTH + " characters");
-
-        // if not specified, the role will be guest
-        UserRole role = UserRole.GUEST;
-        if (registerUserVo.getUserRole() != null) {
-            role = registerUserVo.getUserRole();
-        }
-
-        // do not support adding administrator
-        if (role == UserRole.ADMIN) {
-            return Result.error("Do not support adding administrator");
-        }
-
-        vo.setRole(role);
-        vo.setCreateBy(tUser.getUsername());
-        userService.register(vo);
+    public Result<?> addUser(@RequestBody AddUserVo param) {
+        userService.addUser(param);
         return Result.ok();
     }
 
@@ -101,26 +66,8 @@ public class UserController {
      * Registration request (no role control)
      */
     @PostMapping("/register/request")
-    public Result<?> requestRegistration(@RequestBody RequestRegisterUserWebVo registerUserVo) {
-        RegisterUserVo vo = new RegisterUserVo();
-        BeanUtils.copyProperties(registerUserVo, vo);
-
-        // validate whether username and password is entered
-        hasText(vo.getUsername(), "Please enter username");
-        hasText(vo.getPassword(), "Please enter password");
-
-        // validate if the username and password are the same
-        notEquals(vo.getUsername(), vo.getPassword(), "Username and password must be different");
-
-        // validate if the password is too short
-        if (vo.getPassword().length() < PASSWORD_LENGTH)
-            return Result.error("Password must have at least " + PASSWORD_LENGTH + " characters");
-
-        // by default role is guest
-        vo.setRole(UserRole.GUEST);
-        vo.setCreateBy(vo.getUsername());
-
-        userService.requestRegistrationApproval(vo);
+    public Result<?> register(@RequestBody RegisterUserVo vo) {
+        userService.register(vo);
         return Result.ok();
     }
 
@@ -211,18 +158,20 @@ public class UserController {
      */
     @PostMapping("/password/update")
     public Result<Void> updatePassword(@RequestBody UpdatePasswordWebVo vo) {
-        hasText(vo.getNewPassword(), "New password is required");
-        hasText(vo.getPrevPassword(), "Old password is required");
+        final TUser tUser = TraceUtils.tUser();
+
+        final String newPassword = vo.getNewPassword();
+        final String prevPassword = vo.getPrevPassword();
+        hasText(newPassword, "New password is required");
+        hasText(prevPassword, "Old password is required");
 
         // check if the old password and prev password are equal
-        notEquals(vo.getNewPassword(), vo.getPrevPassword(), "New password must be different");
+        notEquals(newPassword, prevPassword, "New password must be different");
 
         // validate if the new password is too short
-        if (vo.getNewPassword().length() < PASSWORD_LENGTH)
-            return Result.error("Password must have at least " + PASSWORD_LENGTH + " characters");
+        validatePassword(newPassword);
 
-        final TUser tUser = TraceUtils.tUser();
-        userService.updatePassword(vo.getNewPassword(), vo.getPrevPassword(), tUser.getUserId());
+        userService.updatePassword(newPassword, prevPassword, tUser.getUserId());
         return Result.ok();
     }
 
