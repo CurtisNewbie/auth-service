@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS access_log (
     ip_address VARCHAR(255) NOT NULL COMMENT 'ip address',
     username VARCHAR(255) NOT NULL COMMENT 'username',
     user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user',
-    url VARCHAR(255) DEFAULT '' COMMENT 'request url',
+    url VARCHAR(255) DEFAULT '' COMMENT 'request url'
 ) ENGINE=InnoDB COMMENT 'access log';
 
 CREATE TABLE IF NOT EXISTS access_log_history (
@@ -71,7 +71,8 @@ CREATE TABLE IF NOT EXISTS access_log_history (
     access_time TIMESTAMP NOT NULL DEFAULT NOW() COMMENT 'when the user signed in',
     ip_address VARCHAR(255) NOT NULL COMMENT 'ip address',
     username VARCHAR(255) NOT NULL COMMENT 'username',
-    user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user'
+    user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user',
+    url VARCHAR(255) DEFAULT '' COMMENT 'request url'
 ) ENGINE=InnoDB COMMENT 'access log (for history only)';
 
 CREATE TABLE IF NOT EXISTS operate_log (
