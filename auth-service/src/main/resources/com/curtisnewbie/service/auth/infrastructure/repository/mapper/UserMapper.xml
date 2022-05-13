@@ -57,7 +57,7 @@
   </select>
 
   <select id="findUserInfoBy" resultType="com.curtisnewbie.service.auth.dao.User">
-    Select id, username, role, is_disabled, create_by, create_time, update_by, update_time, is_del
+    Select id, username, role, is_disabled, review_status, create_by, create_time, update_by, update_time, is_del
     FROM user
     <where>
       <if test="u.username != null and u.username != ''">
@@ -68,6 +68,9 @@
       </if>
       <if test="u.isDisabled != null">
         and is_disabled = #{u.isDisabled}
+      </if>
+      <if test="u.reviewStatus != null">
+        and review_status = #{u.reviewStatus}
       </if>
       and is_del = 0
     </where>

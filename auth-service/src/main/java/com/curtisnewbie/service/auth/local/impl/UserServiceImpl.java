@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import com.curtisnewbie.common.util.AssertUtils;
+import com.curtisnewbie.common.util.LockUtils;
 import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
 import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
 import com.curtisnewbie.module.jwt.vo.DecodeResult;
+import com.curtisnewbie.module.redisutil.RedisController;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.dao.UserKey;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
@@ -32,8 +34,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 
 import static com.curtisnewbie.common.trace.TraceUtils.tUser;
@@ -69,6 +73,8 @@ public class UserServiceImpl implements LocalUserService {
     private JwtBuilder jwtBuilder;
     @Autowired
     private JwtDecoder jwtDecoder;
+    @Autowired
+    private RedisController redisController;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -182,7 +188,7 @@ public class UserServiceImpl implements LocalUserService {
     @Override
     public String exchangeToken(@NotEmpty String token) {
         DecodeResult decodeResult = jwtDecoder.decode(token);
-        AssertUtils.isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
+        isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
 
         final String idAsStr = decodeResult.getDecodedJWT().getClaim("id").asString();
         final User ue = userMapper.findById(Long.parseLong(idAsStr));
@@ -192,14 +198,40 @@ public class UserServiceImpl implements LocalUserService {
     @Override
     public User getUserInfo(@NotEmpty String token) {
         DecodeResult decodeResult = jwtDecoder.decode(token);
-        AssertUtils.isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
+        isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
 
         final String idAsStr = decodeResult.getDecodedJWT().getClaim("id").asString();
         User user = userMapper.findById(Long.parseLong(idAsStr));
-        AssertUtils.notNull(user, USER_NOT_FOUND);
+        notNull(user, USER_NOT_FOUND);
         AssertUtils.isFalse(user.isDeleted(), USER_NOT_FOUND);
         AssertUtils.equals(user.getIsDisabled(), UserIsDisabled.NORMAL, USER_DISABLED);
         return user;
+    }
+
+    @Override
+    public void reviewUserRegistration(@NotNull UserReviewCmd cmd) {
+        final Integer userId = cmd.getUserId();
+        notNull(userId, "user_id == null");
+        final ReviewStatus reviewStatus = cmd.getReviewStatus();
+        notNull(reviewStatus, "review_status == null");
+        isTrue(reviewStatus.isDecision(), "Illegal Argument");
+
+        final Lock lock = redisController.getLock("auth:user:registration:review:" + userId);
+        LockUtils.lockAndRun(lock, () -> {
+            final User user = userMapper.selectById(userId);
+            AssertUtils.notNull(user, USER_NOT_FOUND);
+            AssertUtils.isFalse(user.isDeleted(), USER_NOT_FOUND);
+            AssertUtils.isTrue(user.getReviewStatus() == ReviewStatus.PENDING,
+                    "User's registration has already been reviewed");
+
+            User update = new User();
+            update.setId(userId);
+            update.setUpdateBy(tUser().getUsername());
+            update.setUpdateTimeIfAbsent();
+            update.setReviewStatus(reviewStatus);
+            update.setIsDisabled(reviewStatus == ReviewStatus.APPROVED ? UserIsDisabled.NORMAL : UserIsDisabled.DISABLED);
+            userMapper.updateById(update);
+        });
     }
 
     @Override
@@ -312,6 +344,7 @@ public class UserServiceImpl implements LocalUserService {
             ue.setIsDisabled(vo.getIsDisabled());
         if (vo.getRole() != null)
             ue.setRole(vo.getRole());
+
         ue.setUsername(vo.getUsername());
 
         IPage<User> pge = userMapper.findUserInfoBy(forPage(vo.getPagingVo()), ue);

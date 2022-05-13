@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.util.DateUtils;
+import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -31,6 +32,9 @@ public class UserInfoWebVo {
 
     /** whether the user is disabled, 0-normal, 1-disabled */
     private UserIsDisabled isDisabled;
+
+    /** User registration review status */
+    private ReviewStatus reviewStatus;
 
     /** when the user is created */
     @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)

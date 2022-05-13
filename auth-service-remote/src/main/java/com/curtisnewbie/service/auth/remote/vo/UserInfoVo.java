@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
+import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class UserInfoVo implements Serializable {
 
     /** whether the user is disabled, 0-normal, 1-disabled */
     private UserIsDisabled isDisabled;
+
+    /** Registration Review Status */
+    private ReviewStatus reviewStatus;
 
     /** when the user is created */
     private LocalDateTime createTime;

@@ -193,4 +193,9 @@ public interface LocalUserService {
      */
     User getUserInfo(@NotEmpty String token);
 
+    /**
+     * Review user registration
+     */
+    void reviewUserRegistration(@NotNull UserReviewCmd cmd);
+
 }

@@ -22,6 +22,7 @@ import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.curtisnewbie.common.util.AssertUtils.*;
@@ -59,15 +60,6 @@ public class UserController {
     @PostMapping("/add")
     public Result<?> addUser(@RequestBody AddUserVo param) {
         userService.addUser(param);
-        return Result.ok();
-    }
-
-    /**
-     * Registration request (no role control)
-     */
-    @PostMapping("/register/request")
-    public Result<?> register(@RequestBody RegisterUserVo vo) {
-        userService.register(vo);
         return Result.ok();
     }
 
@@ -127,6 +119,30 @@ public class UserController {
                 .role(role)
                 .updateBy(tUser.getUsername())
                 .build());
+        return Result.ok();
+    }
+
+    @RoleRequired(role = "admin")
+    @PostMapping("/registration/review")
+    public Result<Void> reviewRegistration(@Valid @RequestBody UserReviewCmd cmd) {
+        userService.reviewUserRegistration(cmd);
+        return Result.ok();
+    }
+
+    /*
+    -------------------------------------------------------------
+
+    Doesn't require admin
+
+    -------------------------------------------------------------
+     */
+
+    /**
+     * Registration request (no role control)
+     */
+    @PostMapping("/register/request")
+    public Result<?> register(@RequestBody RegisterUserVo vo) {
+        userService.register(vo);
         return Result.ok();
     }
 

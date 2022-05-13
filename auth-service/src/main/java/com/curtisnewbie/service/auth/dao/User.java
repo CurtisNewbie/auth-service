@@ -31,7 +31,7 @@ public class User extends DaoSkeleton {
     @TableField("salt")
     private String salt;
 
-    /** Audit Status */
+    /** Review Status */
     @TableField("review_status")
     private ReviewStatus reviewStatus;
 

@@ -28,6 +28,7 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
 /**
  * @author yongjie.zhuang
  */
+@RoleRequired(role = "admin")
 @RestController
 @RequestMapping("${web.base-path}/event")
 public class HandlingEventController {
@@ -38,7 +39,6 @@ public class HandlingEventController {
     @Autowired
     private LocalUserService userService;
 
-    @RoleRequired(role = "admin")
     @PostMapping("/list")
     public Result<FindEventHandlingByPageRespWebVo> findEventHandlingByPage(@RequestBody FindEventHandlingByPageReqWebVo v) {
         final PageablePayloadSingleton<List<EventHandlingVo>> pi = eventHandlingService.findEventHandlingByPage(
@@ -51,7 +51,6 @@ public class HandlingEventController {
         return Result.of(resp);
     }
 
-    @RoleRequired(role = "admin")
     @PostMapping("/handle")
     public Result<Void> handleEvent(@RequestBody HandleEventReqWebVo v) {
         nonNull(v.getId());
