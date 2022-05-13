@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS access_log (
     username VARCHAR(255) NOT NULL COMMENT 'username',
     user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user',
     url VARCHAR(255) DEFAULT '' COMMENT 'request url',
-    token VARCHAR(255) DEFAULT '' COMMENT 'token'
+    token VARCHAR(1000) DEFAULT '' COMMENT 'token'
 ) ENGINE=InnoDB COMMENT 'access log';
 
 CREATE TABLE IF NOT EXISTS access_log_history (
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS access_log_history (
     username VARCHAR(255) NOT NULL COMMENT 'username',
     user_id INT UNSIGNED NOT NULL COMMENT 'primary key of user',
     url VARCHAR(255) DEFAULT '' COMMENT 'request url',
-    token VARCHAR(255) DEFAULT '' COMMENT 'token'
+    token VARCHAR(1000) DEFAULT '' COMMENT 'token'
 ) ENGINE=InnoDB COMMENT 'access log (for history only)';
 
 CREATE TABLE IF NOT EXISTS operate_log (
