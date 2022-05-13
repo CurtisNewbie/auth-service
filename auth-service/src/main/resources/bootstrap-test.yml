@@ -5,12 +5,6 @@ spring:
     username: ${mysqlusername}
     password: ${mysqlpassword}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  rabbitmq:
-    host: ${rabbitmqaddr}
-    port: 5672
-    username: ${rabbitmqusername}
-    password: ${rabbitmqpassword}
-    virtualHost: /
   cloud:
     nacos:
       discovery:
@@ -32,6 +26,16 @@ namingPollingThreadCount: 2
 # ----- quartz
 org.quartz.threadPool:
   threadCount: 2
+
+# ----- messaging-module
+messaging:
+  rabbitmq:
+    host: ${rabbitmqaddr}
+    port: 5672
+    username: ${rabbitmqusername}
+    password: ${rabbitmqpassword}
+    virtualHost: /
+    publisherConfirmType: SIMPLE
 
 jwt-module:
   publicKey: ${jwt-module.publicKey}

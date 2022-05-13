@@ -5,12 +5,6 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtualHost: /
   cloud:
     nacos:
       discovery:
@@ -36,6 +30,16 @@ namingPollingThreadCount: 1
 # ----- quartz
 org.quartz.threadPool:
   threadCount: 2
+
+# ----- messaging-module
+messaging:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtualHost: "/"
+    publisherConfirmType: SIMPLE
 
 jwt-module:
   publicKey: "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCUZIXyb43pYp6xr7nrnBWF23U/LyXu/Mgy6D34EW5N+fPV4hnYMCUVULjG8WZwN/kddIBDaab15y4L1WLBWiGarTP3O0LhvA2uJ4PcABi6AeqbTI5FeimByUMhypEHpELhpZIef9q5WpIj4C04tOE1FSaaWHlzdXQa9lR7JmjJDQIDAQAB"
