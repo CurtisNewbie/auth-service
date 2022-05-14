@@ -25,10 +25,6 @@ public interface UserAppServiceFeign {
     @GetMapping("/list")
     Result<List<AppBriefVo>> getAppsPermittedForUser(@RequestParam("userId") int userId);
 
-    /** Request approval to use the app */
-    @PostMapping("/request-approval")
-    Result<Void> requestAppUseApproval(@RequestBody UserRequestAppApprovalCmd cmd);
-
     /**
      * Check if the user can use the specified application
      *

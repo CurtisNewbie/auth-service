@@ -47,16 +47,17 @@ CREATE TABLE IF NOT EXISTS user_app (
     CONSTRAINT uk_user_app UNIQUE (user_id, app_id)
 ) ENGINE=InnoDB COMMENT 'join table between application and user';
 
-CREATE TABLE IF NOT EXISTS event_handling (
-    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
-    type INT NOT NULL COMMENT "type of event, 1-registration",
-    body VARCHAR(1000) NOT NULL COMMENT "body of the event",
-    description VARCHAR(255) NOT NULL default '' COMMENT 'description of the event',
-    status INT NOT NULL COMMENT "status of event, 0-no need to handle, 1-to be handled, 2-handled",
-    handle_result TINYINT COMMENT "handle result, 1-accept, 2-reject",
-    handler_id INT UNSIGNED COMMENT "id of user who handled the event",
-    handle_time DATETIME COMMENT 'when the event is handled'
-) ENGINE=InnoDB COMMENT 'events that need to be handled by someone, e.g., administrators';
+--deprecated for 1.1.0
+--CREATE TABLE IF NOT EXISTS event_handling (
+--    id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
+--    type INT NOT NULL COMMENT "type of event, 1-registration",
+--    body VARCHAR(1000) NOT NULL COMMENT "body of the event",
+--    description VARCHAR(255) NOT NULL default '' COMMENT 'description of the event',
+--    status INT NOT NULL COMMENT "status of event, 0-no need to handle, 1-to be handled, 2-handled",
+--    handle_result TINYINT COMMENT "handle result, 1-accept, 2-reject",
+--    handler_id INT UNSIGNED COMMENT "id of user who handled the event",
+--    handle_time DATETIME COMMENT 'when the event is handled'
+--) ENGINE=InnoDB COMMENT 'events that need to be handled by someone, e.g., administrators';
 
 CREATE TABLE IF NOT EXISTS access_log (
     id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT 'primary key',

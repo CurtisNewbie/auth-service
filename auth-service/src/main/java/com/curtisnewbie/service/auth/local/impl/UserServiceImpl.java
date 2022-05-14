@@ -17,7 +17,6 @@ import com.curtisnewbie.service.auth.dao.UserKey;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserKeyMapper;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
-import com.curtisnewbie.service.auth.local.api.LocalEventHandlingService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
@@ -61,8 +60,6 @@ public class UserServiceImpl implements LocalUserService {
     private UserMapper userMapper;
     @Autowired
     private UserKeyMapper userKeyMapper;
-    @Autowired
-    private LocalEventHandlingService eventHandlingService;
     @Autowired
     private LocalUserAppService userAppService;
     @Autowired

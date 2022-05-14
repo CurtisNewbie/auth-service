@@ -3,7 +3,6 @@ package com.curtisnewbie.service.auth.local.vo.cmd;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 

@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
 import com.curtisnewbie.service.auth.remote.vo.UpdateUserAppReqCmd;
-import com.curtisnewbie.service.auth.remote.vo.UserRequestAppApprovalCmd;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
@@ -31,9 +30,6 @@ public interface LocalUserAppService {
 
     /** Update user's app */
     void updateUserApp(@NotNull UpdateUserAppReqCmd vo);
-
-    /** Request approval to use the app */
-    void requestAppUseApproval(@NotNull UserRequestAppApprovalCmd cmd);
 
     /**
      * Check if the user can use the specified application
