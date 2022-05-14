@@ -19,6 +19,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class User extends DaoSkeleton {
 
+    /** user no */
+    @TableField("user_no")
+    private String userNo;
+
     /** username (must be unique) */
     @TableField("username")
     private String username;

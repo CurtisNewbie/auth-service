@@ -198,4 +198,15 @@ public interface LocalUserService {
      */
     void reviewUserRegistration(@NotNull UserReviewCmd cmd);
 
+    /**
+     * List id of users that don't have user_no (for backward compatible job only, normal records will always have
+     * user_no)
+     */
+    List<Integer> listEmptyUserNoId(long offset, long limit);
+
+    /**
+     * Generate user_no if it's empty (for backward compatible job only, normal records will always have user_no)
+     */
+    void generateUserNoIfEmpty(int id);
+
 }

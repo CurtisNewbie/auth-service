@@ -1,12 +1,11 @@
 package com.curtisnewbie.service.auth.local.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
-import com.curtisnewbie.common.util.AssertUtils;
-import com.curtisnewbie.common.util.LockUtils;
-import com.curtisnewbie.common.util.PagingUtil;
+import com.curtisnewbie.common.util.*;
 import com.curtisnewbie.common.vo.PageablePayloadSingleton;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
 import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
@@ -24,7 +23,6 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
-import com.curtisnewbie.service.auth.util.RandomNumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -41,7 +39,10 @@ import java.util.stream.Collectors;
 
 import static com.curtisnewbie.common.trace.TraceUtils.tUser;
 import static com.curtisnewbie.common.util.AssertUtils.*;
+import static com.curtisnewbie.common.util.MapperUtils.selectListAndConvert;
 import static com.curtisnewbie.common.util.PagingUtil.forPage;
+import static com.curtisnewbie.common.util.PagingUtil.limit;
+import static com.curtisnewbie.common.util.RandomUtils.sequence;
 import static com.curtisnewbie.service.auth.remote.consts.AuthServiceError.*;
 import static com.curtisnewbie.service.auth.util.PasswordUtil.encodePassword;
 import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
@@ -55,6 +56,7 @@ import static com.curtisnewbie.service.auth.util.UserValidator.validateUsername;
 @Transactional
 public class UserServiceImpl implements LocalUserService {
     private static final String ADMIN_LIMIT_COUNT_KEY = "admin.count.limit";
+    private static final String USER_NO_PREFIX = "UE";
 
     @Autowired
     private UserMapper userMapper;
@@ -232,6 +234,26 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
+    public List<Integer> listEmptyUserNoId(long offset, long limit) {
+        final LambdaQueryWrapper<User> qw = new LambdaQueryWrapper<User>()
+                .select(User::getId)
+                .eq(User::getUserNo, "")
+                .last(limit(offset, limit));
+
+        return selectListAndConvert(qw, userMapper, User::getId);
+    }
+
+    @Override
+    public void generateUserNoIfEmpty(int id) {
+        User u = new User();
+        u.setUserNo(genUserNo());
+
+        userMapper.update(u, new LambdaQueryWrapper<User>()
+                .eq(User::getId, id)
+                .eq(User::getUserNo, ""));
+    }
+
+    @Override
     public UserVo login(String username, String password) {
         final User user = userLogin(username, password);
 
@@ -274,15 +296,16 @@ public class UserServiceImpl implements LocalUserService {
         isNull(userMapper.findIdByUsername(addUserVo.getUsername()), USER_ALREADY_REGISTERED);
 
         // save user
-        User userEntity = prepNewUserCred(addUserVo.getPassword());
-        userEntity.setUsername(addUserVo.getUsername());
-        userEntity.setRole(addUserVo.getRole());
-        userEntity.setCreateBy(tUser().getUsername());
-        userEntity.setCreateTime(LocalDateTime.now());
-        userEntity.setIsDisabled(UserIsDisabled.NORMAL);
+        User user = prepNewUserCred(addUserVo.getPassword());
+        user.setUserNo(genUserNo());
+        user.setUsername(addUserVo.getUsername());
+        user.setRole(addUserVo.getRole());
+        user.setCreateBy(tUser().getUsername());
+        user.setCreateTime(LocalDateTime.now());
+        user.setIsDisabled(UserIsDisabled.NORMAL);
 
         log.info("New user '{}' successfully registered, role: {}", addUserVo.getUsername(), addUserVo.getRole().getValue());
-        userMapper.insert(userEntity);
+        userMapper.insert(user);
     }
 
     @Override
@@ -305,6 +328,7 @@ public class UserServiceImpl implements LocalUserService {
 
         // build user
         User user = prepNewUserCred(v.getPassword());
+        user.setUserNo(genUserNo());
         user.setUsername(v.getUsername());
         user.setRole(UserRole.GUEST);
         user.setCreateTime(LocalDateTime.now());
@@ -410,7 +434,7 @@ public class UserServiceImpl implements LocalUserService {
     /** Prepare new user object's credential (salt and encoded password) */
     private static User prepNewUserCred(String password) {
         User u = new User();
-        u.setSalt(RandomNumUtil.randomNoStr(5));
+        u.setSalt(RandomUtils.randomNumeric(5));
         u.setPassword(encodePassword(password, u.getSalt()));
         return u;
     }
@@ -455,4 +479,7 @@ public class UserServiceImpl implements LocalUserService {
         return ue;
     }
 
+    private static String genUserNo() {
+        return sequence(USER_NO_PREFIX, 7);
+    }
 }
