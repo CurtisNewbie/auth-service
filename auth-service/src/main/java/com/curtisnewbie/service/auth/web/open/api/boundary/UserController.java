@@ -10,6 +10,7 @@ import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.messaging.helper.LogOperation;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
@@ -56,6 +57,7 @@ public class UserController {
     /**
      * Add User (Only Admin is permitted)
      */
+    @LogOperation(name = "addUser", description = "Add user")
     @RoleRequired(role = "admin")
     @PostMapping("/add")
     public Result<?> addUser(@RequestBody AddUserVo param) {
@@ -80,6 +82,7 @@ public class UserController {
     /**
      * Delete user logically (only admin)
      */
+    @LogOperation(name = "deleteUser", description = "Delete user")
     @RoleRequired(role = "admin")
     @PostMapping("/delete")
     public Result<Void> deleteUser(@RequestBody DeleteUserReqWebVo reqVo) throws InvalidAuthenticationException {
@@ -93,6 +96,7 @@ public class UserController {
     /**
      * Change user's role (only admin)
      */
+    @LogOperation(name = "changeUserRole", description = "Change user role")
     @RoleRequired(role = "admin")
     @PostMapping("/info/update")
     public Result<Void> changeUserRole(@RequestBody UpdateUserInfoReqVo param) {
@@ -122,6 +126,7 @@ public class UserController {
         return Result.ok();
     }
 
+    @LogOperation(name = "reviewRegistration", description = "User registration review")
     @RoleRequired(role = "admin")
     @PostMapping("/registration/review")
     public Result<Void> reviewRegistration(@Valid @RequestBody UserReviewCmd cmd) {
