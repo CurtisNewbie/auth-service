@@ -402,7 +402,7 @@ public class UserServiceImpl implements LocalUserService {
                 .stream()
                 .map(AppBriefVo::getName)
                 .collect(Collectors.joining(","));
-        claims.put("appNames", appNames);
+        claims.put("services", appNames);
 
         // by default valid for 15 minutes
         return jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(15));
