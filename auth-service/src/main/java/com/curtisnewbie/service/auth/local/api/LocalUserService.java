@@ -176,6 +176,9 @@ public interface LocalUserService {
      *                 interaction only. The actual validation is undertaken in the gateway (a kind of cross-cutting
      *                 concern), because the returned JWT token also contain the services that the user is permitted to
      *                 use.
+     * @return JWT Token
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
     String exchangeToken(@NotEmpty String username, @NotEmpty String password, @Nullable String appName);
