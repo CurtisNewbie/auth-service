@@ -27,4 +27,9 @@ public interface LocalAppService {
      */
     List<AppBriefVo> getAllAppBriefInfo();
 
+    /**
+     * Get app_id by name
+     */
+    Integer getAppIdByName(String appName);
+
 }

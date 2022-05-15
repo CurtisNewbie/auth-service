@@ -16,6 +16,7 @@ import com.curtisnewbie.service.auth.dao.UserKey;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserKeyMapper;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
+import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserService;
 import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
@@ -74,6 +75,8 @@ public class UserServiceImpl implements LocalUserService {
     private JwtDecoder jwtDecoder;
     @Autowired
     private RedisController redisController;
+    @Autowired
+    private LocalAppService appService;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -230,6 +233,12 @@ public class UserServiceImpl implements LocalUserService {
             update.setReviewStatus(reviewStatus);
             update.setIsDisabled(reviewStatus == ReviewStatus.APPROVED ? UserIsDisabled.NORMAL : UserIsDisabled.DISABLED);
             userMapper.updateById(update);
+
+            if (reviewStatus == ReviewStatus.APPROVED) {
+                final Integer appId = appService.getAppIdByName("auth-service");
+                if (appId != null)
+                    userAppService.addUserApp(userId, appId, "system");
+            }
         });
     }
 

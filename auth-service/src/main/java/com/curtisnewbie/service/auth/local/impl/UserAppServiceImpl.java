@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.local.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.service.auth.dao.UserApp;

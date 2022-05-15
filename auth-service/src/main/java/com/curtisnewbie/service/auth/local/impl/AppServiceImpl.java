@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.local.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.PagingUtil;
@@ -45,5 +46,13 @@ public class AppServiceImpl implements LocalAppService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<AppBriefVo> getAllAppBriefInfo() {
         return BeanCopyUtils.mapTo(appMapper.selectAllBriefInfo(), cvtr::toBriefVo);
+    }
+
+    @Override
+    public Integer getAppIdByName(String appName) {
+        return appMapper.selectAndConvert(new LambdaQueryWrapper<App>()
+                .select(App::getId)
+                .eq(App::getName, appName)
+                .last("limit 1"), App::getId);
     }
 }
