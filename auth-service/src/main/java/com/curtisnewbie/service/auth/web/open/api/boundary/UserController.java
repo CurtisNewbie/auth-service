@@ -94,12 +94,12 @@ public class UserController {
     }
 
     /**
-     * Change user's role (only admin)
+     * Update user info (only admin)
      */
-    @LogOperation(name = "changeUserRole", description = "Change user role")
+    @LogOperation(name = "updateUserInfo", description = "Update user info")
     @RoleRequired(role = "admin")
     @PostMapping("/info/update")
-    public Result<Void> changeUserRole(@RequestBody UpdateUserInfoReqVo param) {
+    public Result<Void> updateUserInfo(@RequestBody UpdateUserInfoReqVo param) {
         TUser tUser = TraceUtils.tUser();
         Assert.isTrue(UserRole.isAdmin(tUser.getRole()), "Not permitted");
 

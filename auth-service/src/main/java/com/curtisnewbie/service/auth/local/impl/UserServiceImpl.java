@@ -468,6 +468,9 @@ public class UserServiceImpl implements LocalUserService {
     private User validateUserStatusForLogin(String username) {
         final User ue = loadUserByUsername(username);
 
+        // logically deleted
+        isFalse(ue.isDeleted(), USER_NOT_FOUND);
+
         // waiting for approval
         isFalse(ue.getReviewStatus() == ReviewStatus.PENDING, REG_REVIEW_PENDING);
 
