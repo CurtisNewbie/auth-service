@@ -50,4 +50,9 @@ public @interface LogOperation {
      */
     boolean enabled() default true;
 
+    /**
+     * Log parameters, by default true
+     */
+    boolean logParameters() default true;
+
 }

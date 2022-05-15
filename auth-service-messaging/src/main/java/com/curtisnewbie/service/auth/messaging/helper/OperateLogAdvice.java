@@ -49,7 +49,8 @@ public class OperateLogAdvice {
         v.setOperateName(logOperation.name());
         v.setOperateDesc(logOperation.description());
         v.setOperateTime(LocalDateTime.now());
-        v.setOperateParam(toParamString(pjp.getArgs()));
+        if (logOperation.logParameters())
+            v.setOperateParam(toParamString(pjp.getArgs()));
 
         String username = ANONYMOUS_NAME;
         int userId = ANONYMOUS_ID;
