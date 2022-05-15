@@ -170,9 +170,12 @@ public interface LocalUserService {
     /**
      * Exchange JWT token
      *
-     * @return token
-     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
-     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
+     * @param username username
+     * @param password password in plaintext
+     * @param appName  name of the app that sent the login request, it's nullable because it's used for better user
+     *                 interaction only. The actual validation is undertaken in the gateway (a kind of cross-cutting
+     *                 concern), because the returned JWT token also contain the services that the user is permitted to
+     *                 use.
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
     String exchangeToken(@NotEmpty String username, @NotEmpty String password, @Nullable String appName);
