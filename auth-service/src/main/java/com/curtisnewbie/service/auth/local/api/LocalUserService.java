@@ -175,7 +175,7 @@ public interface LocalUserService {
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
-    String exchangeToken(@NotEmpty String username, @NotEmpty String password);
+    String exchangeToken(@NotEmpty String username, @NotEmpty String password, @Nullable String appName);
 
     /**
      * Exchange JWT token

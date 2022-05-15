@@ -182,8 +182,8 @@ public class UserServiceImpl implements LocalUserService {
     }
 
     @Override
-    public String exchangeToken(String username, String password) {
-        final UserVo user = login(username, password);
+    public String exchangeToken(String username, String password, String appName) {
+        final UserVo user = login(username, password, appName);
         return buildToken(user);
     }
 

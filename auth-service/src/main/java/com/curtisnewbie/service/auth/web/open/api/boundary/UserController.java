@@ -51,7 +51,7 @@ public class UserController {
      */
     @PostMapping("/login")
     public Result<String> login(@Validated @RequestBody LoginWebVo loginWebVo) throws UserRelatedException {
-        return Result.of(userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword()));
+        return Result.of(userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword(), loginWebVo.getAppName()));
     }
 
     /**
