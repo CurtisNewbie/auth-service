@@ -9,6 +9,7 @@ spring:
         - id
         - username
         - role
+        - services
 
 mybatis:
   config-location: classpath:mybatis-config.xml
