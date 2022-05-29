@@ -1,6 +1,6 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
@@ -104,7 +104,7 @@ public interface LocalUserService {
      * Fetch list of user info based on the provided arguments
      */
     @NotNull
-    PageablePayloadSingleton<List<UserInfoVo>> findUserInfoByPage(@Valid @NotNull FindUserInfoVo vo);
+    PageableList<UserInfoVo> findUserInfoByPage(@Valid @NotNull FindUserInfoVo vo);
 
     /**
      * Disable user by id

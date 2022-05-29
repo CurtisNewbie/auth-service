@@ -1,11 +1,11 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.advice.RoleRequired;
+import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
@@ -24,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
@@ -58,7 +57,7 @@ public class UserController {
      * Add User (Only Admin is permitted)
      */
     @LogOperation(name = "addUser", description = "Add user")
-    @RoleRequired(role = "admin")
+    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/add")
     public Result<?> addUser(@RequestBody AddUserVo param) {
         userService.addUser(param);
@@ -68,11 +67,11 @@ public class UserController {
     /**
      * List users (only admin)
      */
-    @RoleRequired(role = "admin")
+    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/list")
     public Result<GetUserListRespWebVo> getUserList(@RequestBody GetUserListReqWebVo reqVo) {
         FindUserInfoVo searchParam = toFindUserInfoVo(reqVo);
-        PageablePayloadSingleton<List<UserInfoVo>> pps = userService.findUserInfoByPage(searchParam);
+        PageableList<UserInfoVo> pps = userService.findUserInfoByPage(searchParam);
         GetUserListRespWebVo resp = new GetUserListRespWebVo();
         resp.setList(mapTo(pps.getPayload(), cvtr::toWebInfoVo));
         resp.setPagingVo(pps.getPagingVo());
@@ -83,7 +82,7 @@ public class UserController {
      * Delete user logically (only admin)
      */
     @LogOperation(name = "deleteUser", description = "Delete user")
-    @RoleRequired(role = "admin")
+    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/delete")
     public Result<Void> deleteUser(@RequestBody DeleteUserReqWebVo reqVo) throws InvalidAuthenticationException {
         TUser tUser = TraceUtils.tUser();
@@ -97,7 +96,7 @@ public class UserController {
      * Update user info (only admin)
      */
     @LogOperation(name = "updateUserInfo", description = "Update user info")
-    @RoleRequired(role = "admin")
+    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/info/update")
     public Result<Void> updateUserInfo(@RequestBody UpdateUserInfoReqVo param) {
         TUser tUser = TraceUtils.tUser();
@@ -127,7 +126,7 @@ public class UserController {
     }
 
     @LogOperation(name = "reviewRegistration", description = "User registration review")
-    @RoleRequired(role = "admin")
+    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/registration/review")
     public Result<Void> reviewRegistration(@Valid @RequestBody UserReviewCmd cmd) {
         userService.reviewUserRegistration(cmd);

@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -30,6 +31,11 @@ public class OperateLogAdvice {
 
     @Autowired
     private AuthMessageDispatcher messageDispatcher;
+
+    @PostConstruct
+    public void postConstruct() {
+        log.info("OperateLogAdvice initialized, will log method calls annotated with {}", LogOperation.class);
+    }
 
     @Around("@annotation(logOperation)")
     public Object logOperation(ProceedingJoinPoint pjp, LogOperation logOperation) throws Throwable {

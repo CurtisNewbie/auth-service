@@ -2,14 +2,14 @@ package com.curtisnewbie.service.auth.local.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.util.PagingUtil;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.OperateLog;
 import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
-import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import com.curtisnewbie.service.auth.local.vo.cmd.MoveOperateLogToHistoryCmd;
+import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,9 +44,9 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PageablePayloadSingleton<List<OperateLogVo>> findOperateLogInfoInPages(@NotNull PagingVo pagingVo) {
+    public PageableList<OperateLogVo> findOperateLogInfoInPages(@NotNull PagingVo pagingVo) {
         IPage<OperateLog> ipg = operateLogMapper.selectBasicInfo(forPage(pagingVo));
-        return PagingUtil.toPageList(ipg, cvtr::toVo);
+        return PagingUtil.toPageableList(ipg, cvtr::toVo);
     }
 
     @Override

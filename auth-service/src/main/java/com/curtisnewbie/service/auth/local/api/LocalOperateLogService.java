@@ -1,13 +1,12 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
-import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import com.curtisnewbie.service.auth.local.vo.cmd.MoveOperateLogToHistoryCmd;
+import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * Local service for operate_log
@@ -30,5 +29,5 @@ public interface LocalOperateLogService {
     /**
      * Find operate_log info in pages
      */
-    PageablePayloadSingleton<List<OperateLogVo>> findOperateLogInfoInPages(@NotNull PagingVo pagingVo);
+    PageableList<OperateLogVo> findOperateLogInfoInPages(@NotNull PagingVo pagingVo);
 }

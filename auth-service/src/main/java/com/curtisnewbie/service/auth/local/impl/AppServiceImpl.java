@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.PagingUtil;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.App;
 import com.curtisnewbie.service.auth.infrastructure.converters.AppConverter;
@@ -37,9 +37,9 @@ public class AppServiceImpl implements LocalAppService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PageablePayloadSingleton<List<AppVo>> getAllAppInfo(@NotNull PagingVo pagingVo) {
+    public PageableList<AppVo> getAllAppInfo(@NotNull PagingVo pagingVo) {
         IPage<App> ipg = appMapper.selectAll(PagingUtil.forPage(pagingVo));
-        return PagingUtil.toPageList(ipg, cvtr::toVo);
+        return PagingUtil.toPageableList(ipg, cvtr::toVo);
     }
 
     @Override

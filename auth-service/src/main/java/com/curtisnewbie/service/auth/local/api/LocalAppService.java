@@ -1,6 +1,6 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
 import com.curtisnewbie.service.auth.remote.vo.AppVo;
@@ -20,7 +20,7 @@ public interface LocalAppService {
     /**
      * Get all apps information
      */
-    PageablePayloadSingleton<List<AppVo>> getAllAppInfo(@NotNull PagingVo pagingVo);
+    PageableList<AppVo> getAllAppInfo(@NotNull PagingVo pagingVo);
 
     /**
      * Get all apps brief info

@@ -1,13 +1,12 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
-import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.local.vo.cmd.MoveAccessLogToHistoryCmd;
+import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * Service for access_log
@@ -33,6 +32,6 @@ public interface LocalAccessLogService {
      * @param paging pagination param
      */
     @NotNull
-    PageablePayloadSingleton<List<AccessLogInfoVo>> findAccessLogInfoByPage(@NotNull PagingVo paging);
+    PageableList<AccessLogInfoVo> findAccessLogInfoByPage(@NotNull PagingVo paging);
 
 }

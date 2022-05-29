@@ -1,9 +1,9 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.advice.RoleRequired;
+import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.BeanCopyUtils;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogWebConverter;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author yongjie.zhuang
@@ -31,10 +29,10 @@ public class OperateLogController {
     @Autowired
     private OperateLogWebConverter cvtr;
 
-    @RoleRequired(role = "admin")
+    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/history")
     public Result<FindOperateLogRespWebVo> findByPage(@RequestBody PagingVo pagingVo) throws MsgEmbeddedException {
-        PageablePayloadSingleton<List<OperateLogVo>> pv = operateLogService.findOperateLogInfoInPages(pagingVo);
+        PageableList<OperateLogVo> pv = operateLogService.findOperateLogInfoInPages(pagingVo);
         FindOperateLogRespWebVo res = new FindOperateLogRespWebVo();
         res.setPagingVo(pv.getPagingVo());
         res.setOperateLogVoList(BeanCopyUtils.mapTo(pv.getPayload(), cvtr::toWebVo));

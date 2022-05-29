@@ -1,8 +1,8 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.advice.RoleRequired;
+import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.util.AssertUtils;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
@@ -26,13 +26,13 @@ public class AccessLogController {
     @Autowired
     private LocalAccessLogService accessLogService;
 
-    @RoleRequired(role = "admin")
+    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/history")
     public Result<PageableVo<List<AccessLogInfoVo>>> listAccessLogInfo(@RequestBody ListAccessLogInfoReqWebVo vo) {
         AssertUtils.nonNull(vo.getPagingVo());
-        PageablePayloadSingleton<List<AccessLogInfoVo>> pps = accessLogService.findAccessLogInfoByPage(vo.getPagingVo());
+        PageableList<AccessLogInfoVo> pps = accessLogService.findAccessLogInfoByPage(vo.getPagingVo());
         final PageableVo<List<AccessLogInfoVo>> res = new PageableVo<>();
-        res.setData(pps.getPayload());
+        res.setPayload(pps.getPayload());
         res.setPagingVo(pps.getPagingVo());
         return Result.of(res);
     }

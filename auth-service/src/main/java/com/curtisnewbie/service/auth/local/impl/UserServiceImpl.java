@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
-import com.curtisnewbie.common.util.*;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.util.AssertUtils;
+import com.curtisnewbie.common.util.LockUtils;
+import com.curtisnewbie.common.util.PagingUtil;
+import com.curtisnewbie.common.util.RandomUtils;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
 import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
 import com.curtisnewbie.module.jwt.vo.DecodeResult;
@@ -368,7 +371,7 @@ public class UserServiceImpl implements LocalUserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PageablePayloadSingleton<List<UserInfoVo>> findUserInfoByPage(FindUserInfoVo vo) {
+    public PageableList<UserInfoVo> findUserInfoByPage(FindUserInfoVo vo) {
         User ue = new User();
         if (vo.getIsDisabled() != null)
             ue.setIsDisabled(vo.getIsDisabled());
@@ -378,7 +381,7 @@ public class UserServiceImpl implements LocalUserService {
         ue.setUsername(vo.getUsername());
 
         IPage<User> pge = userMapper.findUserInfoBy(forPage(vo.getPagingVo()), ue);
-        return PagingUtil.toPageList(pge, cvtr::toInfoVo);
+        return PagingUtil.toPageableList(pge, cvtr::toInfoVo);
     }
 
     @Override

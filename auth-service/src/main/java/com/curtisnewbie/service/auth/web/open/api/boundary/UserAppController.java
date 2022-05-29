@@ -1,9 +1,9 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.advice.RoleRequired;
+import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
-import com.curtisnewbie.common.util.ValidUtils;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
+import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.infrastructure.converters.AppWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalAppService;
@@ -25,7 +25,7 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.toType;
 /**
  * @author yongjie.zhuang
  */
-@RoleRequired(role = "admin")
+@RoleControlled(rolesRequired = "admin")
 @RequestMapping("${web.base-path}/app")
 @RestController
 public class UserAppController {
@@ -40,12 +40,11 @@ public class UserAppController {
     private AppWebConverter cvtr;
 
     @PostMapping("/list/all")
-    public Result<PageablePayloadSingleton<List<AppWebVo>>> listApps(@RequestBody PageablePayloadSingleton<AppWebVo> req)
+    public Result<PageableList<AppWebVo>> listApps(@RequestBody PageableVo<AppWebVo> req)
             throws MsgEmbeddedException {
-        ValidUtils.requireNonNull(req.getPagingVo());
 
-        PageablePayloadSingleton<List<AppVo>> pps = appService.getAllAppInfo(req.getPagingVo());
-        PageablePayloadSingleton<List<AppWebVo>> resp = new PageablePayloadSingleton<>();
+        PageableList<AppVo> pps = appService.getAllAppInfo(req.getPagingVo());
+        PageableList<AppWebVo> resp = new PageableList<>();
         resp.setPagingVo(pps.getPagingVo());
         resp.setPayload(mapTo(pps.getPayload(), cvtr::toWebVo));
         return Result.of(resp);

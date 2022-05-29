@@ -20,9 +20,8 @@
     <java.version>8</java.version>
     <api.version>1.1.1-SNAPSHOT</api.version>
 
-    <distributed-task-web-module.version>1.0.0-SNAPSHOT</distributed-task-web-module.version>
-    <distributed-task-module.version>2.0.6-SNAPSHOT</distributed-task-module.version>
-    <common-module.version>2.1.1-SNAPSHOT</common-module.version>
+    <distributed-task-module.version>2.0.7-SNAPSHOT</distributed-task-module.version>
+    <common-module.version>2.1.2-SNAPSHOT</common-module.version>
     <messaging-module.version>2.0.5-SNAPSHOT</messaging-module.version>
     <jwt-module.version>1.0.1-SNAPSHOT</jwt-module.version>
   </properties>
@@ -32,7 +31,7 @@
       <dependency>
         <groupId>com.curtisnewbie</groupId>
         <artifactId>distributed-task-web-module</artifactId>
-        <version>${distributed-task-web-module.version}</version>
+        <version>${distributed-task-module.version}</version>
       </dependency>
 
       <dependency>

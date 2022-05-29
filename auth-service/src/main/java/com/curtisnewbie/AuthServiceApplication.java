@@ -1,6 +1,8 @@
 package com.curtisnewbie;
 
+import com.curtisnewbie.common.advice.EnableRoleControl;
 import com.curtisnewbie.module.messaging.listener.EnableMsgListener;
+import com.curtisnewbie.service.auth.messaging.helper.EnableOperateLog;
 import org.mybatis.spring.annotation.MapperScan;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
@@ -13,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 
 import java.io.IOException;
 
+@EnableRoleControl
+@EnableOperateLog
 @EnableMsgListener
 @MapperScan("com.curtisnewbie.service.auth.infrastructure.repository.mapper")
 @EnableDiscoveryClient

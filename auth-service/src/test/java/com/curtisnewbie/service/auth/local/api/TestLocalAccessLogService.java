@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.AuthServiceApplication;
-import com.curtisnewbie.common.vo.PageablePayloadSingleton;
+import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.AccessLogTestMapper;
 import com.curtisnewbie.service.auth.dao.TestMapperConfig;
@@ -14,7 +14,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Test {@link LocalAccessLogService}
@@ -49,7 +48,7 @@ public class TestLocalAccessLogService {
         PagingVo pagingVo = new PagingVo();
         pagingVo.setLimit(10);
         pagingVo.setPage(1);
-        PageablePayloadSingleton<List<AccessLogInfoVo>> pi = localAccessLogService.findAccessLogInfoByPage(pagingVo);
+        PageableList<AccessLogInfoVo> pi = localAccessLogService.findAccessLogInfoByPage(pagingVo);
         Assertions.assertNotNull(pi);
         Assertions.assertFalse(pi.getPayload().isEmpty());
     }
