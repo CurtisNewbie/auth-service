@@ -15,6 +15,10 @@ public class GenerateUserKeyReqWebVo {
     @NotBlank
     private String password;
 
+    /** name of the key */
+    @NotBlank
+    private String keyName;
+
     @ToString.Include(name = "password")
     public String passwordMask() {
         return "****";

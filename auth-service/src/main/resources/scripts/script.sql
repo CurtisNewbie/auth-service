@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE table if not exists user_key (
     id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT COMMENT "primary key",
     user_id INT UNSIGNED NOT NULL COMMENT "user.id",
+    name VARCHAR(255) NOT NULL DEFAULT '' COMMENT 'name of the key',
     secret_key VARCHAR(255) NOT NULL UNIQUE COMMENT "secret key",
     expiration_time DATETIME NOT NULL COMMENT 'when the key is expired',
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'when the record is created',

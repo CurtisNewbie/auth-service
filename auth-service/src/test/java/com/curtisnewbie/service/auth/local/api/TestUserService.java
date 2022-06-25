@@ -18,7 +18,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Test {@link LocalUserService}
+ * Test {@link UserService}
  *
  * @author yongjie.zhuang
  */
@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Rollback
 @Transactional
 @SpringBootTest(classes = {AuthServiceApplication.class, TestMapperConfig.class})
-public class TestLocalUserService {
+public class TestUserService {
 
     private static final int APP_ID = 1234123123;
     private static final String APP_NAME = "auth-service";
@@ -37,7 +37,7 @@ public class TestLocalUserService {
     private static final String CREATE_BY = "test case";
 
     @Autowired
-    LocalUserService userService;
+    UserService userService;
     @Autowired
     AppTestMapper appTestMapper;
     @Autowired

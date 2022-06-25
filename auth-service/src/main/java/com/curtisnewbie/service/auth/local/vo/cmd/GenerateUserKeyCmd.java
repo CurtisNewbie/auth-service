@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 /**
@@ -15,8 +16,9 @@ public class GenerateUserKeyCmd {
 
     private final int userId;
 
+    @NotEmpty
+    private final String name;
+
     @NonNull
     private final LocalDateTime expirationTime;
-
-    private final String createBy;
 }

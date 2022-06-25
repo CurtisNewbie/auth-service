@@ -1,9 +1,11 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.curtisnewbie.common.vo.PageableList;
+import com.baomidou.mybatisplus.extension.plugins.pagination.*;
+import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
+import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 
@@ -11,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.*;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +24,7 @@ import java.util.Map;
  * @author yongjie.zhuang
  */
 @Validated
-public interface LocalUserService {
+public interface UserService {
 
     /**
      * Find user by username

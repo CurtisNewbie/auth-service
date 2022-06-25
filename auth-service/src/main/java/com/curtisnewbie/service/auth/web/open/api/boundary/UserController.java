@@ -5,11 +5,10 @@ import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
-import com.curtisnewbie.common.vo.PageableList;
-import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.dao.User;
+import com.curtisnewbie.common.vo.*;
+import com.curtisnewbie.service.auth.dao.*;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
-import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.messaging.helper.LogOperation;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
@@ -24,6 +23,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.time.*;
 
 import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
@@ -40,8 +41,7 @@ import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
 public class UserController {
 
     @Autowired
-    private LocalUserService userService;
-
+    private UserService userService;
     @Autowired
     private UserWebConverter cvtr;
 

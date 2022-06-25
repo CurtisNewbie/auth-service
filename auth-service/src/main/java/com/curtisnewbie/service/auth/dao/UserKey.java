@@ -22,6 +22,10 @@ public class UserKey extends DaoSkeleton {
     @TableField("secret_key")
     private String secretKey;
 
+    /** name of the key */
+    @TableField("name")
+    private String name;
+
     /** when the key is expired */
     @TableField("expiration_time")
     private LocalDateTime expirationTime;

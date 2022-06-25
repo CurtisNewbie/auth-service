@@ -5,23 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
 import com.curtisnewbie.common.exceptions.UnrecoverableException;
-import com.curtisnewbie.common.util.AssertUtils;
-import com.curtisnewbie.common.util.LockUtils;
-import com.curtisnewbie.common.util.PagingUtil;
-import com.curtisnewbie.common.util.RandomUtils;
-import com.curtisnewbie.common.vo.PageableList;
+import com.curtisnewbie.common.util.*;
+import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
 import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
 import com.curtisnewbie.module.jwt.vo.DecodeResult;
 import com.curtisnewbie.module.redisutil.RedisController;
 import com.curtisnewbie.service.auth.dao.User;
-import com.curtisnewbie.service.auth.dao.UserKey;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
-import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserKeyMapper;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
-import com.curtisnewbie.service.auth.local.api.LocalAppService;
-import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
-import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
@@ -44,8 +37,7 @@ import java.util.stream.Collectors;
 import static com.curtisnewbie.common.trace.TraceUtils.tUser;
 import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.MapperUtils.selectListAndConvert;
-import static com.curtisnewbie.common.util.PagingUtil.forPage;
-import static com.curtisnewbie.common.util.PagingUtil.limit;
+import static com.curtisnewbie.common.util.PagingUtil.*;
 import static com.curtisnewbie.common.util.RandomUtils.sequence;
 import static com.curtisnewbie.service.auth.remote.consts.AuthServiceError.*;
 import static com.curtisnewbie.service.auth.util.PasswordUtil.encodePassword;
@@ -58,14 +50,14 @@ import static com.curtisnewbie.service.auth.util.UserValidator.validateUsername;
 @Slf4j
 @Service
 @Transactional
-public class UserServiceImpl implements LocalUserService {
+public class UserServiceImpl implements UserService {
     private static final String ADMIN_LIMIT_COUNT_KEY = "admin.count.limit";
     private static final String USER_NO_PREFIX = "UE";
 
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private UserKeyMapper userKeyMapper;
+    private UserKeyService userKeyService;
     @Autowired
     private LocalUserAppService userAppService;
     @Autowired
@@ -381,7 +373,7 @@ public class UserServiceImpl implements LocalUserService {
         ue.setUsername(vo.getUsername());
 
         IPage<User> pge = userMapper.findUserInfoBy(forPage(vo.getPagingVo()), ue);
-        return PagingUtil.toPageableList(pge, cvtr::toInfoVo);
+        return toPageableList(pge, cvtr::toInfoVo);
     }
 
     @Override
@@ -429,17 +421,8 @@ public class UserServiceImpl implements LocalUserService {
                 .isMatched();
 
         // if the password is incorrect, may it's a token, validate it
-        if (!isPwdCorrect) {
-            final QueryWrapper<UserKey> cond = new QueryWrapper<UserKey>()
-                    .eq("user_id", ue.getId())
-                    .eq("secret_key", password)
-                    .ge("expiration_time", LocalDateTime.now())
-                    .eq("is_del", IsDel.NORMAL)
-                    .last("limit 1");
-
-            // it's not a token, or it's just incorrect as well
-            notNull(userKeyMapper.selectOne(cond), PASSWORD_INCORRECT);
-        }
+        if (!isPwdCorrect)
+            isTrue(userKeyService.isUserKeyValid(ue.getId(), password), PASSWORD_INCORRECT);
         return ue;
     }
 

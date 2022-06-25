@@ -3,7 +3,7 @@ package com.curtisnewbie.service.auth.web.open.api.boundary;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.dao.User;
-import com.curtisnewbie.service.auth.local.api.LocalUserService;
+import com.curtisnewbie.service.auth.local.api.UserService;
 import com.curtisnewbie.service.auth.web.open.api.vo.ExchangeTokenWebVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class TokenController {
 
     @Autowired
-    private LocalUserService userService;
+    private UserService userService;
 
     @PostMapping("/exchange")
     public Result<String> exchangeToken(@Validated @RequestBody ExchangeTokenWebVo exchangeTokenWebVo) {
