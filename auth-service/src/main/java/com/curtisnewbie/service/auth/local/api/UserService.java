@@ -166,7 +166,7 @@ public interface UserService {
     Map<Integer, String> fetchUsernameById(@NotNull List<Integer> userIds);
 
     /**
-     * Check if the password (not secret key) is correct
+     * Check if the password (not secret key / user key) is correct
      */
     boolean validateUserPassword(@NotBlank String username, @NotBlank String password);
 

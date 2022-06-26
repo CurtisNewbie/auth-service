@@ -6,10 +6,6 @@ import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.service.auth.local.api.UserKeyService;
 import com.curtisnewbie.service.auth.local.api.UserService;
 import com.curtisnewbie.service.auth.local.vo.cmd.GenerateUserKeyCmd;
-import com.curtisnewbie.service.auth.local.vo.resp.GenerateUserKeyResp;
-import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
-import com.curtisnewbie.service.auth.remote.exception.UserDisabledException;
-import com.curtisnewbie.service.auth.remote.exception.UsernameNotFoundException;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +32,7 @@ public class UserKeyController {
     /**
      * Generate user key, the user key can be used as a password
      */
-    @PostMapping("/generate")
+    @PutMapping
     public Result<Void> generateUserKey(@Validated @RequestBody GenerateUserKeyReqWebVo req) {
 
         // before we generate a secret key for current user, we do a password validation
@@ -64,15 +60,13 @@ public class UserKeyController {
     }
 
     /**
-     * Generate a random user key
+     * Delete user key
      */
-    @PostMapping("/key/generate")
-    public Result<Void> generateRandomUserKey(@RequestParam String name) {
+    @DeleteMapping
+    public Result<Void> deleteUserKey(@RequestBody @Validated DeleteUserKeyReqVo req) {
         final TUser user = TraceUtils.tUser();
-        userKeyService.generateUserKey(GenerateUserKeyCmd.builder()
-                .userId(user.getUserId())
-                .expirationTime(LocalDateTime.now().plusMonths(3))
-                .build());
+        userKeyService.deleteUserKey(user.getUserId(), req.getUserKeyId());
         return Result.ok();
     }
+
 }
