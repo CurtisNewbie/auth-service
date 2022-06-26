@@ -54,15 +54,15 @@ public class UserKeyController {
      * List user keys
      */
     @PostMapping("/list")
-    public Result<PageableList<UserKeyVo>> listUserKeys(@RequestBody PagingVo p) {
+    public Result<PageableList<UserKeyVo>> listUserKeys(@RequestBody PageableVo<ListUserKeyReqVo> p) {
         final TUser user = TraceUtils.tUser();
-        return Result.of(userKeyService.listUserKeys(user.getUserId(), p));
+        return Result.of(userKeyService.listUserKeys(user.getUserId(), p.getPayload().getName(), p.getPagingVo()));
     }
 
     /**
      * Delete user key
      */
-    @DeleteMapping
+    @PostMapping("/delete")
     public Result<Void> deleteUserKey(@RequestBody @Validated DeleteUserKeyReqVo req) {
         final TUser user = TraceUtils.tUser();
         userKeyService.deleteUserKey(user.getUserId(), req.getUserKeyId());

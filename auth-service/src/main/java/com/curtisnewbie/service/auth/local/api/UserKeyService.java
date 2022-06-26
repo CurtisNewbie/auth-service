@@ -26,7 +26,7 @@ public interface UserKeyService {
     /**
      * List user keys
      */
-    PageableList<UserKeyVo> listUserKeys(int userId, @NotNull PagingVo p);
+    PageableList<UserKeyVo> listUserKeys(int userId, @Nullable String name, @NotNull PagingVo p);
 
     /**
      * Mark user key deleted

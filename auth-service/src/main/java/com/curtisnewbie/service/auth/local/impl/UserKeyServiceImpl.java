@@ -15,12 +15,13 @@ import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+import org.springframework.util.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static com.curtisnewbie.common.util.PagingUtil.*;
+import static org.springframework.util.StringUtils.*;
 
 /**
  * @author yongjie.zhuang
@@ -52,11 +53,12 @@ public class UserKeyServiceImpl implements UserKeyService {
     }
 
     @Override
-    public PageableList<UserKeyVo> listUserKeys(int userId, PagingVo p) {
+    public PageableList<UserKeyVo> listUserKeys(int userId, String name, PagingVo p) {
         final Page<UserKey> ukPage = userKeyMapper.selectPage(PagingUtil.forPage(p),
                 new LambdaQueryWrapper<UserKey>()
                         .select(UserKey::getId, UserKey::getSecretKey, UserKey::getExpirationTime, UserKey::getCreateTime,
                                 UserKey::getName)
+                        .like(hasText(name), UserKey::getName, name)
                         .eq(UserKey::getUserId, userId)
                         .eq(UserKey::getIsDel, IsDel.NORMAL)
                         .orderByDesc(UserKey::getId));
