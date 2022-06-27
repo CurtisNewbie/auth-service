@@ -1,12 +1,12 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 
-import com.curtisnewbie.common.util.*;
-import com.fasterxml.jackson.annotation.*;
-import lombok.*;
-import zipkin2.internal.*;
+import com.curtisnewbie.common.util.DateUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import lombok.ToString;
 
-import java.time.*;
+import java.time.LocalDateTime;
 
 /**
  * @author yongjie.zhuang

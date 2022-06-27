@@ -32,7 +32,7 @@ public class UserKeyController {
     /**
      * Generate user key, the user key can be used as a password
      */
-    @PutMapping
+    @PostMapping("/generate")
     public Result<Void> generateUserKey(@Validated @RequestBody GenerateUserKeyReqWebVo req) {
 
         // before we generate a secret key for current user, we do a password validation
