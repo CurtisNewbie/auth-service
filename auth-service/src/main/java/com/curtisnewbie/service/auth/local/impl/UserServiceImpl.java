@@ -400,6 +400,7 @@ public class UserServiceImpl implements UserService {
         Map<String, String> claims = new HashMap<>();
         claims.put("id", user.getId().toString());
         claims.put("username", user.getUsername());
+        claims.put("userno", user.getUserNo());
         claims.put("role", user.getRole().getValue());
 
         final String appNames = userAppService.getAppsPermittedForUser(user.getId())

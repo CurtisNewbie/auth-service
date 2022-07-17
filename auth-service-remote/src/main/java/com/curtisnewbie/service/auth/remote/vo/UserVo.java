@@ -17,6 +17,9 @@ public class UserVo implements Serializable {
     /** primary key */
     private Integer id;
 
+    /** userNo (unique) */
+    private String userNo;
+
     /** username (must be unique) */
     private String username;
 

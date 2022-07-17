@@ -26,7 +26,7 @@ public class OperateLogSaveListener {
             return;
         }
 
-        log.info("Save operate_log: '{}'", vo);
+//        log.info("Save operate_log: '{}'", vo);
         operateLogService.saveOperateLogInfo(vo);
     }
 }

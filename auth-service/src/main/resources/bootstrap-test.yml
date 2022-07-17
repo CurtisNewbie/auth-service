@@ -12,6 +12,12 @@ spring:
       config:
         server-addr: ${nacosaddr}:8848
 
+server:
+  tomcat:
+    threads:
+      max: 20
+      min-spare: 5
+
 # ----- Redis
 redisson-config: redisson-test.yaml
 
