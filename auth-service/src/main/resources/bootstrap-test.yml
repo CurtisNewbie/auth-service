@@ -9,8 +9,12 @@ spring:
     nacos:
       discovery:
         server-addr: ${nacosaddr}:8848
+        username: ${nacosusername}
+        password: ${nacospassword}
       config:
         server-addr: ${nacosaddr}:8848
+        username: ${nacosusername}
+        password: ${nacospassword}
 
 server:
   tomcat:
