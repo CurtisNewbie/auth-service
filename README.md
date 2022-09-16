@@ -1,13 +1,15 @@
 # auth-service
 
-Service for managing users, access log and operation log.
+Service for managing users, authentication, access log, operation log and so on.
 
 ***Do not run the 'build' scripts, these are written for my development environment only***
+
+***The frontend project has been moved to a new repository [auth-service-front](https://github.com/CurtisNewbie/auth-service-front)***
 
 ## Middleware
 
 - MySQL
-- Nacos (or others, e.g., zookeeper)
+- Nacos
 - RabbitMQ
 - Redis
 
