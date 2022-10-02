@@ -20,6 +20,9 @@ mybatis-plus:
 
 distributed-task-module:
   application-group: auth-service
+  plugin:
+    dtask-go:
+      enabled: true
 
 messaging:
   concurrent-declaration: true

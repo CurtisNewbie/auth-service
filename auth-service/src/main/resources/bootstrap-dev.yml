@@ -21,7 +21,10 @@ redisson-config: redisson-dev.yaml
 distributed-task-module:
   enabled: true
   scheduling:
-    disabled: true
+    disabled: false
+  plugin:
+    dtask-go:
+      base-url: http://localhost:8083/remote/
 
 # ----- nacos
 namingClientBeatThreadCount: 1

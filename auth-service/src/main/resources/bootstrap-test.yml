@@ -28,6 +28,9 @@ redisson-config: redisson-test.yaml
 # ----- distributed-task-module
 distributed-task-module:
   enabled: true
+  plugin:
+    dtask-go:
+      base-url: http://dtaskgo:8083/remote/
 
 # ----- nacos
 namingClientBeatThreadCount: 2

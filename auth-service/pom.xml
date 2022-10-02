@@ -20,7 +20,7 @@
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
-      <artifactId>distributed-task-web-module</artifactId>
+      <artifactId>distributed-task-module</artifactId>
     </dependency>
 
     <dependency>
