@@ -1,4 +1,4 @@
-# auth-service
+# auth-service V1.1.4
 
 Service for managing users, authentication, access log, operation log and so on.
 
@@ -8,8 +8,8 @@ Service for managing users, authentication, access log, operation log and so on.
 
 ## Middleware
 
-- MySQL
-- Nacos
+- MySQL (5.7+ or 8)
+- Nacos 
 - RabbitMQ
 - Redis
 
@@ -22,7 +22,7 @@ The task implementation beans:
 - com.curtisnewbie.service.auth.job.MoveAccessLogHistoryJob
 - com.curtisnewbie.service.auth.job.MoveOperateLogHistoryJob
 
-In table `task`:
+In table `task` (see `script.sql` in resources folder):
 
 |id |job_name      |target_bean |cron_expr    |app_group   |enabled|concurrent_enabled|
 |---|--------------|------------|-------------|------------|-------|------------------|
@@ -33,31 +33,8 @@ In table `task`:
 
 This project depends on the following modules that you must manually install (using `mvn clean install`).
 
-- curtisnewbie-bom
-    - description: BOM file for dependency management
-    - url: https://github.com/CurtisNewbie/curtisnewbie-bom
-    - under `/microservice` folder
-
-- jwt-module
-    - description: module for JWT encoding / decoding 
-    - url: https://github.com/CurtisNewbie/jwt-module
-
-- service-module
-    - description: import dependencies for a Dubbo service
-    - url: https://github.com/CurtisNewbie/service-module
-
-- messaging-module
-    - description: for RabbitMQ-based messaging 
-    - url: https://github.com/CurtisNewbie/messaging-module
-
-- distributed-task-module
-    - description: for distributed task scheduling
-    - url: https://github.com/CurtisNewbie/distributed-task-module
-
-## Projects that uses this service (examples)
-
-1. file-server 
-    - url: https://github.com/CurtisNewbie/file-server
-
-2. auth-gateway 
-    - url: https://github.com/CurtisNewbie/auth-gateway
+- [curtisnewbie-bom](https://github.com/CurtisNewbie/curtisnewbie-bom)
+- [jwt-module v1.0.1](https://github.com/CurtisNewbie/jwt-module/tree/v1.0.1)
+- [distributed-task-module v2.1.0.1](https://github.com/CurtisNewbie/distributed-task-module/tree/v2.1.0.1)
+- [messaging-module v2.0.7](https://github.com/CurtisNewbie/messaging-module/tree/v2.0.7)
+- [common-module v2.1.7](https://github.com/CurtisNewbie/common-module/tree/v2.1.7)
