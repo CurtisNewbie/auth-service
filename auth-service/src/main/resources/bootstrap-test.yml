@@ -6,15 +6,9 @@ spring:
     password: ${mysqlpassword}
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
-    nacos:
-      discovery:
-        server-addr: ${nacosaddr}:8848
-        username: ${nacosusername}
-        password: ${nacospassword}
-      config:
-        server-addr: ${nacosaddr}:8848
-        username: ${nacosusername}
-        password: ${nacospassword}
+    consul:
+      host: ${consulhost}
+      port: ${consulport}
 
 server:
   tomcat:
@@ -32,14 +26,6 @@ distributed-task-module:
     dtask-go:
       base-url: http://dtaskgo:8083/remote/
 
-# ----- nacos
-namingClientBeatThreadCount: 2
-namingPollingThreadCount: 2
-
-# ----- quartz
-org.quartz.threadPool:
-  threadCount: 2
-
 # ----- messaging-module
 messaging:
   rabbitmq:
@@ -50,6 +36,7 @@ messaging:
     virtualHost: /
     publisherConfirmType: SIMPLE
 
+# ----- jwt-module
 jwt-module:
   publicKey: ${jwt-module.publicKey}
   privateKey: ${jwt-module.privateKey}

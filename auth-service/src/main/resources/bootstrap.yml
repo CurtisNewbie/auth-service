@@ -25,7 +25,7 @@ distributed-task-module:
       enabled: true
 
 messaging:
-  concurrent-declaration: true
+  concurrent-declaration: false
 
 web:
   base-path: "/open/api/"
