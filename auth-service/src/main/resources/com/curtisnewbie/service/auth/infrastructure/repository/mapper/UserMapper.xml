@@ -57,8 +57,8 @@
   </select>
 
   <select id="findUserInfoBy" resultType="com.curtisnewbie.service.auth.dao.User">
-    Select id, username, role, is_disabled, review_status, create_by, create_time, update_by, update_time, is_del
-    FROM user
+    select id, user_no, username, role, is_disabled, review_status, create_by, create_time, update_by, update_time, is_del
+    from user
     <where>
       <if test="u.username != null and u.username != ''">
         username like "%"#{u.username}"%"

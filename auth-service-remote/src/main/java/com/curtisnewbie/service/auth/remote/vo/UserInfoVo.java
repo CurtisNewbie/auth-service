@@ -25,6 +25,9 @@ public class UserInfoVo implements Serializable {
     /** role */
     private UserRole role;
 
+    /** userNo */
+    private String userNo;
+
     /** whether the user is disabled, 0-normal, 1-disabled */
     private UserIsDisabled isDisabled;
 

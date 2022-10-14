@@ -3,13 +3,14 @@ package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.curtisnewbie.common.util.EnhancedMapper;
 import com.curtisnewbie.service.auth.dao.User;
 import org.apache.ibatis.annotations.Param;
 
 /**
  * @author yongjie.zhuang
  */
-public interface UserMapper extends BaseMapper<User> {
+public interface UserMapper extends EnhancedMapper<User> {
 
     /**
      * Select * by username

@@ -20,15 +20,14 @@ public class UserInfoWebVo {
     /** id */
     private Integer id;
 
-    /**
-     * username
-     */
+    /** username */
     private String username;
 
-    /**
-     * role
-     */
+    /** role */
     private UserRole role;
+
+    /** userNo */
+    private String userNo;
 
     /** whether the user is disabled, 0-normal, 1-disabled */
     private UserIsDisabled isDisabled;

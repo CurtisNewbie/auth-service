@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("user")
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class User extends DaoSkeleton {
 
     /** user no */

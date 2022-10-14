@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
-import com.curtisnewbie.common.util.ValidUtils;
+import com.curtisnewbie.common.util.AssertUtils;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,7 +25,7 @@ public class UpdateUserAppReqWebVo implements Serializable {
     private List<Integer> appIdList;
 
     public void validate() throws MsgEmbeddedException {
-        ValidUtils.requireNonNull(getUserId());
+        AssertUtils.notNull(getUserId());
         if (getAppIdList() == null)
             setAppIdList(Collections.emptyList());
     }

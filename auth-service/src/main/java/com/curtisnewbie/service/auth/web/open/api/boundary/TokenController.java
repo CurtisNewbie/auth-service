@@ -32,7 +32,7 @@ public class TokenController {
 
     @GetMapping("/user")
     public Result<UserWebVo> getUserInfo(@RequestParam("token") final String token) {
-        final User userInfo = userService.getUserInfo(token);
+        final User userInfo = userService.getUserInfoByToken(token);
         return Result.of(BeanCopyUtils.toType(userInfo, UserWebVo.class));
     }
 }

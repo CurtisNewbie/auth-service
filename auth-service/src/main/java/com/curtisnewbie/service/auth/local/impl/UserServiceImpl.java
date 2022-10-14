@@ -193,13 +193,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserInfo(@NotEmpty String token) {
+    public User getUserInfoByToken(@NotEmpty String token) {
         DecodeResult decodeResult = jwtDecoder.decode(token);
         isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
 
         final String idAsStr = decodeResult.getDecodedJWT().getClaim("id").asString();
         User user = userMapper.findById(Long.parseLong(idAsStr));
         notNull(user, USER_NOT_FOUND);
+
+        user.setPassword(null);
+
         AssertUtils.isFalse(user.isDeleted(), USER_NOT_FOUND);
         AssertUtils.equals(user.getIsDisabled(), UserIsDisabled.NORMAL, USER_DISABLED);
         return user;
@@ -392,6 +395,25 @@ public class UserServiceImpl implements UserService {
                 .isDisabled(UserIsDisabled.NORMAL)
                 .updateBy(enabledBy)
                 .build());
+    }
+
+    @Override
+    public UserInfoVo getUserInfo(int userId) {
+        User user = userMapper.findById(userId); 
+        notNull(user, USER_NOT_FOUND);
+        
+        user.setPassword(null);
+        return BeanCopyUtils.toType(user, UserInfoVo.class);
+    }
+
+    @Override
+    public UserInfoVo getUserInfo(String userNo) {
+        User user = userMapper.selectOneEq(User::getUserNo, userNo);
+        notNull(user, USER_NOT_FOUND);
+
+        user.setPassword(null);
+        return BeanCopyUtils.toType(user, UserInfoVo.class);
+
     }
 
     // ---------------------- private helper methods -----------------

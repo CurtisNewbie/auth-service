@@ -1,11 +1,9 @@
 package com.curtisnewbie.service.auth.local.api;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.*;
 import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
-import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 
@@ -13,7 +11,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.time.*;
 import java.util.List;
 import java.util.Map;
 
@@ -195,12 +192,14 @@ public interface UserService {
 
     /**
      * Get user info
+     * <p>
+     * the retured User object will not contain password value
      *
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#TOKEN_EXPIRED
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
-    User getUserInfo(@NotEmpty String token);
+    User getUserInfoByToken(@NotEmpty String token);
 
     /**
      * Review user registration
@@ -218,4 +217,9 @@ public interface UserService {
      */
     void generateUserNoIfEmpty(int id);
 
+    /** Get User info by id */
+    UserInfoVo getUserInfo(int userId);
+
+    /** Get User info by userNo */
+    UserInfoVo getUserInfo(String userNo);
 }

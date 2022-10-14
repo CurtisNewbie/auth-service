@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.remote.feign;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdReq;
 import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdResp;
+import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,4 +43,15 @@ public interface UserServiceFeign {
     @PostMapping(value = "/username")
     Result<FetchUsernameByIdResp> fetchUsernameById(@Validated @RequestBody FetchUsernameByIdReq req);
 
+    /**
+     * fetch user info by id
+     */
+    @GetMapping("/info-by-id")
+    Result<UserInfoVo> fetchUserInfo(@NotBlank @RequestParam("userId") int userId);
+
+    /**
+     * fetch user info by userNo
+     */
+    @GetMapping("/info-by-userno")
+    Result<UserInfoVo> fetchUserInfo(@NotBlank @RequestParam("userNo") String userNo);
 }

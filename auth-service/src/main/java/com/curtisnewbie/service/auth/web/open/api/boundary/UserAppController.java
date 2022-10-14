@@ -15,8 +15,10 @@ import com.curtisnewbie.service.auth.web.open.api.vo.AppWebVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.GetAppsForUserReqVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.UpdateUserAppReqWebVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
@@ -25,6 +27,7 @@ import static com.curtisnewbie.common.util.BeanCopyUtils.toType;
 /**
  * @author yongjie.zhuang
  */
+@Validated
 @RoleControlled(rolesRequired = "admin")
 @RequestMapping("${web.base-path}/app")
 @RestController
@@ -56,9 +59,7 @@ public class UserAppController {
     }
 
     @PostMapping("/list/user")
-    public Result<List<AppBriefVo>> getAppsForUser(@RequestBody GetAppsForUserReqVo vo) throws MsgEmbeddedException {
-
-        vo.validate();
+    public Result<List<AppBriefVo>> getAppsForUser(@Valid @RequestBody GetAppsForUserReqVo vo) throws MsgEmbeddedException {
         return Result.of(userAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 

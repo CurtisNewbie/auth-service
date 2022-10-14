@@ -1,8 +1,8 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
-import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
-import com.curtisnewbie.common.util.ValidUtils;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author yongjie.zhuang
@@ -13,9 +13,6 @@ public class GetAppsForUserReqVo {
     /**
      * User's id
      */
+    @NotNull
     private Integer userId;
-
-    public void validate() throws MsgEmbeddedException {
-        ValidUtils.requireNonNull(getUserId());
-    }
 }
