@@ -1,0 +1,1 @@
+alter table access_log drop column token;

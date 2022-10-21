@@ -58,16 +58,15 @@ CREATE TABLE `user_app` (
   UNIQUE KEY `uk_user_app` (`user_id`,`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='join table between application and user';
 
-CREATE TABLE `access_log` (
+CREATE TABLE IF NOT EXISTS fileServer.access_log (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `access_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when the user signed in',
   `ip_address` varchar(255) NOT NULL COMMENT 'ip address',
   `username` varchar(255) NOT NULL COMMENT 'username',
   `user_id` int unsigned NOT NULL COMMENT 'primary key of user',
   `url` varchar(255) DEFAULT '' COMMENT 'request url',
-  `token` varchar(1000) DEFAULT '' COMMENT 'token',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='access log';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='access log';
 
 CREATE TABLE `access_log_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',

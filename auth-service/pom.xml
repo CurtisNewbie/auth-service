@@ -67,6 +67,12 @@
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
+      <artifactId>auth-service-messaging</artifactId>
+      <version>${api.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.curtisnewbie</groupId>
       <artifactId>auth-service-remote</artifactId>
       <version>${api.version}</version>
     </dependency>

@@ -40,8 +40,4 @@ public class AccessLog {
     /** request url */
     @TableField("url")
     private String url;
-
-    /** token */
-    @TableField("token")
-    private String token;
 }

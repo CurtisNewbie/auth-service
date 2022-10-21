@@ -6,10 +6,12 @@ import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.vo.*;
+import com.curtisnewbie.gateway.utils.HttpHeadersUtils;
 import com.curtisnewbie.service.auth.dao.*;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
 import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.messaging.helper.LogOperation;
+import com.curtisnewbie.service.auth.messaging.services.AuthMessageDispatcher;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
@@ -18,6 +20,9 @@ import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import java.time.*;
+import java.util.List;
 
 import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
@@ -39,18 +45,33 @@ import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
 @RestController
 @RequestMapping("${web.base-path}/user")
 public class UserController {
+    public static final String LOGIN_URL = "/auth-service/open/api/user/login";
 
     @Autowired
     private UserService userService;
     @Autowired
     private UserWebConverter cvtr;
+    @Autowired
+    private AuthMessageDispatcher authMessageDispatcher;
 
     /**
      * Login (no role control)
      */
     @PostMapping("/login")
-    public Result<String> login(@Validated @RequestBody LoginWebVo loginWebVo) throws UserRelatedException {
-        return Result.of(userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword(), loginWebVo.getAppName()));
+    public Result<String> login(@Validated @RequestBody LoginWebVo loginWebVo,
+                                @RequestHeader(value = "x-forwarded-for", required = false, defaultValue = "unknown") String forwardedFor) {
+
+        // login and generate an access token
+        final String token = userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword(), loginWebVo.getAppName());
+
+        // log the access asynchronously
+        final AccessLogInfoVo p = new AccessLogInfoVo();
+        p.setIpAddress(forwardedFor);
+        p.setUserId(0);
+        p.setUsername(loginWebVo.getUsername());
+        p.setUrl(LOGIN_URL);
+        authMessageDispatcher.dispatchAccessLog(p);
+        return Result.of(token);
     }
 
     /**
@@ -108,20 +129,13 @@ public class UserController {
         UserRole role = null;
         UserIsDisabled isDisabled = null;
 
-        if (param.getRole() != null)
-            role = EnumUtils.parse(param.getRole(), UserRole.class);
-        if (param.getIsDisabled() != null)
-            isDisabled = EnumUtils.parse(param.getIsDisabled(), UserIsDisabled.class);
+        if (param.getRole() != null) role = EnumUtils.parse(param.getRole(), UserRole.class);
+        if (param.getIsDisabled() != null) isDisabled = EnumUtils.parse(param.getIsDisabled(), UserIsDisabled.class);
 
         if (role == null && isDisabled == null)
             return Result.error("Must have something to update, either role or is_disabled");
 
-        userService.updateUser(UpdateUserVo.builder()
-                .id(param.getId())
-                .isDisabled(isDisabled)
-                .role(role)
-                .updateBy(tUser.getUsername())
-                .build());
+        userService.updateUser(UpdateUserVo.builder().id(param.getId()).isDisabled(isDisabled).role(role).updateBy(tUser.getUsername()).build());
         return Result.ok();
     }
 
@@ -168,8 +182,7 @@ public class UserController {
         final String username = TraceUtils.tUser().getUsername();
         User user = userService.loadUserByUsername(username);
         UserDetailVo userDetailVo = BeanCopyUtils.toType(user, UserDetailVo.class);
-        if (user.getCreateTime() != null)
-            userDetailVo.setRegisterDate(user.getCreateTime().toLocalDate().toString());
+        if (user.getCreateTime() != null) userDetailVo.setRegisterDate(user.getCreateTime().toLocalDate().toString());
         return Result.of(userDetailVo);
     }
 
@@ -201,10 +214,8 @@ public class UserController {
         FindUserInfoVo infoVo = new FindUserInfoVo();
         infoVo.setUsername(reqVo.getUsername());
         infoVo.setPagingVo(reqVo.getPagingVo());
-        if (reqVo.getIsDisabled() != null)
-            infoVo.setIsDisabled(reqVo.getIsDisabled());
-        if (reqVo.getRole() != null)
-            infoVo.setRole(reqVo.getRole());
+        if (reqVo.getIsDisabled() != null) infoVo.setIsDisabled(reqVo.getIsDisabled());
+        if (reqVo.getRole() != null) infoVo.setRole(reqVo.getRole());
         return infoVo;
     }
 
