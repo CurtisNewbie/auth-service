@@ -59,14 +59,21 @@ public class UserController {
      */
     @PostMapping("/login")
     public Result<String> login(@Validated @RequestBody LoginWebVo loginWebVo,
-                                @RequestHeader(value = "x-forwarded-for", required = false, defaultValue = "unknown") String forwardedFor) {
+                                @RequestHeader(value = "x-forwarded-for", required = false) String forwardedFor) {
+
+        String remoteAddr = forwardedFor;
+        if (remoteAddr == null) remoteAddr = "unknown";
+        else {
+            final String[] sff = forwardedFor.split(",");
+            if (sff.length > 0) remoteAddr = sff[0];
+        }
 
         // login and generate an access token
         final String token = userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword(), loginWebVo.getAppName());
 
         // log the access asynchronously
         final AccessLogInfoVo p = new AccessLogInfoVo();
-        p.setIpAddress(forwardedFor);
+        p.setIpAddress(remoteAddr);
         p.setUserId(0);
         p.setUsername(loginWebVo.getUsername());
         p.setUrl(LOGIN_URL);
