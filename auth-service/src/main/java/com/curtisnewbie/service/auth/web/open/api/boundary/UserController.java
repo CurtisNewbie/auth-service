@@ -19,6 +19,7 @@ import com.curtisnewbie.service.auth.remote.exception.UserRelatedException;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -59,7 +60,8 @@ public class UserController {
      */
     @PostMapping("/login")
     public Result<String> login(@Validated @RequestBody LoginWebVo loginWebVo,
-                                @RequestHeader(value = "x-forwarded-for", required = false) String forwardedFor) {
+                                @RequestHeader(value = "x-forwarded-for", required = false) String forwardedFor,
+                                @RequestHeader(value = "user-agent", required = false) String userAgent) {
 
         String remoteAddr = forwardedFor;
         if (remoteAddr == null) remoteAddr = "unknown";
@@ -73,6 +75,7 @@ public class UserController {
 
         // log the access asynchronously
         final AccessLogInfoVo p = new AccessLogInfoVo();
+        p.setUserAgent(StringUtils.substring(userAgent, 0, 512));
         p.setIpAddress(remoteAddr);
         p.setUserId(0);
         p.setUsername(loginWebVo.getUsername());

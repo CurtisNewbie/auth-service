@@ -47,37 +47,6 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
         return PagingUtil.toPageableList(list, v -> BeanCopyUtils.toType(v, AccessLogInfoVo.class));
     }
 
-    @Override
-    public void moveRecordsToHistory(@NotNull MoveAccessLogToHistoryCmd cmd) {
-        // validate the command object
-        cmd.validate();
-
-        final LocalDateTime before = cmd.before();
-        final int batchLimit = cmd.batchSize();
-
-        // records are moved, no need to change the page number
-        final PagingVo paging = new PagingVo().ofLimit(batchLimit).ofPage(1);
-
-        IPage<Integer> ids = findIdsBeforeDateByPage(paging, before);
-
-        // count of records being moved
-        int count = 0;
-
-        // while has next page
-        while (moveRecordsToHistory(ids.getRecords())) {
-
-            count += ids.getRecords().size();
-
-            // violated maxCount, end the loop
-            if (cmd.isMaxCountViolated(count))
-                break;
-
-            ids = findIdsBeforeDateByPage(paging, before);
-        }
-        log.info("Found and moved {} access_log records before '{}', moving them to access_log_history",
-                count, before);
-    }
-
     // ---------------------- private methods ---------------------------
 
 
@@ -88,16 +57,4 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
         return m.selectIdsBeforeDate(PagingUtil.forPage(paging), date);
     }
 
-
-    /**
-     * Move the records to access_log_history
-     */
-    private boolean moveRecordsToHistory(List<Integer> ids) {
-        if (ids.isEmpty())
-            return false;
-
-        m.copyToHistory(ids);
-        m.deleteByIds(ids);
-        return true;
-    }
 }

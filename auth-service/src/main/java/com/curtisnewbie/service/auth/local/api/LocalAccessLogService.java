@@ -17,11 +17,6 @@ import javax.validation.constraints.NotNull;
 public interface LocalAccessLogService {
 
     /**
-     * Move records to access_log_history
-     */
-    void moveRecordsToHistory(@NotNull MoveAccessLogToHistoryCmd cmd);
-
-    /**
      * Save access_log entity
      */
     void save(@NotNull AccessLogInfoVo accessLogVo);
