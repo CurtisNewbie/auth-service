@@ -13,7 +13,7 @@ fi
 
 
 # packaging
-mvn package -f auth-service/pom.xml -Dmaven.test.skip=true
+mvn clean package -f auth-service/pom.xml -Dmaven.test.skip=true
 if [ ! $? -eq 0 ]; then
     exit -1
 fi
