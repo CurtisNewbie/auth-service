@@ -1,8 +1,6 @@
 package com.curtisnewbie.service.auth.infrastructure.job;
 
 import com.curtisnewbie.common.util.LDTTimer;
-import com.curtisnewbie.common.util.Paginator;
-import com.curtisnewbie.common.util.StopWatchUtils;
 import com.curtisnewbie.module.task.annotation.JobDeclaration;
 import com.curtisnewbie.module.task.scheduling.AbstractJob;
 import com.curtisnewbie.module.task.vo.TaskVo;
@@ -34,6 +32,7 @@ public class GenerateUserNoJob extends AbstractJob {
         final LDTTimer timer = LDTTimer.startTimer();
         final List<Integer> ids = userService.listEmptyUserNoId();
         ids.forEach(id -> userService.generateUserNoIfEmpty(id));
+        if (task != null) task.setLastRunResult(String.format("Generated userNo for %s records", ids.size()));
         log.info("GenerateUserNoJob finished, processed records: {}, time: {}", ids.size(), timer.stop().printDuration());
     }
 }

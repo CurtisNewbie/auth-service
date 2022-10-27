@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -27,15 +28,14 @@ import static com.curtisnewbie.common.util.PagingUtil.forPage;
  */
 @Slf4j
 @Service
-@Transactional
 public class OperateLogServiceImpl implements LocalOperateLogService {
 
     @Autowired
     private OperateLogMapper operateLogMapper;
-
     @Autowired
     private OperateLogConverter cvtr;
-
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     @Override
     public void saveOperateLogInfo(@NotNull OperateLogVo operateLogVo) {
@@ -90,8 +90,12 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
     private boolean moveRecordsToHistory(List<Integer> ids) {
         if (ids.isEmpty())
             return false;
-        operateLogMapper.copyToHistory(ids);
-        operateLogMapper.deleteByIds(ids);
+
+        transactionTemplate.execute(ex -> {
+            operateLogMapper.copyToHistory(ids);
+            operateLogMapper.deleteByIds(ids);
+            return null;
+        });
         return true;
     }
 
