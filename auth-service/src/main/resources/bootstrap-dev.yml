@@ -18,10 +18,9 @@ redisson-config: redisson-dev.yaml
 # ----- distributed-task-module
 distributed-task-module:
   enabled: true
-  scheduling:
-    disabled: true 
   plugin:
     dtask-go:
+      enabled: false
       base-url: http://localhost:8083/remote/
 
 # ----- messaging-module

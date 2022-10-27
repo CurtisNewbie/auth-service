@@ -1,4 +1,4 @@
-# auth-service V1.1.4.3
+# auth-service V1.1.4.4
 
 Service for managing users, authentication, access log, operation log and so on.
 
@@ -16,21 +16,12 @@ Service for managing users, authentication, access log, operation log and so on.
 
 ## Task Scheduling  
 
-Task scheduling in this app is supported by `Quartz` and `distributed-task-module`. Two task implementation beans are already written for this application, you may create two records in table `task` as follows to use it: 
+Task scheduling in this app is supported by `Quartz` and `distributed-task-module`. A few task implementation beans are already written for this application, these tasks are automatically registered and will run on application startup: 
 
 The task implementation beans: 
 
 - com.curtisnewbie.service.auth.infrastructure.job.GenerateUserNoJob
 - com.curtisnewbie.service.auth.job.MoveOperateLogHistoryJob
-
-See the `task` table DDL, and the insert statements in `script.sql` in resources folder:
-
-```sql
-INSERT INTO `task` (`job_name`, `target_bean`, `cron_expr`, `app_group`, `last_run_start_time`, `last_run_end_time`, `last_run_by`, `last_run_result`, `enabled`, `concurrent_enabled`, `update_date`, `update_by`)
-VALUES ('OperateLogHistoryJob','moveOperateLogHistoryJob','0 0 /6 ? * *','auth-service',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'','',0,0,CURRENT_TIMESTAMP,''),
-('GenerateUserNoJob','generateUserNoJob','0 0 0 ? * *','auth-service',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'','',0,0,CURRENT_TIMESTAMP,'');
-
-```
 
 ## Modules and Dependencies
 
@@ -38,6 +29,6 @@ This project depends on the following modules that you must manually install (us
 
 - [curtisnewbie-bom](https://github.com/CurtisNewbie/curtisnewbie-bom)
 - [jwt-module v1.0.1](https://github.com/CurtisNewbie/jwt-module/tree/v1.0.1)
-- [distributed-task-module v2.1.1.2](https://github.com/CurtisNewbie/distributed-task-module/tree/v2.1.1.2)
+- [distributed-task-module v2.1.1.3](https://github.com/CurtisNewbie/distributed-task-module/tree/v2.1.1.3)
 - [messaging-module v2.0.7](https://github.com/CurtisNewbie/messaging-module/tree/v2.0.7)
 - [common-module v2.1.9](https://github.com/CurtisNewbie/common-module/tree/v2.1.9)

@@ -1,6 +1,9 @@
 package com.curtisnewbie.service.auth.infrastructure.job;
 
+import com.curtisnewbie.common.util.LDTTimer;
 import com.curtisnewbie.common.util.Paginator;
+import com.curtisnewbie.common.util.StopWatchUtils;
+import com.curtisnewbie.module.task.annotation.JobDeclaration;
 import com.curtisnewbie.module.task.scheduling.AbstractJob;
 import com.curtisnewbie.module.task.vo.TaskVo;
 import com.curtisnewbie.service.auth.local.api.UserService;
@@ -8,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
+@JobDeclaration(name = "Job that generates the missing user no", cron = "0 0 0 ? * *")
 public class GenerateUserNoJob extends AbstractJob {
 
     @Autowired
@@ -25,15 +31,9 @@ public class GenerateUserNoJob extends AbstractJob {
 
     @Override
     protected void executeInternal(TaskVo task) throws JobExecutionException {
-        Paginator<Integer /* id */> paginator = new Paginator<Integer>()
-                .pageSize(50)
-                .isTimed(true)
-                .nextPageSupplier(p -> userService.listEmptyUserNoId(p.getOffset(), p.getLimit()));
-
-        paginator.loopEachTilEnd(id -> {
-            userService.generateUserNoIfEmpty(id);
-        });
-
-        log.info("GenerateUserNoJob finished, processed records: {}, time: {}", paginator.getCount(), paginator.getTimer().printDuration());
+        final LDTTimer timer = LDTTimer.startTimer();
+        final List<Integer> ids = userService.listEmptyUserNoId();
+        ids.forEach(id -> userService.generateUserNoIfEmpty(id));
+        log.info("GenerateUserNoJob finished, processed records: {}, time: {}", ids.size(), timer.stop().printDuration());
     }
 }

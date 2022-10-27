@@ -121,8 +121,3 @@ CREATE TABLE task_history (
     KEY task_id_idx (task_id)
 ) ENGINE=InnoDB COMMENT "task history";
 
--- tasks used by this service
-INSERT INTO `task` (`job_name`, `target_bean`, `cron_expr`, `app_group`, `last_run_start_time`, `last_run_end_time`, `last_run_by`, `last_run_result`, `enabled`, `concurrent_enabled`, `update_date`, `update_by`)
-VALUES ('OperateLogHistoryJob','moveOperateLogHistoryJob','0 0 /6 ? * *','auth-service',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'','',0,0,CURRENT_TIMESTAMP,''),
-('GenerateUserNoJob','generateUserNoJob','0 0 0 ? * *','auth-service',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'','',0,0,CURRENT_TIMESTAMP,'');
-

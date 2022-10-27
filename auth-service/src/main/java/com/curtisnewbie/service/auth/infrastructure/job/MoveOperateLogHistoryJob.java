@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.infrastructure.job;
 
+import com.curtisnewbie.module.task.annotation.JobDeclaration;
 import com.curtisnewbie.module.task.scheduling.AbstractJob;
 import com.curtisnewbie.module.task.vo.TaskVo;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Component
+@JobDeclaration(name = "Job that moves operate logs to history table", cron = "0 0 0/6 ? * *")
 public class MoveOperateLogHistoryJob extends AbstractJob {
 
     @Autowired
@@ -27,14 +29,12 @@ public class MoveOperateLogHistoryJob extends AbstractJob {
 
     @Override
     protected void executeInternal(TaskVo task) throws JobExecutionException {
-        final LocalDateTime oneWeekBefore = LocalDateTime.now().minusWeeks(1);
-
-        log.info("Finding and moving operate_log records before '{}'", oneWeekBefore);
-
+        final LocalDateTime before = LocalDateTime.now().minusMonths(1);
+        log.info("Finding and moving operate_log records before '{}'", before);
         operateLogService.moveRecordsToHistory(
                 MoveOperateLogToHistoryCmd.builder()
                         .batchSize(200)
-                        .before(oneWeekBefore)
+                        .before(before)
                         .maxCount(10000)
                         .build()
         );

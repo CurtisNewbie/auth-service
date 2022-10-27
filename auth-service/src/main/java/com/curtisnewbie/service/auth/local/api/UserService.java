@@ -210,7 +210,7 @@ public interface UserService {
      * List id of users that don't have user_no (for backward compatible job only, normal records will always have
      * user_no)
      */
-    List<Integer> listEmptyUserNoId(long offset, long limit);
+    List<Integer> listEmptyUserNoId();
 
     /**
      * Generate user_no if it's empty (for backward compatible job only, normal records will always have user_no)

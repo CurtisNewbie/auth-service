@@ -241,11 +241,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Integer> listEmptyUserNoId(long offset, long limit) {
+    public List<Integer> listEmptyUserNoId() {
         final LambdaQueryWrapper<User> qw = new LambdaQueryWrapper<User>()
                 .select(User::getId)
-                .eq(User::getUserNo, "")
-                .last(limit(offset, limit));
+                .eq(User::getUserNo, "");
 
         return selectListAndConvert(qw, userMapper, User::getId);
     }
