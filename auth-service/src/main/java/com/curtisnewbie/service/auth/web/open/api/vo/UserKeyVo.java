@@ -23,11 +23,9 @@ public class UserKeyVo {
     private String name;
 
     /** when the key is expired */
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime expirationTime;
 
     /** when the record is created */
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime createTime;
 
     @ToString.Include(name = "secretKey")

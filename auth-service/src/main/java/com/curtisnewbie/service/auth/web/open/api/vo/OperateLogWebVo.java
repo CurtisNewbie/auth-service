@@ -22,7 +22,6 @@ public class OperateLogWebVo implements Serializable {
     private String operateDesc;
 
     /** when the operation happens */
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime operateTime;
 
     /** parameters used for the operation */

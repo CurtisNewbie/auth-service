@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author yongjie.zhuang
@@ -17,4 +18,14 @@ public class UpdatePasswordWebVo {
      * New password
      */
     private String newPassword;
+
+    @ToString.Include(name = "prevPassword")
+    public String prevPasswordMask() {
+        return "****";
+    }
+
+    @ToString.Include(name = "newPassword")
+    public String newPasswordMask() {
+        return "****";
+    }
 }

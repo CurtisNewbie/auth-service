@@ -4,6 +4,8 @@ import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * @author yongjie.zhuang
  */
@@ -23,4 +25,9 @@ public class UserWebVo {
      * role
      */
     private UserRole role;
+
+    /**
+     * Services permitted
+     */
+    private List<String> services;
 }

@@ -36,11 +36,9 @@ public class UserInfoWebVo {
     private ReviewStatus reviewStatus;
 
     /** when the user is created */
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime createTime;
 
     /** when the user is updated */
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime updateTime;
 
     /** who updated this user */

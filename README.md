@@ -1,4 +1,4 @@
-# auth-service V1.1.4.4
+# auth-service V1.1.4.5
 
 Service for managing users, authentication, access log, operation log and so on.
 
@@ -8,11 +8,12 @@ Service for managing users, authentication, access log, operation log and so on.
 
 ## Requirements 
 
-- auth-service-front (Angular frontend) >= [v1.1.5](https://github.com/CurtisNewbie/auth-service-front/tree/v1.1.5)
+- auth-service-front (Angular frontend) >= [v1.1.6](https://github.com/CurtisNewbie/auth-service-front/tree/v1.1.6)
 - MySQL 5.7 or 8
 - Consul
 - RabbitMQ
 - Redis
+- Java 8
 
 ## Task Scheduling  
 
@@ -32,3 +33,7 @@ This project depends on the following modules that you must manually install (us
 - [distributed-task-module v2.1.1.3](https://github.com/CurtisNewbie/distributed-task-module/tree/v2.1.1.3)
 - [messaging-module v2.0.7](https://github.com/CurtisNewbie/messaging-module/tree/v2.0.7)
 - [common-module v2.1.9](https://github.com/CurtisNewbie/common-module/tree/v2.1.9)
+
+## Updates
+
+- Since release V1.1.4.5, LocalDateTime / Date are serialized and deserialized in the form of epoch time (milliseconds), this is not backward compatible, some MQ messages may also be affected as well.

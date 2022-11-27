@@ -20,14 +20,12 @@ public class AppWebVo {
     private String name;
 
     /** when the record is created */
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime createTime;
 
     /** who created this record */
     private String createBy;
 
     /** when the record is updated */
-    @JsonFormat(pattern = DateUtils.DD_MM_YYYY_HH_MM)
     private LocalDateTime updateTime;
 
     /** who updated this record */

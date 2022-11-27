@@ -4,6 +4,7 @@ import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
+import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,6 +30,13 @@ public interface UserService {
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
      */
     User loadUserByUsername(@NotEmpty String username);
+
+    /**
+     * Find user by username
+     *
+     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
+     */
+    UserWebVo loadUserInfo(@NotEmpty String username);
 
     /**
      * Login

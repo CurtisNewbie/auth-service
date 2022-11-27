@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.web.open.api.boundary;
 import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
+import com.curtisnewbie.common.util.AsyncUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.vo.*;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.validation.Valid;
 
@@ -170,10 +172,9 @@ public class UserController {
      * Get user info (no role control)
      */
     @GetMapping("/info")
-    public Result<UserWebVo> getUserInfo() {
+    public DeferredResult<Result<UserWebVo>> getUserInfo() {
         final String username = TraceUtils.tUser().getUsername();
-        User user = userService.loadUserByUsername(username);
-        return Result.of(BeanCopyUtils.toType(user, UserWebVo.class));
+        return AsyncUtils.runAsyncResult(() -> userService.loadUserInfo(username));
     }
 
     /**

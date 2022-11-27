@@ -20,6 +20,7 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
+import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -77,10 +78,27 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public User loadUserByUsername(String s) {
         Objects.requireNonNull(s);
-        User userEntity = userMapper.findByUsername(s);
-        notNull(userEntity, USER_NOT_FOUND);
+        User user = userMapper.findByUsername(s);
+        notNull(user, USER_NOT_FOUND);
+        return user;
+    }
 
-        return userEntity;
+    @Override
+    public UserWebVo loadUserInfo(String username) {
+
+        User user = userMapper.findByUsername(username);
+        notNull(user, USER_NOT_FOUND);
+
+        final List<String> appNames = userAppService.getAppsPermittedForUser(user.getId())
+                .stream()
+                .map(AppBriefVo::getName).collect(Collectors.toList());
+        UserWebVo uw = new UserWebVo();
+        uw.setServices(appNames);
+        uw.setId(user.getId());
+        uw.setRole(user.getRole());
+        uw.setUsername(user.getUsername());
+
+        return uw;
     }
 
     @Override
@@ -398,9 +416,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserInfoVo getUserInfo(int userId) {
-        User user = userMapper.findById(userId); 
+        User user = userMapper.findById(userId);
         notNull(user, USER_NOT_FOUND);
-        
+
         user.setPassword(null);
         return BeanCopyUtils.toType(user, UserInfoVo.class);
     }
