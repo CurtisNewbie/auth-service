@@ -229,5 +229,10 @@ public interface UserService {
     UserInfoVo getUserInfo(int userId);
 
     /** Get User info by userNo */
-    UserInfoVo getUserInfo(String userNo);
+    UserInfoVo getUserInfo(@NotEmpty String userNo);
+
+    /**
+     * Fetch usernames by userNos
+     */
+    Map<String, String> fetchUsernameByUserNos(@NotEmpty List<String> userNos);
 }

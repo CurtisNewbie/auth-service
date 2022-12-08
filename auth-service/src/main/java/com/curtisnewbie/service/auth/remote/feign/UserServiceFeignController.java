@@ -2,9 +2,7 @@ package com.curtisnewbie.service.auth.remote.feign;
 
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.service.auth.local.api.UserService;
-import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdReq;
-import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdResp;
-import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
+import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +32,13 @@ public class UserServiceFeignController implements UserServiceFeign {
     public Result<FetchUsernameByIdResp> fetchUsernameById(FetchUsernameByIdReq req) {
         return Result.of(FetchUsernameByIdResp.builder()
                 .idToUsername(userService.fetchUsernameById(req.getUserIds()))
+                .build());
+    }
+
+    @Override
+    public Result<FetchUsernameByUserNosResp> fetchUsernameByUserNos(FetchUsernameByUserNosReq req) {
+        return Result.of(FetchUsernameByUserNosResp.builder()
+                .userNoToUsername(userService.fetchUsernameByUserNos(req.getUserNos()))
                 .build());
     }
 

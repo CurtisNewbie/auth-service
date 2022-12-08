@@ -433,6 +433,16 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public Map<String, String> fetchUsernameByUserNos(List<String> userNos) {
+        userNos = userNos.stream().distinct().collect(Collectors.toList());
+        return userMapper.selectList(MapperUtils.select(User::getUserNo, User::getUsername)
+                        .in(User::getUserNo, userNos)
+                        .eq(User::getIsDel, IsDel.NORMAL))
+                .stream()
+                .collect(Collectors.toMap(User::getUserNo, User::getUsername));
+    }
+
     // ---------------------- private helper methods -----------------
 
     private String buildToken(UserVo user) {

@@ -13,7 +13,7 @@ Service for managing users, authentication, access log, operation log and so on.
 - Consul
 - RabbitMQ
 - Redis
-- Java 8
+- Java 11
 
 ## Task Scheduling  
 

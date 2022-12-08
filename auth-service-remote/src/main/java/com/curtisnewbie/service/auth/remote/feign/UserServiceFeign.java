@@ -1,9 +1,7 @@
 package com.curtisnewbie.service.auth.remote.feign;
 
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdReq;
-import com.curtisnewbie.service.auth.remote.vo.FetchUsernameByIdResp;
-import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
+import com.curtisnewbie.service.auth.remote.vo.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +40,14 @@ public interface UserServiceFeign {
      */
     @PostMapping(value = "/username")
     Result<FetchUsernameByIdResp> fetchUsernameById(@Validated @RequestBody FetchUsernameByIdReq req);
+
+    /**
+     * Fetch username by userNos
+     *
+     * @return user_no -> username map
+     */
+    @PostMapping(value = "/userno/username")
+    Result<FetchUsernameByUserNosResp> fetchUsernameByUserNos(@Validated @RequestBody FetchUsernameByUserNosReq req);
 
     /**
      * fetch user info by id
