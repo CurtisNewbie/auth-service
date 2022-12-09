@@ -443,6 +443,19 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toMap(User::getUserNo, User::getUsername));
     }
 
+    @Override
+    public UserInfoVo findUser(FindUserReq req) {
+        User user;
+        if (req.getUserId() != null) user = userMapper.findById(req.getUserId());
+        else if (req.getUserNo() != null) user = userMapper.selectOneEq(User::getUserNo, req.getUserNo());
+        else if (req.getUsername() != null) user = userMapper.selectOneEq(User::getUsername, req.getUsername());
+        else return null;
+        notNull(user, USER_NOT_FOUND);
+
+        user.setPassword(null);
+        return BeanCopyUtils.toType(user, UserInfoVo.class);
+    }
+
     // ---------------------- private helper methods -----------------
 
     private String buildToken(UserVo user) {

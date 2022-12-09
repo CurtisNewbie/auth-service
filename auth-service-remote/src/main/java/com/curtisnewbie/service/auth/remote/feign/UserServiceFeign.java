@@ -28,6 +28,14 @@ public interface UserServiceFeign {
     Result<String> findUsernameById(@RequestParam("id") int id);
 
     /**
+     * Find User Info by id/name/userNo
+     * <p>
+     * Priority: ID > userNo > name
+     */
+    @PostMapping("/info")
+    Result<UserInfoVo> findUser(@RequestBody FindUserReq req);
+
+    /**
      * Find id by username
      */
     @GetMapping("/id")

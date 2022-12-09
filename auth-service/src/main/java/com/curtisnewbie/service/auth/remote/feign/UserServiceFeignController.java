@@ -24,6 +24,11 @@ public class UserServiceFeignController implements UserServiceFeign {
     }
 
     @Override
+    public Result<UserInfoVo> findUser(FindUserReq req) {
+        return Result.of(userService.findUser(req));
+    }
+
+    @Override
     public Result<Integer> findIdByUsername(String username) {
         return Result.of(userService.findIdByUsername(username));
     }

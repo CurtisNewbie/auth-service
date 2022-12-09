@@ -235,4 +235,7 @@ public interface UserService {
      * Fetch usernames by userNos
      */
     Map<String, String> fetchUsernameByUserNos(@NotEmpty List<String> userNos);
+
+    /** Try to find user by id/userNo/name */
+    UserInfoVo findUser(@NotNull FindUserReq req);
 }
