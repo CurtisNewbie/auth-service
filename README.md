@@ -1,4 +1,4 @@
-# auth-service V1.1.5
+# auth-service V1.1.6
 
 Service for managing users, authentication, access log, operation log and so on.
 

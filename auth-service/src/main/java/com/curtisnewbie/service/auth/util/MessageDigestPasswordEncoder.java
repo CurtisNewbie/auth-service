@@ -1,6 +1,6 @@
 package com.curtisnewbie.service.auth.util;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
@@ -23,7 +23,7 @@ public class MessageDigestPasswordEncoder implements PasswordEncoder {
     @Override
     public String encodePassword(String password) {
         MessageDigest md = getMessageDigest(algorithm);
-        byte[] digested = md.digest(password.getBytes(Charset.forName("UTF-8")));
+        byte[] digested = md.digest(password.getBytes(StandardCharsets.UTF_8));
         return encodeToHex(digested);
     }
 

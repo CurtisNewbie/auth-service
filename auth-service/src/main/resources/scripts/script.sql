@@ -1,20 +1,19 @@
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS user (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `username` varchar(255) NOT NULL COMMENT 'username (must be unique)',
+  `username` varchar(50) NOT NULL COMMENT 'username',
   `password` varchar(255) NOT NULL COMMENT 'password in hash',
   `salt` varchar(10) NOT NULL COMMENT 'salt',
   `role` varchar(20) NOT NULL COMMENT 'role',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when the record is created',
-  `create_by` varchar(255) NOT NULL DEFAULT '' COMMENT 'who created this record',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'when the record is updated',
   `is_disabled` int NOT NULL DEFAULT '0' COMMENT 'whether the user is disabled, 0-normal, 1-disabled',
   `review_status` varchar(25) NOT NULL COMMENT 'Review Status',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'when the record is updated',
   `update_by` varchar(255) NOT NULL DEFAULT '' COMMENT 'who updated this record',
+  `create_by` varchar(255) NOT NULL DEFAULT '' COMMENT 'who created this record',
   `is_del` tinyint NOT NULL DEFAULT '0' COMMENT '0-normal, 1-deleted',
-  `user_no` varchar(64) NOT NULL COMMENT 'user no',
+  `user_no` varchar(32) NOT NULL COMMENT 'user no',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `username_2` (`username`),
   UNIQUE KEY `user_no` (`user_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

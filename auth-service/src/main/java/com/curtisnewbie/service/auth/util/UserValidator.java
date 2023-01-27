@@ -14,7 +14,7 @@ import static com.curtisnewbie.common.util.AssertUtils.isTrue;
 public final class UserValidator {
 
     public static final int PASSWORD_LENGTH = 8;
-    public static final Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9_\\-@.]{6,}$");
+    public static final Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9_\\-@.]{6,50}$");
 
     private UserValidator() {
     }
@@ -26,7 +26,7 @@ public final class UserValidator {
      */
     public static void validateUsername(String username) {
         isTrue(usernamePattern.matcher(username).matches(),
-                "Username must have at least 6 characters, permitted characters include: 'a-z A-Z 0-9 . - _ @'");
+                "Username must have 6-50 characters, permitted characters include: 'a-z A-Z 0-9 . - _ @'");
     }
 
     /**
