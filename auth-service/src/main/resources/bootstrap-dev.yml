@@ -17,7 +17,7 @@ redisson-config: redisson-dev.yaml
 
 # ----- distributed-task-module
 distributed-task-module:
-  enabled: true
+  enabled: false
   plugin:
     dtask-go:
       enabled: false
@@ -41,3 +41,5 @@ logging.level.com.curtisnewbie.service.auth.infrastructure.mq.listeners.AccessLo
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+goauth.path.report.disabled: false

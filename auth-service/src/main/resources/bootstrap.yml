@@ -11,6 +11,8 @@ spring:
         - role
         - services
         - userno
+  main:
+    allow-bean-definition-overriding: true
 
 mybatis:
   config-location: classpath:mybatis-config.xml
@@ -25,7 +27,7 @@ messaging:
   concurrent-declaration: false
 
 web:
-  base-path: "/open/api/"
+  base-path: "/open/api"
 
 management.endpoints.web.exposure.include: "*"
 

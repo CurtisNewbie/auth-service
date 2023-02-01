@@ -20,6 +20,11 @@
 
     <dependency>
       <groupId>com.curtisnewbie</groupId>
+      <artifactId>goauth-client-java</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.curtisnewbie</groupId>
       <artifactId>distributed-task-module</artifactId>
     </dependency>
 
