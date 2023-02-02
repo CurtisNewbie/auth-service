@@ -1,6 +1,7 @@
 package com.curtisnewbie;
 
 import com.curtisnewbie.common.advice.EnableRoleControl;
+import com.curtisnewbie.common.dao.*;
 import com.curtisnewbie.goauth.client.*;
 import com.curtisnewbie.module.messaging.listener.EnableMsgListener;
 import com.curtisnewbie.service.auth.messaging.helper.EnableOperateLog;
@@ -18,6 +19,7 @@ import org.springframework.cloud.openfeign.*;
 @MapperScan("com.curtisnewbie.service.auth.infrastructure.repository.mapper")
 @EnableDiscoveryClient
 @SpringBootApplication
+@EnableMBTraceInterceptor
 public class AuthServiceApplication {
 
     public static void main(String[] args) {
