@@ -11,6 +11,7 @@ spring:
         - role
         - services
         - userno
+        - roleno
   main:
     allow-bean-definition-overriding: true
 

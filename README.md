@@ -32,7 +32,7 @@ This project depends on the following modules that you must manually install (us
 - [jwt-module v1.0.1](https://github.com/CurtisNewbie/jwt-module/tree/v1.0.1)
 - [distributed-task-module v2.1.1.4](https://github.com/CurtisNewbie/distributed-task-module/tree/v2.1.1.4)
 - [messaging-module v2.0.8](https://github.com/CurtisNewbie/messaging-module/tree/v2.0.8)
-- [common-module v2.1.11](https://github.com/CurtisNewbie/common-module/tree/v2.1.11)
+- [common-module v2.2.0](https://github.com/CurtisNewbie/common-module/tree/v2.2.0)
 
 ## Updates
 
