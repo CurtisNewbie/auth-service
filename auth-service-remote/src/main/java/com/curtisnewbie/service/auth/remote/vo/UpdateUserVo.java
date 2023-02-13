@@ -2,6 +2,7 @@ package com.curtisnewbie.service.auth.remote.vo;
 
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import java.io.Serializable;
 /**
  * @author yongjie.zhuang
  */
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class UpdateUserVo implements Serializable {
@@ -32,11 +35,8 @@ public class UpdateUserVo implements Serializable {
     @NotEmpty
     private String updateBy;
 
-    @Builder
-    public UpdateUserVo(int id, @NotNull UserRole role, @NotNull UserIsDisabled isDisabled, @NotEmpty String updateBy) {
-        this.id = id;
-        this.role = role;
-        this.isDisabled = isDisabled;
-        this.updateBy = updateBy;
-    }
+    /** userNo */
+    @NotEmpty
+    private String roleNo;
+
 }

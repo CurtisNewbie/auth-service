@@ -35,6 +35,9 @@ public class UserVo implements Serializable {
     /** who updated this user */
     private String updateBy;
 
+    /** roleNo */
+    private String roleNo;
+
     /** who created this user */
     private String createBy;
 }

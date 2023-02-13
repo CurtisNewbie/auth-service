@@ -5,5 +5,6 @@
 alter table user
   modify column `user_no` varchar(32) NOT NULL COMMENT 'user no',
   modify column `username` varchar(50) NOT NULL COMMENT 'username',
+  add column `role_no` varchar(32) NOT NULL default '' COMMENT 'role no',
   drop constraint username_2
 ;

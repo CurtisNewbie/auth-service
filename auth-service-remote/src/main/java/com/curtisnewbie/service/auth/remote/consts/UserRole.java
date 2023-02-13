@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  *
  * @author yongjie.zhuang
  */
+@Deprecated // TODO remove this
 public enum UserRole implements ValueEnum<String> {
 
     /** Administrator */

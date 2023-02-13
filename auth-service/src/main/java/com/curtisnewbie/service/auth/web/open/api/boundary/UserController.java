@@ -7,6 +7,9 @@ import com.curtisnewbie.common.util.AsyncUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.vo.*;
+import com.curtisnewbie.goauth.client.GoAuthClient;
+import com.curtisnewbie.goauth.client.RoleInfoReq;
+import com.curtisnewbie.goauth.client.RoleInfoResp;
 import com.curtisnewbie.service.auth.dao.*;
 import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
 import com.curtisnewbie.service.auth.local.api.*;
@@ -48,6 +51,8 @@ public class UserController {
     private UserWebConverter cvtr;
     @Autowired
     private AuthMessageDispatcher authMessageDispatcher;
+    @Autowired
+    private GoAuthClient goAuthClient;
 
     /**
      * Login (no role control)
@@ -130,16 +135,24 @@ public class UserController {
         nonNull(param.getId(), "id == null");
         notEquals(param.getId(), TraceUtils.tUser().getUserId(), "You cannot update yourself");
 
-        UserRole role = null;
         UserIsDisabled isDisabled = null;
-
-        if (param.getRole() != null) role = EnumUtils.parse(param.getRole(), UserRole.class);
         if (param.getIsDisabled() != null) isDisabled = EnumUtils.parse(param.getIsDisabled(), UserIsDisabled.class);
+        if (param.getRoleNo() != null) param.setRoleNo(param.getRoleNo().trim());
 
-        if (role == null && isDisabled == null)
-            return Result.error("Must have something to update, either role or is_disabled");
+        // validate roleNo
+        if (StringUtils.isNotBlank(param.getRoleNo())) {
+            final RoleInfoReq rir = new RoleInfoReq();
+            rir.setRoleNo(param.getRoleNo());
+            final Result<RoleInfoResp> roleInfo = goAuthClient.getRoleInfo(rir);
+            roleInfo.assertIsOk();
+        }
 
-        userService.updateUser(UpdateUserVo.builder().id(param.getId()).isDisabled(isDisabled).role(role).updateBy(tUser.getUsername()).build());
+        userService.updateUser(UpdateUserVo.builder()
+                .id(param.getId())
+                .isDisabled(isDisabled)
+                .updateBy(tUser.getUsername())
+                .roleNo(param.getRoleNo())
+                .build());
         return Result.ok();
     }
 

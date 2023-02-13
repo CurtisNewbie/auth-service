@@ -40,8 +40,13 @@ public class User extends DaoSkeleton {
     private ReviewStatus reviewStatus;
 
     /** role */
+    @Deprecated // TODO remove
     @TableField("role")
     private UserRole role;
+
+    /** roleNo */
+    @TableField("role_no")
+    private String roleNo;
 
     /** whether the user is disabled, 0-normal, 1-disabled */
     @TableField("is_disabled")

@@ -92,10 +92,12 @@ public class UserServiceImpl implements UserService {
         final List<String> appNames = userAppService.getAppsPermittedForUser(user.getId())
                 .stream()
                 .map(AppBriefVo::getName).collect(Collectors.toList());
+
         UserWebVo uw = new UserWebVo();
         uw.setServices(appNames);
         uw.setId(user.getId());
-        uw.setRole(user.getRole());
+        uw.setRole(user.getRole()); // TODO remove
+        uw.setRoleNo(user.getRoleNo());
         uw.setUsername(user.getUsername());
 
         return uw;
@@ -138,8 +140,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Nothing to update");
         if (param.getIsDisabled() != null)
             ue.setIsDisabled(param.getIsDisabled());
-        if (param.getRole() != null)
-            ue.setRole(param.getRole());
         ue.setUpdateBy(param.getUpdateBy());
         ue.setUpdateTime(LocalDateTime.now());
         userMapper.updateUser(ue);
@@ -464,6 +464,7 @@ public class UserServiceImpl implements UserService {
         claims.put("username", user.getUsername());
         claims.put("userno", user.getUserNo());
         claims.put("role", user.getRole().getValue());
+        claims.put("roleno", user.getRoleNo());
 
         final String appNames = userAppService.getAppsPermittedForUser(user.getId())
                 .stream()

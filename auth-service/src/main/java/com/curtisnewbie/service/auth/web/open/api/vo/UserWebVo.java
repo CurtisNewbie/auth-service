@@ -24,7 +24,13 @@ public class UserWebVo {
     /**
      * role
      */
+    @Deprecated
     private UserRole role;
+
+    /**
+     * Role No
+     */
+    private String roleNo;
 
     /**
      * Services permitted

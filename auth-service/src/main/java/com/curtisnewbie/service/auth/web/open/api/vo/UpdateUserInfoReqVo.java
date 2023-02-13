@@ -19,6 +19,11 @@ public class UpdateUserInfoReqVo {
     private String role;
 
     /**
+     * User Role No
+     */
+    private String roleNo;
+
+    /**
      * is_disabled
      */
     private Integer isDisabled;
