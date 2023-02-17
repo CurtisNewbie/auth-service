@@ -7,7 +7,6 @@ import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.App;
-import com.curtisnewbie.service.auth.infrastructure.converters.AppConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AppMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
@@ -32,20 +31,17 @@ public class AppServiceImpl implements LocalAppService {
     @Autowired
     private AppMapper appMapper;
 
-    @Autowired
-    private AppConverter cvtr;
-
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public PageableList<AppVo> getAllAppInfo(@NotNull PagingVo pagingVo) {
         IPage<App> ipg = appMapper.selectAll(PagingUtil.forPage(pagingVo));
-        return PagingUtil.toPageableList(ipg, cvtr::toVo);
+        return PagingUtil.toPageableList(ipg, b -> BeanCopyUtils.toType(b, AppVo.class));
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public List<AppBriefVo> getAllAppBriefInfo() {
-        return BeanCopyUtils.mapTo(appMapper.selectAllBriefInfo(), cvtr::toBriefVo);
+        return BeanCopyUtils.toTypeList(appMapper.selectAllBriefInfo(), AppBriefVo.class);
     }
 
     @Override

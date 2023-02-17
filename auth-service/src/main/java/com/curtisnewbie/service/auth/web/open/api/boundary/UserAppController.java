@@ -5,7 +5,6 @@ import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.infrastructure.converters.AppWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
@@ -21,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
-import static com.curtisnewbie.common.util.BeanCopyUtils.toType;
+import static com.curtisnewbie.common.util.BeanCopyUtils.*;
 
 /**
  * @author yongjie.zhuang
@@ -39,9 +37,6 @@ public class UserAppController {
     @Autowired
     private LocalUserAppService userAppService;
 
-    @Autowired
-    private AppWebConverter cvtr;
-
     @PostMapping("/list/all")
     public Result<PageableList<AppWebVo>> listApps(@RequestBody PageableVo<AppWebVo> req)
             throws MsgEmbeddedException {
@@ -49,7 +44,7 @@ public class UserAppController {
         PageableList<AppVo> pps = appService.getAllAppInfo(req.getPagingVo());
         PageableList<AppWebVo> resp = new PageableList<>();
         resp.setPagingVo(pps.getPagingVo());
-        resp.setPayload(mapTo(pps.getPayload(), cvtr::toWebVo));
+        resp.setPayload(toTypeList(pps.getPayload(), AppWebVo.class));
         return Result.of(resp);
     }
 

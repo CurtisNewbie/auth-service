@@ -6,10 +6,9 @@ import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogWebConverter;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
-import com.curtisnewbie.service.auth.web.open.api.vo.FindOperateLogRespWebVo;
+import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,16 +25,13 @@ public class OperateLogController {
     @Autowired
     private LocalOperateLogService operateLogService;
 
-    @Autowired
-    private OperateLogWebConverter cvtr;
-
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/history")
     public Result<FindOperateLogRespWebVo> findByPage(@RequestBody PagingVo pagingVo) throws MsgEmbeddedException {
         PageableList<OperateLogVo> pv = operateLogService.findOperateLogInfoInPages(pagingVo);
         FindOperateLogRespWebVo res = new FindOperateLogRespWebVo();
         res.setPagingVo(pv.getPagingVo());
-        res.setOperateLogVoList(BeanCopyUtils.mapTo(pv.getPayload(), cvtr::toWebVo));
+        res.setOperateLogVoList(BeanCopyUtils.toTypeList(pv.getPayload(), OperateLogWebVo.class));
         return Result.of(res);
     }
 

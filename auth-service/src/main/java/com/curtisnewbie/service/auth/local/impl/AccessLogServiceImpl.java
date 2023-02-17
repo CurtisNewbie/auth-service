@@ -6,10 +6,8 @@ import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.AccessLog;
-import com.curtisnewbie.service.auth.infrastructure.converters.AccessLogConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.AccessLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
-import com.curtisnewbie.service.auth.local.vo.cmd.MoveAccessLogToHistoryCmd;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author yongjie.zhuang
@@ -32,12 +29,9 @@ public class AccessLogServiceImpl implements LocalAccessLogService {
     @Autowired
     private AccessLogMapper m;
 
-    @Autowired
-    private AccessLogConverter converter;
-
     @Override
     public void save(AccessLogInfoVo accessLogVo) {
-        m.insert(converter.toDo(accessLogVo));
+        m.insert(BeanCopyUtils.toType(accessLogVo, AccessLog.class));
     }
 
     @Override

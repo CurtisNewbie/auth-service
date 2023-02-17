@@ -5,7 +5,6 @@ import com.curtisnewbie.common.util.PagingUtil;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.OperateLog;
-import com.curtisnewbie.service.auth.infrastructure.converters.OperateLogConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLogMapper;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.local.vo.cmd.MoveOperateLogToHistoryCmd;
@@ -21,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.curtisnewbie.common.util.BeanCopyUtils.*;
 import static com.curtisnewbie.common.util.PagingUtil.forPage;
 
 /**
@@ -33,20 +33,18 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
     @Autowired
     private OperateLogMapper operateLogMapper;
     @Autowired
-    private OperateLogConverter cvtr;
-    @Autowired
     private TransactionTemplate transactionTemplate;
 
     @Override
     public void saveOperateLogInfo(@NotNull OperateLogVo operateLogVo) {
-        operateLogMapper.insert(cvtr.toDo(operateLogVo));
+        operateLogMapper.insert(toType(operateLogVo, OperateLog.class));
     }
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public PageableList<OperateLogVo> findOperateLogInfoInPages(@NotNull PagingVo pagingVo) {
         IPage<OperateLog> ipg = operateLogMapper.selectBasicInfo(forPage(pagingVo));
-        return PagingUtil.toPageableList(ipg, cvtr::toVo);
+        return PagingUtil.toPageableList(ipg, o -> toType(o, OperateLogVo.class));
     }
 
     @Override

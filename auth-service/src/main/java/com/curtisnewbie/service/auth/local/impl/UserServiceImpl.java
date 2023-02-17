@@ -12,7 +12,6 @@ import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
 import com.curtisnewbie.module.jwt.vo.DecodeResult;
 import com.curtisnewbie.module.redisutil.RedisController;
 import com.curtisnewbie.service.auth.dao.User;
-import com.curtisnewbie.service.auth.infrastructure.converters.UserConverter;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper;
 import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
@@ -63,8 +62,6 @@ public class UserServiceImpl implements UserService {
     private LocalUserAppService userAppService;
     @Autowired
     private Environment environment;
-    @Autowired
-    private UserConverter cvtr;
     @Autowired
     private JwtBuilder jwtBuilder;
     @Autowired
@@ -207,7 +204,7 @@ public class UserServiceImpl implements UserService {
 
         final String idAsStr = decodeResult.getDecodedJWT().getClaim("id").asString();
         final User ue = userMapper.findById(Long.parseLong(idAsStr));
-        return buildToken(cvtr.toVo(ue));
+        return buildToken(BeanCopyUtils.toType(ue, UserVo.class));
     }
 
     @Override
@@ -282,7 +279,7 @@ public class UserServiceImpl implements UserService {
         final User user = userLogin(username, password);
 
         log.info("User '{}' login successful, user_info returned", username);
-        return cvtr.toVo(user);
+        return BeanCopyUtils.toType(user, UserVo.class);
     }
 
     @Override
@@ -385,15 +382,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public PageableList<UserInfoVo> findUserInfoByPage(FindUserInfoVo vo) {
         User ue = new User();
-        if (vo.getIsDisabled() != null)
-            ue.setIsDisabled(vo.getIsDisabled());
-        if (vo.getRole() != null)
-            ue.setRole(vo.getRole());
+        if (vo.getIsDisabled() != null) ue.setIsDisabled(vo.getIsDisabled());
+        if (vo.getRole() != null) ue.setRole(vo.getRole());
 
         ue.setUsername(vo.getUsername());
 
         IPage<User> pge = userMapper.findUserInfoBy(forPage(vo.getPagingVo()), ue);
-        return toPageableList(pge, cvtr::toInfoVo);
+        return toPageableList(pge, v -> BeanCopyUtils.toType(v, UserInfoVo.class));
     }
 
     @Override

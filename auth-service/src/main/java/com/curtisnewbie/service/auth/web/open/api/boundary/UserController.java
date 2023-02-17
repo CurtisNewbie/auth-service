@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
+import com.curtisnewbie.common.action.*;
 import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
@@ -11,7 +12,6 @@ import com.curtisnewbie.goauth.client.GoAuthClient;
 import com.curtisnewbie.goauth.client.RoleInfoReq;
 import com.curtisnewbie.goauth.client.RoleInfoResp;
 import com.curtisnewbie.service.auth.dao.*;
-import com.curtisnewbie.service.auth.infrastructure.converters.UserWebConverter;
 import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.messaging.helper.LogOperation;
 import com.curtisnewbie.service.auth.messaging.services.AuthMessageDispatcher;
@@ -31,7 +31,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import javax.validation.Valid;
 
 import static com.curtisnewbie.common.util.AssertUtils.*;
-import static com.curtisnewbie.common.util.BeanCopyUtils.mapTo;
+import static com.curtisnewbie.common.util.BeanCopyUtils.*;
 import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
 
 /**
@@ -47,8 +47,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserWebConverter cvtr;
     @Autowired
     private AuthMessageDispatcher authMessageDispatcher;
     @Autowired
@@ -103,7 +101,7 @@ public class UserController {
         FindUserInfoVo searchParam = toFindUserInfoVo(reqVo);
         PageableList<UserInfoVo> pps = userService.findUserInfoByPage(searchParam);
         GetUserListRespWebVo resp = new GetUserListRespWebVo();
-        resp.setList(mapTo(pps.getPayload(), cvtr::toWebInfoVo));
+        resp.setList(toTypeList(pps.getPayload(), UserInfoWebVo.class));
         resp.setPagingVo(pps.getPagingVo());
         return Result.of(resp);
     }
