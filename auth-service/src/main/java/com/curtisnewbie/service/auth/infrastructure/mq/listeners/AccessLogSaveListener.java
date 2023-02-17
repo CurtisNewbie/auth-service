@@ -27,6 +27,5 @@ public class AccessLogSaveListener {
         }
 
         localAccessLogService.save(vo);
-        log.debug("Save access_log: '{}'", vo);
     }
 }

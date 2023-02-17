@@ -24,7 +24,6 @@ import java.util.List;
  * @author yongjie.zhuang
  */
 @Slf4j
-@Transactional
 @Service
 public class AppServiceImpl implements LocalAppService {
 
@@ -32,19 +31,18 @@ public class AppServiceImpl implements LocalAppService {
     private AppMapper appMapper;
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PageableList<AppVo> getAllAppInfo(@NotNull PagingVo pagingVo) {
         IPage<App> ipg = appMapper.selectAll(PagingUtil.forPage(pagingVo));
         return PagingUtil.toPageableList(ipg, b -> BeanCopyUtils.toType(b, AppVo.class));
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public List<AppBriefVo> getAllAppBriefInfo() {
         return BeanCopyUtils.toTypeList(appMapper.selectAllBriefInfo(), AppBriefVo.class);
     }
 
     @Override
+    @Transactional
     public Integer getAppIdByName(String appName) {
         return appMapper.selectAndConvert(new LambdaQueryWrapper<App>()
                 .select(App::getId)

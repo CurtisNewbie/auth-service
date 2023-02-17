@@ -17,11 +17,6 @@ import javax.validation.constraints.NotNull;
 public interface LocalOperateLogService {
 
     /**
-     * Move records to operate_log_history
-     */
-    void moveRecordsToHistory(@NotNull MoveOperateLogToHistoryCmd cmd);
-
-    /**
      * Save operate_log info
      */
     void saveOperateLogInfo(@NotNull OperateLogVo operateLogVo);

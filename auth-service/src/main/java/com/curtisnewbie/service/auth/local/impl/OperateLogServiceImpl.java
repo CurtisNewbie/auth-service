@@ -41,60 +41,9 @@ public class OperateLogServiceImpl implements LocalOperateLogService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PageableList<OperateLogVo> findOperateLogInfoInPages(@NotNull PagingVo pagingVo) {
         IPage<OperateLog> ipg = operateLogMapper.selectBasicInfo(forPage(pagingVo));
         return PagingUtil.toPageableList(ipg, o -> toType(o, OperateLogVo.class));
-    }
-
-    @Override
-    public void moveRecordsToHistory(@NotNull MoveOperateLogToHistoryCmd cmd) {
-        // validate the command object
-        cmd.validate();
-
-        final LocalDateTime before = cmd.before();
-        final int batchLimit = cmd.batchSize();
-
-        // records are moved, no need to change the page number
-        final PagingVo paging = new PagingVo().ofLimit(batchLimit).ofPage(1);
-
-        IPage<Integer> page = findIdsBeforeDateByPage(paging, before);
-
-        // count of records being moved
-        int count = 0;
-
-        // while has next page
-        while (moveRecordsToHistory(page.getRecords())) {
-
-            count += page.getRecords().size();
-
-            // violated maxCount, end the loop
-            if (cmd.isMaxCountViolated(count))
-                break;
-
-            page = findIdsBeforeDateByPage(paging, before);
-        }
-        log.info("Found and moved {} operate_log records before '{}' to operate_log_history", count,
-                before);
-    }
-
-    // ----------------------- private methods ----------------------
-
-    /**
-     * Move records to operate_log_history table
-     *
-     * @return has next page
-     */
-    private boolean moveRecordsToHistory(List<Integer> ids) {
-        if (ids.isEmpty())
-            return false;
-
-        transactionTemplate.execute(ex -> {
-            operateLogMapper.copyToHistory(ids);
-            operateLogMapper.deleteByIds(ids);
-            return null;
-        });
-        return true;
     }
 
     private IPage<Integer> findIdsBeforeDateByPage(PagingVo paging, LocalDateTime date) {

@@ -23,19 +23,18 @@ import java.time.LocalDateTime;
  */
 @Slf4j
 @Service
-@Transactional
 public class AccessLogServiceImpl implements LocalAccessLogService {
 
     @Autowired
     private AccessLogMapper m;
 
     @Override
+    @Transactional
     public void save(AccessLogInfoVo accessLogVo) {
         m.insert(BeanCopyUtils.toType(accessLogVo, AccessLog.class));
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PageableList<AccessLogInfoVo> findAccessLogInfoByPage(@NotNull PagingVo paging) {
         IPage<AccessLog> list = m.selectAllBasicInfo(PagingUtil.forPage(paging));
         return PagingUtil.toPageableList(list, v -> BeanCopyUtils.toType(v, AccessLogInfoVo.class));
