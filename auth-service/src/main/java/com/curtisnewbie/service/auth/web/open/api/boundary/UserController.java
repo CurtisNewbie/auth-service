@@ -1,5 +1,6 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
+import brave.Tracer;
 import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
@@ -29,9 +30,12 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.validation.Valid;
 
+import java.util.Optional;
+
 import static com.curtisnewbie.common.util.AssertUtils.*;
 import static com.curtisnewbie.common.util.BeanCopyUtils.*;
 import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 /**
  * User Controller
@@ -137,7 +141,7 @@ public class UserController {
         if (param.getRoleNo() != null) param.setRoleNo(param.getRoleNo().trim());
 
         // validate roleNo
-        if (StringUtils.isNotBlank(param.getRoleNo())) {
+        if (isNotBlank(param.getRoleNo())) {
             final RoleInfoReq rir = new RoleInfoReq();
             rir.setRoleNo(param.getRoleNo());
             final Result<RoleInfoResp> roleInfo = goAuthClient.getRoleInfo(rir);
@@ -182,9 +186,25 @@ public class UserController {
      * Get user info (no role control)
      */
     @GetMapping("/info")
-    public DeferredResult<Result<UserWebVo>> getUserInfo() {
-        final String username = TraceUtils.tUser().getUsername();
-        return AsyncUtils.runAsyncResult(() -> userService.loadUserInfo(username));
+    public Result<UserWebVo> getUserInfo() {
+        if (!TraceUtils.isLoggedIn())
+            return Result.ok();
+
+        final UserWebVo uv = userService.loadUserInfo(TraceUtils.tUser().getUsername());
+        if (isNotBlank(uv.getRoleNo())) {
+            uv.setRoleName(fetchRoleName(uv.getRoleNo()));
+        }
+        return Result.of(uv);
+    }
+
+    private String fetchRoleName(String roleNo) {
+        final RoleInfoReq rir = new RoleInfoReq();
+        rir.setRoleNo(roleNo);
+        final RoleInfoResp rr = Result.tryGetData(goAuthClient.getRoleInfo(rir), () -> String.format("goAuthClient.getRoleInfo, roleNo: %s", roleNo));
+        if (rr != null) {
+            return rr.getName();
+        }
+        return null;
     }
 
     /**
@@ -193,10 +213,13 @@ public class UserController {
     @GetMapping("/detail")
     public Result<UserDetailVo> getUserDetail() {
         final String username = TraceUtils.tUser().getUsername();
-        User user = userService.loadUserByUsername(username);
-        UserDetailVo userDetailVo = BeanCopyUtils.toType(user, UserDetailVo.class);
-        if (user.getCreateTime() != null) userDetailVo.setRegisterDate(user.getCreateTime().toLocalDate().toString());
-        return Result.of(userDetailVo);
+        User u = userService.loadUserByUsername(username);
+        UserDetailVo ud = BeanCopyUtils.toType(u, UserDetailVo.class);
+        if (u.getCreateTime() != null)
+            ud.setRegisterDate(u.getCreateTime().toLocalDate().toString());
+        if (isNotBlank(ud.getRoleNo()))
+            ud.setRoleName(fetchRoleName(ud.getRoleNo()));
+        return Result.of(ud);
     }
 
     /**

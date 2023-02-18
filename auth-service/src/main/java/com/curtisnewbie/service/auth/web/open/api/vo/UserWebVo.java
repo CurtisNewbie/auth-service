@@ -13,27 +13,15 @@ import java.util.List;
 @Data
 public class UserWebVo {
 
-    /** id */
     private Integer id;
-
-    /**
-     * username
-     */
     private String username;
+    private String roleName;
+    private String roleNo;
+    private String userNo;
 
-    /**
-     * role
-     */
+    /** Services permitted */
+    private List<String> services;
+
     @Deprecated
     private UserRole role;
-
-    /**
-     * Role No
-     */
-    private String roleNo;
-
-    /**
-     * Services permitted
-     */
-    private List<String> services;
 }

@@ -12,11 +12,20 @@ public class UserDetailVo {
     /** id */
     private Integer id;
 
+    /** user no */
+    private String userNo;
+
     /** username */
     private String username;
 
     /** role */
     private UserRole role;
+
+    /** role no */
+    private String roleNo;
+
+    /** role name */
+    private String roleName;
 
     /** when the user is registered */
     private String registerDate;

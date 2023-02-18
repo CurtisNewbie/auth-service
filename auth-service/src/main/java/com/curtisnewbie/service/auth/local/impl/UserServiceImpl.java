@@ -91,9 +91,10 @@ public class UserServiceImpl implements UserService {
                 .map(AppBriefVo::getName).collect(Collectors.toList());
 
         UserWebVo uw = new UserWebVo();
+        uw.setUserNo(user.getUserNo());
         uw.setServices(appNames);
         uw.setId(user.getId());
-        uw.setRole(user.getRole()); // TODO remove
+        uw.setRole(user.getRole());
         uw.setRoleNo(user.getRoleNo());
         uw.setUsername(user.getUsername());
 
