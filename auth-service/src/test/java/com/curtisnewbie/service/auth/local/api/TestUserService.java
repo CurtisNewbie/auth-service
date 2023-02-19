@@ -60,7 +60,6 @@ public class TestUserService {
             Assertions.assertNotNull(vo);
             Assertions.assertNotNull(vo.getId());
             Assertions.assertEquals(vo.getUsername(), USERNAME);
-            Assertions.assertEquals(vo.getRole(), ROLE.getValue());
         });
     }
 
@@ -90,7 +89,6 @@ public class TestUserService {
             Assertions.assertNotNull(vo);
             Assertions.assertNotNull(vo.getId());
             Assertions.assertEquals(vo.getUsername(), USERNAME);
-            Assertions.assertEquals(vo.getRole(), ROLE.getValue());
         });
     }
 
@@ -161,7 +159,6 @@ public class TestUserService {
         AddUserVo v = new AddUserVo();
         v.setUsername(USERNAME);
         v.setPassword(PASSWORD);
-        v.setRole(ROLE);
         return v;
     }
 

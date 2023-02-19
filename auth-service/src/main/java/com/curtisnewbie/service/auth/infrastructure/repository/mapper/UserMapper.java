@@ -27,11 +27,6 @@ public interface UserMapper extends EnhancedMapper<User> {
     Integer findIdByUsername(@Param("username") String username);
 
     /**
-     * Count number of administrators
-     */
-    int countAdmin();
-
-    /**
      * Update password
      *
      * @param hashedPwd hashed password

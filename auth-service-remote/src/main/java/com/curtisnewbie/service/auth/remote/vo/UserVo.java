@@ -23,9 +23,6 @@ public class UserVo implements Serializable {
     /** username (must be unique) */
     private String username;
 
-    /** role */
-    private UserRole role;
-
     /** when the user is created */
     private LocalDateTime createTime;
 

@@ -94,7 +94,6 @@ public class UserServiceImpl implements UserService {
         uw.setUserNo(user.getUserNo());
         uw.setServices(appNames);
         uw.setId(user.getId());
-        uw.setRole(user.getRole());
         uw.setRoleNo(user.getRoleNo());
         uw.setUsername(user.getUsername());
 
@@ -286,11 +285,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserVo login(String username, String password, String appName) {
         // validate the credentials first
-        final UserVo uv = login(username, password);
-
-        // validate whether current user is allowed to use this application, admin is allowed to use all applications
-        isFalse(uv.getRole() != UserRole.ADMIN && !userAppService.isUserAllowedToUseApp(uv.getId(), appName), USER_NOT_PERMITTED);
-        return uv;
+        return login(username, password);
     }
 
     @Override
@@ -307,13 +302,6 @@ public class UserServiceImpl implements UserService {
         // validate if the username and password is the same
         notEquals(username, password, "Username and password must be different");
 
-        // if not specified, the role will be guest
-        if (addUserVo.getRole() == null)
-            addUserVo.setRole(UserRole.GUEST);
-
-        // do not support adding administrator
-        isFalse(addUserVo.isAdmin(), "Do not support adding administrator");
-
         // user is already registered
         isNull(userMapper.findIdByUsername(addUserVo.getUsername()), USER_ALREADY_REGISTERED);
 
@@ -321,12 +309,13 @@ public class UserServiceImpl implements UserService {
         User user = prepNewUserCred(addUserVo.getPassword());
         user.setUserNo(genUserNo());
         user.setUsername(addUserVo.getUsername());
-        user.setRole(addUserVo.getRole());
+        user.setRoleNo(addUserVo.getRoleNo());
         user.setCreateBy(tUser().getUsername());
         user.setCreateTime(LocalDateTime.now());
         user.setIsDisabled(UserIsDisabled.NORMAL);
+        user.setReviewStatus(ReviewStatus.PENDING);
 
-        log.info("New user '{}' successfully registered, role: {}", addUserVo.getUsername(), addUserVo.getRole().getValue());
+        log.info("New user '{}' successfully registered, roleNo: {}", addUserVo.getUsername(), addUserVo.getRoleNo());
         userMapper.insert(user);
     }
 
@@ -348,11 +337,10 @@ public class UserServiceImpl implements UserService {
         // user is already registered
         isNull(userMapper.findIdByUsername(v.getUsername()), USER_ALREADY_REGISTERED);
 
-        // build user
+        // build user (without role)
         User user = prepNewUserCred(v.getPassword());
         user.setUserNo(genUserNo());
         user.setUsername(v.getUsername());
-        user.setRole(UserRole.GUEST);
         user.setCreateTime(LocalDateTime.now());
         user.setCreateBy(v.getUsername());
 
@@ -384,7 +372,6 @@ public class UserServiceImpl implements UserService {
     public PageableList<UserInfoVo> findUserInfoByPage(FindUserInfoVo vo) {
         User ue = new User();
         if (vo.getIsDisabled() != null) ue.setIsDisabled(vo.getIsDisabled());
-        if (vo.getRole() != null) ue.setRole(vo.getRole());
 
         ue.setUsername(vo.getUsername());
 
@@ -459,7 +446,6 @@ public class UserServiceImpl implements UserService {
         claims.put("id", user.getId().toString());
         claims.put("username", user.getUsername());
         claims.put("userno", user.getUserNo());
-        claims.put("role", user.getRole().getValue());
         claims.put("roleno", user.getRoleNo());
 
         final String appNames = userAppService.getAppsPermittedForUser(user.getId())
@@ -504,19 +490,6 @@ public class UserServiceImpl implements UserService {
             return Optional.of(count);
         } catch (NumberFormatException e) {
             return Optional.empty();
-        }
-    }
-
-    private void checkAdminQuota() {
-        // limit the total number of administrators
-        Optional<Integer> optInt = parseInteger(environment.getProperty(ADMIN_LIMIT_COUNT_KEY));
-        if (optInt.isPresent()) {
-            int currCntOfAdmin = userMapper.countAdmin();
-            // exceeded the max num of administrators
-            if (currCntOfAdmin >= optInt.get()) {
-                log.info("Try to register user as admin, but the maximum number of admin ({}) is exceeded.", optInt.get());
-                throw new UnrecoverableException(ADMIN_REG_NOT_ALLOWED);
-            }
         }
     }
 

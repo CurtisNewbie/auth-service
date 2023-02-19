@@ -22,6 +22,7 @@ public class UserWebVo {
     /** Services permitted */
     private List<String> services;
 
+    /** will always be null */
     @Deprecated
     private UserRole role;
 }

@@ -90,7 +90,16 @@ public class UserController {
     @LogOperation(name = "addUser", description = "Add user")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/add")
-    public Result<?> addUser(@RequestBody AddUserVo param) {
+    public Result<?> addUser(@Validated @RequestBody AddUserVo param) {
+
+        // validate roleNo
+        if (isNotBlank(param.getRoleNo())) {
+            final RoleInfoReq rir = new RoleInfoReq();
+            rir.setRoleNo(param.getRoleNo());
+            final Result<RoleInfoResp> roleInfo = goAuthClient.getRoleInfo(rir);
+            roleInfo.assertIsOk();
+        }
+
         userService.addUser(param);
         return Result.ok();
     }
@@ -251,7 +260,6 @@ public class UserController {
         infoVo.setUsername(reqVo.getUsername());
         infoVo.setPagingVo(reqVo.getPagingVo());
         if (reqVo.getIsDisabled() != null) infoVo.setIsDisabled(reqVo.getIsDisabled());
-        if (reqVo.getRole() != null) infoVo.setRole(reqVo.getRole());
         return infoVo;
     }
 

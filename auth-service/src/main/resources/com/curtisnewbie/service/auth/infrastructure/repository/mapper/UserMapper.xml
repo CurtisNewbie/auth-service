@@ -12,9 +12,6 @@
   <update id="updateUser">
     update user
     <set>
-      <if test="role != null">
-        role = #{role},
-      </if>
       <if test="isDisabled != null">
         is_disabled = #{isDisabled},
       </if>
@@ -42,13 +39,6 @@
     LIMIT 1
   </select>
 
-  <select id="countAdmin" resultType="java.lang.Integer">
-    SELECT COUNT(*)
-    FROM user
-    WHERE role = 'admin'
-    AND is_del = 0
-  </select>
-
   <select id="findById" resultType="com.curtisnewbie.service.auth.dao.User">
     SELECT *
     FROM user
@@ -57,14 +47,11 @@
   </select>
 
   <select id="findUserInfoBy" resultType="com.curtisnewbie.service.auth.dao.User">
-    select id, user_no, username, role, is_disabled, review_status, create_by, create_time, update_by, update_time, is_del
+    select id, user_no, username, is_disabled, review_status, create_by, create_time, update_by, update_time, is_del
     from user
     <where>
       <if test="u.username != null and u.username != ''">
         username like "%"#{u.username}"%"
-      </if>
-      <if test="u.role != null">
-        and role = #{u.role}
       </if>
       <if test="u.isDisabled != null">
         and is_disabled = #{u.isDisabled}
