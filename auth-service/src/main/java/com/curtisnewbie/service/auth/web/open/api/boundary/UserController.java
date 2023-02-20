@@ -1,10 +1,8 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import brave.Tracer;
 import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
-import com.curtisnewbie.common.util.AsyncUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.vo.*;
@@ -26,14 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.validation.Valid;
 
-import java.util.Optional;
-
 import static com.curtisnewbie.common.util.AssertUtils.*;
-import static com.curtisnewbie.common.util.BeanCopyUtils.*;
 import static com.curtisnewbie.service.auth.util.UserValidator.validatePassword;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
@@ -109,13 +103,8 @@ public class UserController {
      */
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/list")
-    public Result<GetUserListRespWebVo> getUserList(@RequestBody GetUserListReqWebVo reqVo) {
-        FindUserInfoVo searchParam = toFindUserInfoVo(reqVo);
-        PageableList<UserInfoVo> pps = userService.findUserInfoByPage(searchParam);
-        GetUserListRespWebVo resp = new GetUserListRespWebVo();
-        resp.setList(toTypeList(pps.getPayload(), UserInfoWebVo.class));
-        resp.setPagingVo(pps.getPagingVo());
-        return Result.of(resp);
+    public Result<PageableList<UserInfoVo>> listUsers(@RequestBody ListUserReq req) {
+        return Result.of(userService.findUserInfoByPage(req));
     }
 
     /**
@@ -138,11 +127,8 @@ public class UserController {
     @LogOperation(name = "updateUserInfo", description = "Update user info")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/info/update")
-    public Result<Void> updateUserInfo(@RequestBody UpdateUserInfoReqVo param) {
+    public Result<Void> updateUserInfo(@Validated @RequestBody UpdateUserInfoReqVo param) {
         TUser tUser = TraceUtils.tUser();
-        Assert.isTrue(UserRole.isAdmin(tUser.getRole()), "Not permitted");
-
-        nonNull(param.getId(), "id == null");
         notEquals(param.getId(), TraceUtils.tUser().getUserId(), "You cannot update yourself");
 
         UserIsDisabled isDisabled = null;
@@ -251,16 +237,6 @@ public class UserController {
 
         userService.updatePassword(newPassword, prevPassword, tUser.getUserId());
         return Result.ok();
-    }
-
-    // --------------------------------- private helper methods ------------------------------------
-
-    private static FindUserInfoVo toFindUserInfoVo(GetUserListReqWebVo reqVo) {
-        FindUserInfoVo infoVo = new FindUserInfoVo();
-        infoVo.setUsername(reqVo.getUsername());
-        infoVo.setPagingVo(reqVo.getPagingVo());
-        if (reqVo.getIsDisabled() != null) infoVo.setIsDisabled(reqVo.getIsDisabled());
-        return infoVo;
     }
 
 }

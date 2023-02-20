@@ -26,6 +26,8 @@ public class FindUserInfoVo implements Serializable {
     /** whether the user is disabled */
     private UserIsDisabled isDisabled;
 
+    private String roleNo;
+
     /** paging param */
     private PagingVo pagingVo = new PagingVo();
 

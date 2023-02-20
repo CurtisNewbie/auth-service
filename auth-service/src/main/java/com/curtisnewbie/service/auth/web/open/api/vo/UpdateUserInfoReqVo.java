@@ -2,6 +2,8 @@ package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author yongjie.zhuang
  */
@@ -11,12 +13,8 @@ public class UpdateUserInfoReqVo {
     /**
      * User id
      */
+    @NotNull
     private Integer id;
-
-    /**
-     * User role
-     */
-    private String role;
 
     /**
      * User Role No

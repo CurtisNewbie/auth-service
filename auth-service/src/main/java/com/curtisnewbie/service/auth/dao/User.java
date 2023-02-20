@@ -39,11 +39,6 @@ public class User extends DaoSkeleton {
     @TableField("review_status")
     private ReviewStatus reviewStatus;
 
-//    /** role */
-//    @Deprecated // TODO remove
-//    @TableField("role")
-//    private UserRole role;
-
     /** roleNo */
     @TableField("role_no")
     private String roleNo;

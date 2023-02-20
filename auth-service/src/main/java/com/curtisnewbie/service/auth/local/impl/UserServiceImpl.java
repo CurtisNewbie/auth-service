@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
-import com.curtisnewbie.common.exceptions.UnrecoverableException;
 import com.curtisnewbie.common.util.*;
 import com.curtisnewbie.common.vo.*;
+import com.curtisnewbie.goauth.client.GoAuthClient;
+import com.curtisnewbie.goauth.client.RoleInfoReq;
+import com.curtisnewbie.goauth.client.RoleInfoResp;
 import com.curtisnewbie.module.jwt.domain.api.JwtBuilder;
 import com.curtisnewbie.module.jwt.domain.api.JwtDecoder;
 import com.curtisnewbie.module.jwt.vo.DecodeResult;
@@ -19,6 +21,7 @@ import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
+import com.curtisnewbie.service.auth.web.open.api.vo.ListUserReq;
 import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -70,6 +74,8 @@ public class UserServiceImpl implements UserService {
     private RedisController redisController;
     @Autowired
     private LocalAppService appService;
+    @Autowired
+    private GoAuthClient goAuthClient;
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -133,13 +139,11 @@ public class UserServiceImpl implements UserService {
     public void updateUser(UpdateUserVo param) {
         User ue = new User();
         ue.setId(param.getId());
-        if (param.getIsDisabled() == null && param.getRole() == null)
-            throw new IllegalArgumentException("Nothing to update");
-        if (param.getIsDisabled() != null)
-            ue.setIsDisabled(param.getIsDisabled());
+        ue.setIsDisabled(param.getIsDisabled());
+        ue.setRoleNo(param.getRoleNo());
         ue.setUpdateBy(param.getUpdateBy());
         ue.setUpdateTime(LocalDateTime.now());
-        userMapper.updateUser(ue);
+        userMapper.updateById(ue);
     }
 
     @Override
@@ -369,14 +373,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
-    public PageableList<UserInfoVo> findUserInfoByPage(FindUserInfoVo vo) {
-        User ue = new User();
-        if (vo.getIsDisabled() != null) ue.setIsDisabled(vo.getIsDisabled());
+    public PageableList<UserInfoVo> findUserInfoByPage(ListUserReq req) {
+        IPage<User> pge = userMapper.findUserInfoBy(forPage(req.getPagingVo()), req);
+        final PageableList<UserInfoVo> pl = toPageableList(pge, v -> BeanCopyUtils.toType(v, UserInfoVo.class));
 
-        ue.setUsername(vo.getUsername());
-
-        IPage<User> pge = userMapper.findUserInfoBy(forPage(vo.getPagingVo()), ue);
-        return toPageableList(pge, v -> BeanCopyUtils.toType(v, UserInfoVo.class));
+        // convert roleNo to role name
+        if (pl.getPayload() != null) {
+            try {
+                pl.getPayload().stream()
+                        .filter(u -> StringUtils.hasText(u.getRoleNo()))
+                        .forEach(u -> {
+                            final RoleInfoReq r = new RoleInfoReq();
+                            r.setRoleNo(u.getRoleNo());
+                            final Result<RoleInfoResp> res = goAuthClient.getRoleInfo(r);
+                            if (res.isOk()) u.setRoleName(res.getData().getName());
+                        });
+            } catch (Exception e) {
+                log.error("Failed to fetch role names", e);
+            }
+        }
+        return pl;
     }
 
     @Override

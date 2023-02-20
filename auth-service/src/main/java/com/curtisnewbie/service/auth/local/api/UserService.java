@@ -4,6 +4,7 @@ import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
+import com.curtisnewbie.service.auth.web.open.api.vo.ListUserReq;
 import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.annotation.Validated;
@@ -112,7 +113,7 @@ public interface UserService {
      * Fetch list of user info based on the provided arguments
      */
     @NotNull
-    PageableList<UserInfoVo> findUserInfoByPage(@Valid @NotNull FindUserInfoVo vo);
+    PageableList<UserInfoVo> findUserInfoByPage(@Valid @NotNull ListUserReq vo);
 
     /**
      * Disable user by id

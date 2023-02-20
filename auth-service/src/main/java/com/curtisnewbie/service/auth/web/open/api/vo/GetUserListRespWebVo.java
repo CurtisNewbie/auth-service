@@ -1,6 +1,7 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.vo.PageableVo;
+import com.curtisnewbie.service.auth.remote.vo.UserInfoVo;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * @author yongjie.zhuang
  */
 @Data
-public class GetUserListRespWebVo extends PageableVo implements Serializable {
+public class GetUserListRespWebVo extends PageableVo<Void> {
 
-    private Iterable<UserInfoWebVo> list;
+    private Iterable<UserInfoVo> list;
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.common.util.EnhancedMapper;
 import com.curtisnewbie.service.auth.dao.User;
+import com.curtisnewbie.service.auth.web.open.api.vo.ListUserReq;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -44,15 +45,10 @@ public interface UserMapper extends EnhancedMapper<User> {
     /**
      * Select id, username, role, is_disabled, create_time, update_time, create_by, update_by
      */
-    IPage<User> findUserInfoBy(Page p, @Param("u") User ue);
+    IPage<User> findUserInfoBy(Page p, @Param("u") ListUserReq req);
 
     /**
      * Select username
      */
     String findUsernameById(@Param("id") int id);
-
-    /**
-     * Update role, is_disabled, update_by, update_time
-     */
-    void updateUser(User ue);
 }
