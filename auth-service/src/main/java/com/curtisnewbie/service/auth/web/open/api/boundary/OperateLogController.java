@@ -6,6 +6,7 @@ import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.common.vo.Result;
+import com.curtisnewbie.goauth.client.PathDoc;
 import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
@@ -25,6 +26,7 @@ public class OperateLogController {
     @Autowired
     private LocalOperateLogService operateLogService;
 
+    @PathDoc(description = "List operate logs")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/history")
     public Result<FindOperateLogRespWebVo> findByPage(@RequestBody PagingVo pagingVo) throws MsgEmbeddedException {

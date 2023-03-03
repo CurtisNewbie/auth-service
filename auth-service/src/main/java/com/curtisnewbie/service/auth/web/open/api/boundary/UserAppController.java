@@ -5,6 +5,7 @@ import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.Result;
+import com.curtisnewbie.goauth.client.PathDoc;
 import com.curtisnewbie.service.auth.local.api.LocalAppService;
 import com.curtisnewbie.service.auth.local.api.LocalUserAppService;
 import com.curtisnewbie.service.auth.remote.vo.AppBriefVo;
@@ -37,6 +38,7 @@ public class UserAppController {
     @Autowired
     private LocalUserAppService userAppService;
 
+    @PathDoc(description = "Admin list apps")
     @PostMapping("/list/all")
     public Result<PageableList<AppWebVo>> listApps(@RequestBody PageableVo<AppWebVo> req)
             throws MsgEmbeddedException {
@@ -48,16 +50,19 @@ public class UserAppController {
         return Result.of(resp);
     }
 
+    @PathDoc(description = "Admin list all apps brief info")
     @GetMapping("/list/brief/all")
     public Result<List<AppBriefVo>> listAppsBriefInfo() {
         return Result.of(appService.getAllAppBriefInfo());
     }
 
+    @PathDoc(description = "Admin list apps accessible by user")
     @PostMapping("/list/user")
     public Result<List<AppBriefVo>> getAppsForUser(@Valid @RequestBody GetAppsForUserReqVo vo) throws MsgEmbeddedException {
         return Result.of(userAppService.getAppsPermittedForUser(vo.getUserId()));
     }
 
+    @PathDoc(description = "Admin update user's apps")
     @PostMapping("/user/update")
     public Result<Void> updateUserApps(@RequestBody UpdateUserAppReqWebVo reqVo) throws MsgEmbeddedException {
         reqVo.validate();

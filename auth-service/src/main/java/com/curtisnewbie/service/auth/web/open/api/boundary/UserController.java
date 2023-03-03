@@ -7,6 +7,7 @@ import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.goauth.client.GoAuthClient;
+import com.curtisnewbie.goauth.client.PathDoc;
 import com.curtisnewbie.goauth.client.RoleInfoReq;
 import com.curtisnewbie.goauth.client.RoleInfoResp;
 import com.curtisnewbie.service.auth.dao.*;
@@ -52,6 +53,7 @@ public class UserController {
     /**
      * Login (no role control)
      */
+    @PathDoc(description = "Login")
     @PostMapping("/login")
     public Result<String> login(@Validated @RequestBody LoginWebVo loginWebVo,
                                 @RequestHeader(value = "x-forwarded-for", required = false) String forwardedFor,
@@ -81,6 +83,7 @@ public class UserController {
     /**
      * Add User (Only Admin is permitted)
      */
+    @PathDoc(description = "Admin add user")
     @LogOperation(name = "addUser", description = "Add user")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/add")
@@ -101,6 +104,7 @@ public class UserController {
     /**
      * List users (only admin)
      */
+    @PathDoc(description = "Admin list users")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/list")
     public Result<PageableList<UserInfoVo>> listUsers(@RequestBody ListUserReq req) {
@@ -110,6 +114,7 @@ public class UserController {
     /**
      * Delete user logically (only admin)
      */
+    @PathDoc(description = "Admin delete user")
     @LogOperation(name = "deleteUser", description = "Delete user")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/delete")
@@ -124,6 +129,7 @@ public class UserController {
     /**
      * Update user info (only admin)
      */
+    @PathDoc(description = "Admin update user info")
     @LogOperation(name = "updateUserInfo", description = "Update user info")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/info/update")
@@ -152,6 +158,7 @@ public class UserController {
         return Result.ok();
     }
 
+    @PathDoc(description = "Admin review user registration")
     @LogOperation(name = "reviewRegistration", description = "User registration review")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/registration/review")
@@ -171,6 +178,7 @@ public class UserController {
     /**
      * Registration request (no role control)
      */
+    @PathDoc(description = "User request registration")
     @PostMapping("/register/request")
     public Result<?> register(@RequestBody RegisterUserVo vo) {
         userService.register(vo);
@@ -180,6 +188,7 @@ public class UserController {
     /**
      * Get user info (no role control)
      */
+    @PathDoc(description = "User get user info")
     @GetMapping("/info")
     public Result<UserWebVo> getUserInfo() {
         if (!TraceUtils.isLoggedIn())
@@ -205,6 +214,7 @@ public class UserController {
     /**
      * Get user info (no role control)
      */
+    @PathDoc(description = "User get user details")
     @GetMapping("/detail")
     public Result<UserDetailVo> getUserDetail() {
         final String username = TraceUtils.tUser().getUsername();
@@ -220,6 +230,7 @@ public class UserController {
     /**
      * Update password (no role control)
      */
+    @PathDoc(description = "User update password")
     @PostMapping("/password/update")
     public Result<Void> updatePassword(@RequestBody UpdatePasswordWebVo vo) {
         final TUser tUser = TraceUtils.tUser();

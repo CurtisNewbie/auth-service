@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.web.open.api.boundary;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.vo.*;
+import com.curtisnewbie.goauth.client.PathDoc;
 import com.curtisnewbie.service.auth.local.api.UserKeyService;
 import com.curtisnewbie.service.auth.local.api.UserService;
 import com.curtisnewbie.service.auth.local.vo.cmd.GenerateUserKeyCmd;
@@ -32,6 +33,7 @@ public class UserKeyController {
     /**
      * Generate user key, the user key can be used as a password
      */
+    @PathDoc(description = "User generate user key")
     @PostMapping("/generate")
     public Result<Void> generateUserKey(@Validated @RequestBody GenerateUserKeyReqWebVo req) {
 
@@ -53,6 +55,7 @@ public class UserKeyController {
     /**
      * List user keys
      */
+    @PathDoc(description = "User list user keys")
     @PostMapping("/list")
     public Result<PageableList<UserKeyVo>> listUserKeys(@RequestBody PageableVo<ListUserKeyReqVo> p) {
         final TUser user = TraceUtils.tUser();
@@ -62,6 +65,7 @@ public class UserKeyController {
     /**
      * Delete user key
      */
+    @PathDoc(description = "User delete user key")
     @PostMapping("/delete")
     public Result<Void> deleteUserKey(@RequestBody @Validated DeleteUserKeyReqVo req) {
         final TUser user = TraceUtils.tUser();

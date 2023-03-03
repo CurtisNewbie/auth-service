@@ -5,6 +5,7 @@ import com.curtisnewbie.common.util.AssertUtils;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.Result;
+import com.curtisnewbie.goauth.client.PathDoc;
 import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.ListAccessLogInfoReqWebVo;
@@ -26,6 +27,7 @@ public class AccessLogController {
     @Autowired
     private LocalAccessLogService accessLogService;
 
+    @PathDoc(description = "List access logs")
     @RoleControlled(rolesRequired = "admin")
     @PostMapping("/history")
     public Result<PageableVo<List<AccessLogInfoVo>>> listAccessLogInfo(@RequestBody ListAccessLogInfoReqWebVo vo) {
