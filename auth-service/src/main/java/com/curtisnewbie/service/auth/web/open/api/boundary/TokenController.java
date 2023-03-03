@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.web.open.api.boundary;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.goauth.client.PathDoc;
+import com.curtisnewbie.goauth.client.PathType;
 import com.curtisnewbie.service.auth.dao.User;
 import com.curtisnewbie.service.auth.local.api.UserService;
 import com.curtisnewbie.service.auth.web.open.api.vo.ExchangeTokenWebVo;
@@ -26,13 +27,13 @@ public class TokenController {
     @Autowired
     private UserService userService;
 
-    @PathDoc(description = "Exchange token")
+    @PathDoc(description = "Exchange token", type = PathType.PUBLIC)
     @PostMapping("/exchange")
     public Result<String> exchangeToken(@Validated @RequestBody ExchangeTokenWebVo exchangeTokenWebVo) {
         return Result.of(userService.exchangeToken(exchangeTokenWebVo.getToken()));
     }
 
-    @PathDoc(description = "Get user info by token")
+    @PathDoc(description = "Get user info by token", type = PathType.PUBLIC)
     @GetMapping("/user")
     public Result<UserWebVo> getUserInfo(@RequestParam("token") final String token) {
         final User userInfo = userService.getUserInfoByToken(token);

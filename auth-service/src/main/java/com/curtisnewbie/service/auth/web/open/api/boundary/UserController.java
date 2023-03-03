@@ -6,10 +6,7 @@ import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.util.EnumUtils;
 import com.curtisnewbie.common.vo.*;
-import com.curtisnewbie.goauth.client.GoAuthClient;
-import com.curtisnewbie.goauth.client.PathDoc;
-import com.curtisnewbie.goauth.client.RoleInfoReq;
-import com.curtisnewbie.goauth.client.RoleInfoResp;
+import com.curtisnewbie.goauth.client.*;
 import com.curtisnewbie.service.auth.dao.*;
 import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.messaging.helper.LogOperation;
@@ -53,7 +50,7 @@ public class UserController {
     /**
      * Login (no role control)
      */
-    @PathDoc(description = "Login")
+    @PathDoc(description = "Login", type = PathType.PUBLIC)
     @PostMapping("/login")
     public Result<String> login(@Validated @RequestBody LoginWebVo loginWebVo,
                                 @RequestHeader(value = "x-forwarded-for", required = false) String forwardedFor,
@@ -178,7 +175,7 @@ public class UserController {
     /**
      * Registration request (no role control)
      */
-    @PathDoc(description = "User request registration")
+    @PathDoc(description = "User request registration", type = PathType.PUBLIC)
     @PostMapping("/register/request")
     public Result<?> register(@RequestBody RegisterUserVo vo) {
         userService.register(vo);
