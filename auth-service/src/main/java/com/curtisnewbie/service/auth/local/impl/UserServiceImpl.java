@@ -55,15 +55,12 @@ import static com.curtisnewbie.service.auth.util.UserValidator.validateUsername;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-    private static final String ADMIN_LIMIT_COUNT_KEY = "admin.count.limit";
     private static final String USER_NO_PREFIX = "UE";
 
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private UserKeyService userKeyService;
-    @Autowired
-    private LocalUserAppService userAppService;
     @Autowired
     private Environment environment;
     @Autowired
@@ -72,8 +69,6 @@ public class UserServiceImpl implements UserService {
     private JwtDecoder jwtDecoder;
     @Autowired
     private RedisController redisController;
-    @Autowired
-    private LocalAppService appService;
     @Autowired
     private GoAuthClient goAuthClient;
 
@@ -92,13 +87,9 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.findByUsername(username);
         notNull(user, USER_NOT_FOUND);
 
-        final List<String> appNames = userAppService.getAppsPermittedForUser(user.getId())
-                .stream()
-                .map(AppBriefVo::getName).collect(Collectors.toList());
-
         UserWebVo uw = new UserWebVo();
         uw.setUserNo(user.getUserNo());
-        uw.setServices(appNames);
+        uw.setServices(Collections.emptyList());
         uw.setId(user.getId());
         uw.setRoleNo(user.getRoleNo());
         uw.setUsername(user.getUsername());
@@ -250,12 +241,6 @@ public class UserServiceImpl implements UserService {
             update.setReviewStatus(reviewStatus);
             update.setIsDisabled(reviewStatus == ReviewStatus.APPROVED ? UserIsDisabled.NORMAL : UserIsDisabled.DISABLED);
             userMapper.updateById(update);
-
-            if (reviewStatus == ReviewStatus.APPROVED) {
-                final Integer appId = appService.getAppIdByName("auth-service");
-                if (appId != null)
-                    userAppService.addUserApp(userId, appId, "system");
-            }
         });
     }
 
@@ -463,12 +448,7 @@ public class UserServiceImpl implements UserService {
         claims.put("username", user.getUsername());
         claims.put("userno", user.getUserNo());
         claims.put("roleno", user.getRoleNo());
-
-        final String appNames = userAppService.getAppsPermittedForUser(user.getId())
-                .stream()
-                .map(AppBriefVo::getName)
-                .collect(Collectors.joining(","));
-        claims.put("services", appNames);
+        claims.put("services", "");
 
         // by default valid for 15 minutes
         return jwtBuilder.encode(claims, LocalDateTime.now().plusMinutes(15));

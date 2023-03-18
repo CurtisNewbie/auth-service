@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.exceptions.MsgEmbeddedException;
 import com.curtisnewbie.common.util.BeanCopyUtils;
 import com.curtisnewbie.common.vo.PageableList;
@@ -26,8 +25,7 @@ public class OperateLogController {
     @Autowired
     private LocalOperateLogService operateLogService;
 
-    @PathDoc(description = "List operate logs")
-    @RoleControlled(rolesRequired = "admin")
+    @PathDoc(description = "List operate logs", resourceCode = Resources.OPERATE_LOG, resourceName = Resources.OPERATE_LOG_NAME)
     @PostMapping("/history")
     public Result<FindOperateLogRespWebVo> findByPage(@RequestBody PagingVo pagingVo) throws MsgEmbeddedException {
         PageableList<OperateLogVo> pv = operateLogService.findOperateLogInfoInPages(pagingVo);

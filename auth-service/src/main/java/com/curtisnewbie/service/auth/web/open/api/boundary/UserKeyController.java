@@ -23,6 +23,7 @@ import static com.curtisnewbie.common.util.AssertUtils.isTrue;
 @Slf4j
 @RestController
 @RequestMapping("${web.base-path}/user/key")
+@PathDoc(resourceCode = Resources.BASIC_USER, resourceName = Resources.BASIC_USER_NAME)
 public class UserKeyController {
 
     @Autowired

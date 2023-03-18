@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.util.AssertUtils;
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PageableVo;
@@ -27,8 +26,7 @@ public class AccessLogController {
     @Autowired
     private LocalAccessLogService accessLogService;
 
-    @PathDoc(description = "List access logs")
-    @RoleControlled(rolesRequired = "admin")
+    @PathDoc(description = "List access logs", resourceCode = Resources.ACCESS_LOG, resourceName = Resources.ACCESS_LOG_NAME)
     @PostMapping("/history")
     public Result<PageableVo<List<AccessLogInfoVo>>> listAccessLogInfo(@RequestBody ListAccessLogInfoReqWebVo vo) {
         AssertUtils.nonNull(vo.getPagingVo());

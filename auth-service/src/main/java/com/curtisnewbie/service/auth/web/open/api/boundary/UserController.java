@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.web.open.api.boundary;
 
-import com.curtisnewbie.common.advice.RoleControlled;
 import com.curtisnewbie.common.trace.TUser;
 import com.curtisnewbie.common.trace.TraceUtils;
 import com.curtisnewbie.common.util.BeanCopyUtils;
@@ -80,9 +79,8 @@ public class UserController {
     /**
      * Add User (Only Admin is permitted)
      */
-    @PathDoc(description = "Admin add user")
+    @PathDoc(description = "Admin add user", resourceCode = Resources.ADMIN_MNG_USER, resourceName = Resources.ADMIN_MNG_USER_NAME)
     @LogOperation(name = "addUser", description = "Add user")
-    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/add")
     public Result<?> addUser(@Validated @RequestBody AddUserVo param) {
 
@@ -101,8 +99,7 @@ public class UserController {
     /**
      * List users (only admin)
      */
-    @PathDoc(description = "Admin list users")
-    @RoleControlled(rolesRequired = "admin")
+    @PathDoc(description = "Admin list users", resourceCode = Resources.ADMIN_MNG_USER, resourceName = Resources.ADMIN_MNG_USER_NAME)
     @PostMapping("/list")
     public Result<PageableList<UserInfoVo>> listUsers(@RequestBody ListUserReq req) {
         return Result.of(userService.findUserInfoByPage(req));
@@ -111,9 +108,8 @@ public class UserController {
     /**
      * Delete user logically (only admin)
      */
-    @PathDoc(description = "Admin delete user")
+    @PathDoc(description = "Admin delete user", resourceCode = Resources.ADMIN_MNG_USER, resourceName = Resources.ADMIN_MNG_USER_NAME)
     @LogOperation(name = "deleteUser", description = "Delete user")
-    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/delete")
     public Result<Void> deleteUser(@RequestBody DeleteUserReqWebVo reqVo) throws InvalidAuthenticationException {
         TUser tUser = TraceUtils.tUser();
@@ -126,9 +122,8 @@ public class UserController {
     /**
      * Update user info (only admin)
      */
-    @PathDoc(description = "Admin update user info")
+    @PathDoc(description = "Admin update user info", resourceCode = Resources.ADMIN_MNG_USER, resourceName = Resources.ADMIN_MNG_USER_NAME)
     @LogOperation(name = "updateUserInfo", description = "Update user info")
-    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/info/update")
     public Result<Void> updateUserInfo(@Validated @RequestBody UpdateUserInfoReqVo param) {
         TUser tUser = TraceUtils.tUser();
@@ -155,9 +150,8 @@ public class UserController {
         return Result.ok();
     }
 
-    @PathDoc(description = "Admin review user registration")
+    @PathDoc(description = "Admin review user registration", resourceCode = Resources.ADMIN_MNG_USER, resourceName = Resources.ADMIN_MNG_USER_NAME)
     @LogOperation(name = "reviewRegistration", description = "User registration review")
-    @RoleControlled(rolesRequired = "admin")
     @PostMapping("/registration/review")
     public Result<Void> reviewRegistration(@Valid @RequestBody UserReviewCmd cmd) {
         userService.reviewUserRegistration(cmd);
@@ -185,7 +179,7 @@ public class UserController {
     /**
      * Get user info (no role control)
      */
-    @PathDoc(description = "User get user info")
+    @PathDoc(description = "User get user info", resourceCode = Resources.BASIC_USER, resourceName = Resources.BASIC_USER_NAME)
     @GetMapping("/info")
     public Result<UserWebVo> getUserInfo() {
         if (!TraceUtils.isLoggedIn())
@@ -211,7 +205,7 @@ public class UserController {
     /**
      * Get user info (no role control)
      */
-    @PathDoc(description = "User get user details")
+    @PathDoc(description = "User get user details", resourceCode = Resources.BASIC_USER, resourceName = Resources.BASIC_USER_NAME)
     @GetMapping("/detail")
     public Result<UserDetailVo> getUserDetail() {
         final String username = TraceUtils.tUser().getUsername();
@@ -227,7 +221,7 @@ public class UserController {
     /**
      * Update password (no role control)
      */
-    @PathDoc(description = "User update password")
+    @PathDoc(description = "User update password", resourceCode = Resources.BASIC_USER, resourceName = Resources.BASIC_USER_NAME)
     @PostMapping("/password/update")
     public Result<Void> updatePassword(@RequestBody UpdatePasswordWebVo vo) {
         final TUser tUser = TraceUtils.tUser();
