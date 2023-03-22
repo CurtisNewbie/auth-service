@@ -34,9 +34,10 @@ This project depends on the following modules that you must manually install (us
 - [distributed-task-module v2.1.1.4](https://github.com/CurtisNewbie/distributed-task-module/tree/v2.1.1.4)
 - [messaging-module v2.0.8](https://github.com/CurtisNewbie/messaging-module/tree/v2.0.8)
 - [common-module v2.2.0](https://github.com/CurtisNewbie/common-module/tree/v2.2.0)
+- [goauth-client-java v1.0.0](https://github.com/CurtisNewbie/goauth/tree/v1.0.0/client/goauth-client-java)
 
 ## Updates
 
-- Since v1.1.6, `goauth` is required for path level authorization and resource management. Roles are no longer hard-coded, instead, role_no specify the role that the user has, and that role can be bound with 1..* resources, depending on what the role is allowed to access. The role and resource management is handled by `goauth` service.
+- Since v1.1.6, `goauth` is required for path level authorization and resource management. Roles are no longer hard-coded, instead, role_no specify the role that the user has, and that role can be bound to 1..N resources, depending on what the role is allowed to access. The role and resource management is handled by `goauth` service.
 
 - Since release V1.1.4.5, LocalDateTime / Date are serialized and deserialized in the form of epoch time (milliseconds), this is not backward compatible, some MQ messages may also be affected as well.
