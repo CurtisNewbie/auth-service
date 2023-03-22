@@ -8,7 +8,8 @@ Service for managing users, authentication, access log, operation log and so on.
 
 ## Requirements 
 
-- auth-service-front (Angular frontend) >= [v1.1.6](https://github.com/CurtisNewbie/auth-service-front/tree/v1.1.6)
+- auth-service-front (Angular frontend) >= [v1.1.7](https://github.com/CurtisNewbie/auth-service-front/tree/v1.1.7)
+- goauth >= [v1.0.0](https://github.com/CurtisNewbie/goauth/tree/v1.0.0)
 - MySQL 5.7 or 8
 - Consul
 - RabbitMQ
@@ -35,5 +36,7 @@ This project depends on the following modules that you must manually install (us
 - [common-module v2.2.0](https://github.com/CurtisNewbie/common-module/tree/v2.2.0)
 
 ## Updates
+
+- Since v1.1.6, `goauth` is required for path level authorization and resource management. Roles are no longer hard-coded, instead, role_no specify the role that the user has, and that role can be bound with 1..* resources, depending on what the role is allowed to access. The role and resource management is handled by `goauth` service.
 
 - Since release V1.1.4.5, LocalDateTime / Date are serialized and deserialized in the form of epoch time (milliseconds), this is not backward compatible, some MQ messages may also be affected as well.
