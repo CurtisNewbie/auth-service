@@ -28,18 +28,18 @@ import static org.springframework.util.StringUtils.hasText;
 /**
  * @author yongjie.zhuang
  */
-@Slf4j
 @Service
 public class UserKeyServiceImpl implements UserKeyService {
 
-    public static int KEY_LEN = 64;
+    public static final int KEY_LEN = 64;
 
     @Autowired
     private UserKeyMapper userKeyMapper;
 
     @Override
     public GenerateUserKeyResp generateUserKey(GenerateUserKeyCmd cmd) {
-        Assert.isTrue(cmd.getExpirationTime().isAfter(LocalDateTime.now()), "expirationTime must be after current time");
+        Assert.isTrue(cmd.getExpirationTime().isAfter(LocalDateTime.now()),
+                "expirationTime must be after current time");
         final String key = RandomUtils.randomAlphaNumeric(KEY_LEN);
 
         final UserKey insertParam = new UserKey();
@@ -60,7 +60,8 @@ public class UserKeyServiceImpl implements UserKeyService {
     public PageableList<UserKeyVo> listUserKeys(int userId, String name, PagingVo p) {
         final Page<UserKey> ukPage = userKeyMapper.selectPage(PagingUtil.forPage(p),
                 new LambdaQueryWrapper<UserKey>()
-                        .select(UserKey::getId, UserKey::getSecretKey, UserKey::getExpirationTime, UserKey::getCreateTime,
+                        .select(UserKey::getId, UserKey::getSecretKey, UserKey::getExpirationTime,
+                                UserKey::getCreateTime,
                                 UserKey::getName)
                         .like(hasText(name), UserKey::getName, name)
                         .eq(UserKey::getUserId, userId)
@@ -80,7 +81,8 @@ public class UserKeyServiceImpl implements UserKeyService {
 
     @Override
     public boolean isUserKeyValid(int userId, String key) {
-        if (key == null) return false;
+        if (key == null)
+            return false;
 
         final LambdaQueryWrapper<UserKey> cond = new LambdaQueryWrapper<UserKey>()
                 .eq(UserKey::getUserId, userId)

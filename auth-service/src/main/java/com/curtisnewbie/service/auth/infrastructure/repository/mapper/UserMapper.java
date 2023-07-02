@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.infrastructure.repository.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.curtisnewbie.common.util.EnhancedMapper;
@@ -43,7 +42,8 @@ public interface UserMapper extends EnhancedMapper<User> {
     User findById(@Param("id") long id);
 
     /**
-     * Select id, username, role, is_disabled, create_time, update_time, create_by, update_by
+     * Select id, username, role, is_disabled, create_time, update_time, create_by,
+     * update_by
      */
     IPage<User> findUserInfoBy(Page p, @Param("u") ListUserReq req);
 

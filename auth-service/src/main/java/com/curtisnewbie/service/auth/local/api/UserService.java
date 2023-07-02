@@ -54,27 +54,6 @@ public interface UserService {
 
     /**
      * <p>
-     * Login
-     * </p>
-     * <p>
-     * Different from {@link #login(String, String)}, this method takes into the consideration of applications that the
-     * user is allowed to use.
-     * </p>
-     *
-     * @param username username
-     * @param password password
-     * @param appName  application name that the user is trying to use
-     * @return user's info when it was successful
-     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
-     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
-     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
-     * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_PERMITTED
-     */
-    @NotNull
-    UserVo login(@NotEmpty String username, @NotEmpty String password, @NotEmpty String appName);
-
-    /**
-     * <p>
      * Add user (by admin)
      * </p>
      * <p>
@@ -136,11 +115,6 @@ public interface UserService {
     Integer findIdByUsername(@NotEmpty String username);
 
     /**
-     * Change user's role and enable the user
-     */
-    void changeRoleAndEnableUser(int userId, @NotNull UserRole role, @Nullable String updatedBy);
-
-    /**
      * Update user
      *
      * @param param param
@@ -157,11 +131,6 @@ public interface UserService {
      * @param deletedBy deleted by
      */
     boolean deleteUserLogically(int userId, @NotEmpty String deletedBy);
-
-    /**
-     * Update user role
-     */
-    void updateRole(int id, @NotNull UserRole role, @Nullable String updatedBy);
 
     /**
      * Fetch username by ids
@@ -181,16 +150,12 @@ public interface UserService {
      *
      * @param username username
      * @param password password in plaintext
-     * @param appName  name of the app that sent the login request, it's nullable because it's used for better user
-     *                 interaction only. The actual validation is undertaken in the gateway (a kind of cross-cutting
-     *                 concern), because the returned JWT token also contain the services that the user is permitted to
-     *                 use.
      * @return JWT Token
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_NOT_FOUND
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#PASSWORD_INCORRECT
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_DISABLED
      */
-    String exchangeToken(@NotEmpty String username, @NotEmpty String password, @Nullable String appName);
+    String exchangeToken(@NotEmpty String username, @NotEmpty String password);
 
     /**
      * Exchange JWT token
@@ -214,17 +179,6 @@ public interface UserService {
      * Review user registration
      */
     void reviewUserRegistration(@NotNull UserReviewCmd cmd);
-
-    /**
-     * List id of users that don't have user_no (for backward compatible job only, normal records will always have
-     * user_no)
-     */
-    List<Integer> listEmptyUserNoId();
-
-    /**
-     * Generate user_no if it's empty (for backward compatible job only, normal records will always have user_no)
-     */
-    void generateUserNoIfEmpty(int id);
 
     /** Get User info by id */
     UserInfoVo getUserInfo(int userId);

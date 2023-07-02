@@ -3,7 +3,6 @@ package com.curtisnewbie;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.plugins.*;
 import com.baomidou.mybatisplus.extension.plugins.inner.*;
-import com.curtisnewbie.common.advice.EnableRoleControl;
 import com.curtisnewbie.common.dao.*;
 import com.curtisnewbie.common.util.*;
 import com.curtisnewbie.goauth.client.*;

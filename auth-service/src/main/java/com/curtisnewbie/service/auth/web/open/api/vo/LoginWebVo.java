@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import lombok.Data;
 import lombok.ToString;
-import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotBlank;
 
@@ -10,6 +9,7 @@ import javax.validation.constraints.NotBlank;
  * @author yongjie.zhuang
  */
 @Data
+@ToString(exclude = "password")
 public class LoginWebVo {
 
     /** username */
@@ -19,13 +19,4 @@ public class LoginWebVo {
     /** password */
     @NotBlank
     private String password;
-
-    /** the service that sent the login request */
-    @Nullable
-    private String appName;
-
-    @ToString.Include(name = "password")
-    public String passwordMask() {
-        return "****";
-    }
 }

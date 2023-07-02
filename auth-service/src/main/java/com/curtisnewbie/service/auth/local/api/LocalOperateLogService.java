@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
-import com.curtisnewbie.service.auth.local.vo.cmd.MoveOperateLogToHistoryCmd;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import org.springframework.validation.annotation.Validated;
 

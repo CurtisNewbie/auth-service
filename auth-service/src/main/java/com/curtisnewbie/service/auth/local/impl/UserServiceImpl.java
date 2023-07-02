@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.local.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.curtisnewbie.common.dao.IsDel;
@@ -18,21 +17,16 @@ import com.curtisnewbie.service.auth.infrastructure.repository.mapper.UserMapper
 import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.util.PasswordUtil;
 import com.curtisnewbie.service.auth.web.open.api.vo.ListUserReq;
 import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
@@ -40,7 +34,6 @@ import java.util.stream.Collectors;
 
 import static com.curtisnewbie.common.trace.TraceUtils.tUser;
 import static com.curtisnewbie.common.util.AssertUtils.*;
-import static com.curtisnewbie.common.util.MapperUtils.selectListAndConvert;
 import static com.curtisnewbie.common.util.PagingUtil.*;
 import static com.curtisnewbie.common.util.RandomUtils.sequence;
 import static com.curtisnewbie.service.auth.remote.consts.AuthServiceError.*;
@@ -53,16 +46,14 @@ import static com.curtisnewbie.service.auth.util.UserValidator.validateUsername;
  */
 @Slf4j
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
+
     private static final String USER_NO_PREFIX = "UE";
 
     @Autowired
     private UserMapper userMapper;
     @Autowired
     private UserKeyService userKeyService;
-    @Autowired
-    private Environment environment;
     @Autowired
     private JwtBuilder jwtBuilder;
     @Autowired
@@ -73,7 +64,6 @@ public class UserServiceImpl implements UserService {
     private GoAuthClient goAuthClient;
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public User loadUserByUsername(String s) {
         Objects.requireNonNull(s);
         User user = userMapper.findByUsername(s);
@@ -83,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserWebVo loadUserInfo(String username) {
-
+        AssertUtils.hasText(username, "username is empty");
         User user = userMapper.findByUsername(username);
         notNull(user, USER_NOT_FOUND);
 
@@ -93,18 +83,15 @@ public class UserServiceImpl implements UserService {
         uw.setId(user.getId());
         uw.setRoleNo(user.getRoleNo());
         uw.setUsername(user.getUsername());
-
         return uw;
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public String findUsernameById(int id) {
         return userMapper.findUsernameById(id);
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public Integer findIdByUsername(String username) {
         QueryWrapper<User> condition = new QueryWrapper<>();
         condition.select("id")
@@ -114,16 +101,6 @@ public class UserServiceImpl implements UserService {
         if (Objects.isNull(user))
             return null;
         return user.getId();
-    }
-
-    @Override
-    public void changeRoleAndEnableUser(int userId, UserRole role, String updatedBy) {
-        updateUser(UpdateUserVo.builder()
-                .id(userId)
-                .role(role)
-                .isDisabled(UserIsDisabled.NORMAL)
-                .updateBy(updatedBy)
-                .build());
     }
 
     @Override
@@ -151,15 +128,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateRole(int id, UserRole role, String updatedBy) {
-        updateUser(UpdateUserVo.builder()
-                .id(id)
-                .role(role)
-                .updateBy(updatedBy)
-                .build());
-    }
-
-    @Override
     public Map<Integer, String> fetchUsernameById(List<Integer> userIds) {
         if (userIds.isEmpty())
             return Collections.emptyMap();
@@ -180,20 +148,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean validateUserPassword(String username, String password) {
-        final User ue = validateUserStatusForLogin(username);
+        final User ue = checkLoginStatus(username);
         return PasswordUtil.getValidator(ue)
                 .givenPassword(password)
                 .isMatched();
     }
 
     @Override
-    public String exchangeToken(String username, String password, String appName) {
-        final UserVo user = login(username, password, appName);
+    public String exchangeToken(String username, String password) {
+        final UserVo user = login(username, password);
         return buildToken(user);
     }
 
     @Override
-    public String exchangeToken(@NotEmpty String token) {
+    public String exchangeToken(String token) {
         DecodeResult decodeResult = jwtDecoder.decode(token);
         isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
 
@@ -207,10 +175,9 @@ public class UserServiceImpl implements UserService {
         DecodeResult decodeResult = jwtDecoder.decode(token);
         isTrue(decodeResult.isValid(), TOKEN_EXPIRED);
 
-        final String idAsStr = decodeResult.getDecodedJWT().getClaim("id").asString();
-        User user = userMapper.findById(Long.parseLong(idAsStr));
+        final long id = decodeResult.getDecodedJWT().getClaim("id").asLong();
+        User user = userMapper.findById(id);
         notNull(user, USER_NOT_FOUND);
-
         user.setPassword(null);
 
         AssertUtils.isFalse(user.isDeleted(), USER_NOT_FOUND);
@@ -219,7 +186,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void reviewUserRegistration(@NotNull UserReviewCmd cmd) {
+    public void reviewUserRegistration(UserReviewCmd cmd) {
         final Integer userId = cmd.getUserId();
         notNull(userId, "user_id == null");
         final ReviewStatus reviewStatus = cmd.getReviewStatus();
@@ -236,55 +203,28 @@ public class UserServiceImpl implements UserService {
 
             User update = new User();
             update.setId(userId);
-            update.setUpdateBy(tUser().getUsername());
-            update.setUpdateTimeIfAbsent();
             update.setReviewStatus(reviewStatus);
-            update.setIsDisabled(reviewStatus == ReviewStatus.APPROVED ? UserIsDisabled.NORMAL : UserIsDisabled.DISABLED);
+            update.setIsDisabled(
+                    reviewStatus == ReviewStatus.APPROVED ? UserIsDisabled.NORMAL : UserIsDisabled.DISABLED);
             userMapper.updateById(update);
         });
     }
 
     @Override
-    public List<Integer> listEmptyUserNoId() {
-        final LambdaQueryWrapper<User> qw = new LambdaQueryWrapper<User>()
-                .select(User::getId)
-                .eq(User::getUserNo, "");
-
-        return selectListAndConvert(qw, userMapper, User::getId);
-    }
-
-    @Override
-    public void generateUserNoIfEmpty(int id) {
-        User u = new User();
-        u.setUserNo(genUserNo());
-
-        userMapper.update(u, new LambdaQueryWrapper<User>()
-                .eq(User::getId, id)
-                .eq(User::getUserNo, ""));
-    }
-
-    @Override
     public UserVo login(String username, String password) {
         final User user = userLogin(username, password);
-
         log.info("User '{}' login successful, user_info returned", username);
         return BeanCopyUtils.toType(user, UserVo.class);
     }
 
     @Override
-    public UserVo login(String username, String password, String appName) {
-        // validate the credentials first
-        return login(username, password);
-    }
-
-    @Override
-    public void addUser(AddUserVo addUserVo) {
+    public void addUser(AddUserVo req) {
         // validate whether username and password is entered
-        final String username = addUserVo.getUsername();
+        final String username = req.getUsername();
         hasText(username, "Username is required");
         validateUsername(username);
 
-        final String password = addUserVo.getPassword();
+        final String password = req.getPassword();
         hasText(password, "Password is required");
         validatePassword(password);
 
@@ -292,19 +232,19 @@ public class UserServiceImpl implements UserService {
         notEquals(username, password, "Username and password must be different");
 
         // user is already registered
-        isNull(userMapper.findIdByUsername(addUserVo.getUsername()), USER_ALREADY_REGISTERED);
+        isNull(userMapper.findIdByUsername(req.getUsername()), USER_ALREADY_REGISTERED);
 
         // save user
-        User user = prepNewUserCred(addUserVo.getPassword());
+        User user = prepNewUserCred(req.getPassword());
         user.setUserNo(genUserNo());
-        user.setUsername(addUserVo.getUsername());
-        user.setRoleNo(addUserVo.getRoleNo());
+        user.setUsername(req.getUsername());
+        user.setRoleNo(req.getRoleNo());
         user.setCreateBy(tUser().getUsername());
         user.setCreateTime(LocalDateTime.now());
         user.setIsDisabled(UserIsDisabled.NORMAL);
         user.setReviewStatus(ReviewStatus.PENDING);
 
-        log.info("New user '{}' successfully registered, roleNo: {}", addUserVo.getUsername(), addUserVo.getRoleNo());
+        log.info("New user '{}' successfully registered, roleNo: {}", req.getUsername(), req.getRoleNo());
         userMapper.insert(user);
     }
 
@@ -330,8 +270,6 @@ public class UserServiceImpl implements UserService {
         User user = prepNewUserCred(v.getPassword());
         user.setUserNo(genUserNo());
         user.setUsername(v.getUsername());
-        user.setCreateTime(LocalDateTime.now());
-        user.setCreateBy(v.getUsername());
 
         // user will be reviewed by admin
         user.setIsDisabled(UserIsDisabled.DISABLED);
@@ -357,7 +295,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.SUPPORTS)
     public PageableList<UserInfoVo> findUserInfoByPage(ListUserReq req) {
         IPage<User> pge = userMapper.findUserInfoBy(forPage(req.getPagingVo()), req);
         final PageableList<UserInfoVo> pl = toPageableList(pge, v -> BeanCopyUtils.toType(v, UserInfoVo.class));
@@ -371,7 +308,8 @@ public class UserServiceImpl implements UserService {
                             final RoleInfoReq r = new RoleInfoReq();
                             r.setRoleNo(u.getRoleNo());
                             final Result<RoleInfoResp> res = goAuthClient.getRoleInfo(r);
-                            if (res.isOk()) u.setRoleName(res.getData().getName());
+                            if (res.isOk())
+                                u.setRoleName(res.getData().getName());
                         });
             } catch (Exception e) {
                 log.error("Failed to fetch role names", e);
@@ -421,8 +359,8 @@ public class UserServiceImpl implements UserService {
     public Map<String, String> fetchUsernameByUserNos(List<String> userNos) {
         userNos = userNos.stream().distinct().collect(Collectors.toList());
         return userMapper.selectList(MapperUtils.select(User::getUserNo, User::getUsername)
-                        .in(User::getUserNo, userNos)
-                        .eq(User::getIsDel, IsDel.NORMAL))
+                .in(User::getUserNo, userNos)
+                .eq(User::getIsDel, IsDel.NORMAL))
                 .stream()
                 .collect(Collectors.toMap(User::getUserNo, User::getUsername));
     }
@@ -430,10 +368,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoVo findUser(FindUserReq req) {
         User user;
-        if (req.getUserId() != null) user = userMapper.findById(req.getUserId());
-        else if (req.getUserNo() != null) user = userMapper.selectOneEq(User::getUserNo, req.getUserNo());
-        else if (req.getUsername() != null) user = userMapper.selectOneEq(User::getUsername, req.getUsername());
-        else return null;
+        if (req.getUserId() != null)
+            user = userMapper.findById(req.getUserId());
+        else if (req.getUserNo() != null)
+            user = userMapper.selectOneEq(User::getUserNo, req.getUserNo());
+        else if (req.getUsername() != null)
+            user = userMapper.selectOneEq(User::getUsername, req.getUsername());
+        else
+            return null;
         notNull(user, USER_NOT_FOUND);
 
         user.setPassword(null);
@@ -455,7 +397,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private User userLogin(String username, String password) {
-        final User ue = validateUserStatusForLogin(username);
+        final User ue = checkLoginStatus(username);
 
         // validate the password first
         final boolean isPwdCorrect = PasswordUtil.getValidator(ue)
@@ -476,20 +418,7 @@ public class UserServiceImpl implements UserService {
         return u;
     }
 
-    private static Optional<Integer> parseInteger(String value) {
-        if (value == null)
-            return Optional.empty();
-        try {
-            int count = Integer.parseInt(value);
-            if (count < 0)
-                return Optional.empty();
-            return Optional.of(count);
-        } catch (NumberFormatException e) {
-            return Optional.empty();
-        }
-    }
-
-    private User validateUserStatusForLogin(String username) {
+    private User checkLoginStatus(String username) {
         final User ue = loadUserByUsername(username);
 
         // logically deleted

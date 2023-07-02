@@ -63,7 +63,7 @@ public class UserController {
         }
 
         // login and generate an access token
-        final String token = userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword(), loginWebVo.getAppName());
+        final String token = userService.exchangeToken(loginWebVo.getUsername(), loginWebVo.getPassword());
 
         // log the access asynchronously
         final AccessLogInfoVo p = new AccessLogInfoVo();
