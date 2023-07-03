@@ -7,7 +7,7 @@ import lombok.Data;
  * @author yongjie.zhuang
  */
 @Data
-public class GetAppsPermittedForUserReqVo extends PageableVo {
+public class GetAppsPermittedForUserReqVo extends PageableVo<Void> {
 
     /**
      * User's id

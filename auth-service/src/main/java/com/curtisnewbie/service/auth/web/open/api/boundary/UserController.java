@@ -11,14 +11,11 @@ import com.curtisnewbie.service.auth.local.api.*;
 import com.curtisnewbie.service.auth.messaging.helper.LogOperation;
 import com.curtisnewbie.service.auth.messaging.services.AuthMessageDispatcher;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.InvalidAuthenticationException;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +30,6 @@ import static org.apache.commons.lang.StringUtils.isNotBlank;
  *
  * @author yongjie.zhuang
  */
-@Slf4j
 @RestController
 @RequestMapping("${web.base-path}/user")
 public class UserController {
@@ -113,8 +109,6 @@ public class UserController {
     @PostMapping("/delete")
     public Result<Void> deleteUser(@RequestBody DeleteUserReqWebVo reqVo) throws InvalidAuthenticationException {
         TUser tUser = TraceUtils.tUser();
-        Assert.isTrue(UserRole.isAdmin(tUser.getRole()), "Not permitted");
-
         userService.deleteUserLogically(reqVo.getId(), tUser.getUsername());
         return Result.ok();
     }

@@ -7,7 +7,6 @@ import com.curtisnewbie.service.auth.dao.AccessLog;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface AccessLogMapper extends BaseMapper<AccessLog> {
 

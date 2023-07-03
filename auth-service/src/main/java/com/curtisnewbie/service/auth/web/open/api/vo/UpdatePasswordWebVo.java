@@ -7,6 +7,7 @@ import lombok.ToString;
  * @author yongjie.zhuang
  */
 @Data
+@ToString(exclude = { "prevPassword", "newPassword" })
 public class UpdatePasswordWebVo {
 
     /**
@@ -18,14 +19,4 @@ public class UpdatePasswordWebVo {
      * New password
      */
     private String newPassword;
-
-    @ToString.Include(name = "prevPassword")
-    public String prevPasswordMask() {
-        return "****";
-    }
-
-    @ToString.Include(name = "newPassword")
-    public String newPasswordMask() {
-        return "****";
-    }
 }

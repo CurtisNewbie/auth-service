@@ -15,7 +15,6 @@ import com.curtisnewbie.service.auth.local.api.UserKeyService;
 import com.curtisnewbie.service.auth.local.vo.cmd.GenerateUserKeyCmd;
 import com.curtisnewbie.service.auth.local.vo.resp.GenerateUserKeyResp;
 import com.curtisnewbie.service.auth.web.open.api.vo.UserKeyVo;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

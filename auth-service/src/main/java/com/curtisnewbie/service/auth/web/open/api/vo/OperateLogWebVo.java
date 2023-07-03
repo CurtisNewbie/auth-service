@@ -1,10 +1,7 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
-import com.curtisnewbie.common.util.DateUtils;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -13,7 +10,7 @@ import java.time.LocalDateTime;
  * @author yongjie.zhuang
  */
 @Data
-public class OperateLogWebVo implements Serializable {
+public class OperateLogWebVo {
 
     /** name of operation */
     private String operateName;

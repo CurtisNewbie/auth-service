@@ -2,6 +2,7 @@ package com.curtisnewbie.service.auth.web.open.api.vo;
 
 import com.curtisnewbie.common.vo.PageableVo;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -11,7 +12,8 @@ import java.util.List;
  * @author yongjie.zhuang
  */
 @Data
-public class FindOperateLogRespWebVo extends PageableVo {
+@EqualsAndHashCode(callSuper = true)
+public class FindOperateLogRespWebVo extends PageableVo<Void> {
 
     private List<OperateLogWebVo> operateLogVoList;
 }

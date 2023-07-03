@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.common.vo.*;
 import com.curtisnewbie.service.auth.dao.User;
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.vo.*;
 import com.curtisnewbie.service.auth.web.open.api.vo.ListUserReq;
 import com.curtisnewbie.service.auth.web.open.api.vo.UserWebVo;

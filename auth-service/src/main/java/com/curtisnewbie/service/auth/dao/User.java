@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.curtisnewbie.common.dao.DaoSkeleton;
 import com.curtisnewbie.service.auth.remote.consts.ReviewStatus;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -8,7 +8,6 @@ import com.curtisnewbie.service.auth.local.api.UserKeyService;
 import com.curtisnewbie.service.auth.local.api.UserService;
 import com.curtisnewbie.service.auth.local.vo.cmd.GenerateUserKeyCmd;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,6 @@ import static com.curtisnewbie.common.util.AssertUtils.isTrue;
 /**
  * @author yongjie.zhuang
  */
-@Slf4j
 @RestController
 @RequestMapping("${web.base-path}/user/key")
 @PathDoc(resourceCode = Resources.BASIC_USER, resourceName = Resources.BASIC_USER_NAME)

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
  * @author yongjie.zhuang
  */
 @Data
+@ToString(exclude = "password")
 public class GenerateUserKeyReqWebVo {
 
     /** password */
@@ -18,10 +19,5 @@ public class GenerateUserKeyReqWebVo {
     /** name of the key */
     @NotBlank
     private String keyName;
-
-    @ToString.Include(name = "password")
-    public String passwordMask() {
-        return "****";
-    }
 
 }

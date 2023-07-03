@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.web.open.api.vo;
 
-import com.curtisnewbie.common.vo.*;
 import lombok.*;
 
 /**

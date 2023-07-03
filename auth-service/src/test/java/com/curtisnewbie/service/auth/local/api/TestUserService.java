@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.local.api;
 
 import com.curtisnewbie.AuthServiceApplication;
 import com.curtisnewbie.service.auth.dao.*;
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import com.curtisnewbie.service.auth.remote.exception.ExceededMaxAdminCountException;
 import com.curtisnewbie.service.auth.remote.exception.UserDisabledException;
 import com.curtisnewbie.service.auth.remote.exception.UserRegisteredException;
@@ -16,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+
+// TODO: Fix the tests
 
 /**
  * Test {@link UserService}
@@ -33,7 +34,6 @@ public class TestUserService {
     private static final String USERNAME = "test_yongjie.zhuang";
     private static final String PASSWORD = "123123test";
     private static final String NEW_PASSWORD = "456456456test";
-    private static final UserRole ROLE = UserRole.USER;
     private static final String CREATE_BY = "test case";
 
     @Autowired
@@ -85,7 +85,7 @@ public class TestUserService {
             userApp.setAppId(app.getId());
             userAppTestMapper.insertUserAppRecord(userApp);
 
-            UserVo vo = userService.login(USERNAME, PASSWORD, APP_NAME);
+            UserVo vo = userService.login(USERNAME, PASSWORD);
             Assertions.assertNotNull(vo);
             Assertions.assertNotNull(vo.getId());
             Assertions.assertEquals(vo.getUsername(), USERNAME);

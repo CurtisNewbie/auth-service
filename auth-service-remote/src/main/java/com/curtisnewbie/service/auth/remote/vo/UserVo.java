@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
-import com.curtisnewbie.service.auth.remote.consts.UserRole;
 import lombok.Data;
 
 import java.io.Serializable;

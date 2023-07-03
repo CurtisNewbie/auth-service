@@ -3,6 +3,7 @@ package com.curtisnewbie.service.auth.web.open.api.vo;
 import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.service.auth.remote.consts.UserIsDisabled;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
 /**
@@ -11,6 +12,7 @@ import lombok.Data;
  * @author yongjie.zhuang
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ListUserReq extends PageableVo<Void> {
 
     private String username;
