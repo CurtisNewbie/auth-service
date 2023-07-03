@@ -1,6 +1,5 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
