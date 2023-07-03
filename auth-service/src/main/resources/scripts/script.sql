@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS user (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `user_no` (`user_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMNET = 'users';
 
-CREATE TABLE `user_key` (
+CREATE TABLE IF NOT EXISTS user_key (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `user_id` int unsigned NOT NULL COMMENT 'user.id',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'name of the key',
@@ -32,32 +32,7 @@ CREATE TABLE `user_key` (
   UNIQUE KEY `secret_key` (`secret_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT="user's key";
 
-CREATE TABLE `app` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `name` varchar(255) NOT NULL COMMENT 'name of the application',
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when the record is created',
-  `create_by` varchar(255) NOT NULL DEFAULT '' COMMENT 'who created this record',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'when the record is updated',
-  `update_by` varchar(255) NOT NULL DEFAULT '' COMMENT 'who updated this record',
-  `is_del` tinyint NOT NULL DEFAULT '0' COMMENT '0-normal, 1-deleted',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='application';
-
-CREATE TABLE `user_app` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `user_id` int unsigned NOT NULL COMMENT 'user''s id',
-  `app_id` int unsigned NOT NULL COMMENT 'app''s id',
-  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when the record is created',
-  `create_by` varchar(255) NOT NULL DEFAULT '' COMMENT 'who created this record',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'when the record is updated',
-  `update_by` varchar(255) NOT NULL DEFAULT '' COMMENT 'who updated this record',
-  `is_del` tinyint NOT NULL DEFAULT '0' COMMENT '0-normal, 1-deleted',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_app` (`user_id`,`app_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='join table between application and user';
-
-CREATE TABLE IF NOT EXISTS fileServer.access_log (
+CREATE TABLE IF NOT EXISTS access_log (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `access_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when the user signed in',
   `ip_address` varchar(255) NOT NULL COMMENT 'ip address',
@@ -68,7 +43,7 @@ CREATE TABLE IF NOT EXISTS fileServer.access_log (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='access log';
 
-CREATE TABLE `operate_log` (
+CREATE TABLE IF NOT EXISTS operate_log (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
   `operate_name` varchar(255) NOT NULL COMMENT 'name of operation',
   `operate_desc` varchar(255) NOT NULL DEFAULT '' COMMENT 'description of operation',
@@ -78,17 +53,6 @@ CREATE TABLE `operate_log` (
   `user_id` int unsigned NOT NULL COMMENT 'primary key of user',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='operate log';
-
-CREATE TABLE `operate_log_history` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `operate_name` varchar(255) NOT NULL COMMENT 'name of operation',
-  `operate_desc` varchar(255) NOT NULL DEFAULT '' COMMENT 'description of operation',
-  `operate_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'when the operation happens',
-  `operate_param` varchar(1000) NOT NULL COMMENT 'parameters used for the operation',
-  `username` varchar(255) NOT NULL COMMENT 'username',
-  `user_id` int unsigned NOT NULL COMMENT 'primary key of user',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='operate log history (for history only)';
 
 -- copied from distributed-task-module
 CREATE TABLE task (

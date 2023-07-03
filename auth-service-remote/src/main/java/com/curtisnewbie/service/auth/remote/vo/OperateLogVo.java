@@ -1,9 +1,7 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +10,7 @@ import java.time.LocalDateTime;
  * @author yongjie.zhuang
  */
 @Data
-public class OperateLogVo implements Serializable {
+public class OperateLogVo {
 
     /** name of operation */
     private String operateName;

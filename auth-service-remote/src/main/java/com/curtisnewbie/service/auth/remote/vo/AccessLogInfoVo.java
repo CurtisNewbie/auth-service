@@ -2,7 +2,6 @@ package com.curtisnewbie.service.auth.remote.vo;
 
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
  * @author yongjie.zhuang
  */
 @Data
-public class AccessLogInfoVo implements Serializable {
+public class AccessLogInfoVo {
 
     private Integer id;
 

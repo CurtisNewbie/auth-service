@@ -62,7 +62,7 @@ public interface UserService {
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#ADMIN_REG_NOT_ALLOWED
      */
-    void addUser(@NotNull AddUserVo addUserVo);
+    void adminAddUser(@NotNull AddUserVo addUserVo);
 
     /**
      * Register user

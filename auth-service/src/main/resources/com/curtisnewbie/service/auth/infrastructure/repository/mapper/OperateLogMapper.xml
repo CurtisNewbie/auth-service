@@ -34,16 +34,6 @@
     where operate_time <![CDATA[<]]> #{date}
   </select>
 
-  <insert id="copyToHistory">
-    insert into operate_log_history
-    select * from operate_log
-    where id in (
-    <foreach collection="ids" item="id" separator=",">
-      #{id}
-    </foreach>
-    )
-  </insert>
-
   <delete id="deleteByIds">
     delete from operate_log
     where id in (

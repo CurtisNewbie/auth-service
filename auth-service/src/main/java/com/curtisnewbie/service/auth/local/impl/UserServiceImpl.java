@@ -218,7 +218,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(AddUserVo req) {
+    public void adminAddUser(AddUserVo req) {
         // validate whether username and password is entered
         final String username = req.getUsername();
         hasText(username, "Username is required");
@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
         user.setCreateBy(tUser().getUsername());
         user.setCreateTime(LocalDateTime.now());
         user.setIsDisabled(UserIsDisabled.NORMAL);
-        user.setReviewStatus(ReviewStatus.PENDING);
+        user.setReviewStatus(ReviewStatus.APPROVED); // users added by admin, review not needed
 
         log.info("New user '{}' successfully registered, roleNo: {}", req.getUsername(), req.getRoleNo());
         userMapper.insert(user);

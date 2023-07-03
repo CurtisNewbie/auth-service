@@ -29,7 +29,5 @@ public interface OperateLogMapper extends BaseMapper<OperateLog> {
 
     IPage<Integer> selectIdsBeforeDate(Page p, @Param("date") LocalDateTime date);
 
-    void copyToHistory(@Param("ids") List<Integer> ids);
-
     void deleteByIds(@Param("ids") List<Integer> ids);
 }

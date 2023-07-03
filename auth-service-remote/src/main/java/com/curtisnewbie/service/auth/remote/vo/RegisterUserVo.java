@@ -1,10 +1,8 @@
 package com.curtisnewbie.service.auth.remote.vo;
 
-
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
  * Vo for registering new user
@@ -15,7 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Builder
-public class RegisterUserVo implements Serializable {
+public class RegisterUserVo {
 
     /**
      * username

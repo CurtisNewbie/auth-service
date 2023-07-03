@@ -88,7 +88,7 @@ public class UserController {
             roleInfo.assertIsOk();
         }
 
-        userService.addUser(param);
+        userService.adminAddUser(param);
         return Result.ok();
     }
 
