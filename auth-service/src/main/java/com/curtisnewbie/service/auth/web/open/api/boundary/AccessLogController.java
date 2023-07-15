@@ -5,7 +5,7 @@ import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PageableVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.goauth.client.PathDoc;
-import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
+import com.curtisnewbie.service.auth.local.api.AccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.ListAccessLogInfoReqWebVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ import java.util.List;
 public class AccessLogController {
 
     @Autowired
-    private LocalAccessLogService accessLogService;
+    private AccessLogService accessLogService;
 
     @PathDoc(description = "List access logs", resourceCode = Resources.ACCESS_LOG, resourceName = Resources.ACCESS_LOG_NAME)
     @PostMapping("/history")

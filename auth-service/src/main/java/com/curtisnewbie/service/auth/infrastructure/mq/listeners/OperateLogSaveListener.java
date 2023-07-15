@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.infrastructure.mq.listeners;
 
 import com.curtisnewbie.module.messaging.listener.MsgListener;
-import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
+import com.curtisnewbie.service.auth.local.api.OperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class OperateLogSaveListener {
 
     @Autowired
-    private LocalOperateLogService operateLogService;
+    private OperateLogService operateLogService;
 
     @MsgListener(queue = "auth.operate-log.queue", exchange = "auth.operate-log.exg", routingKey = "auth.operate-log.save")
     public void onMessage(OperateLogVo vo) {

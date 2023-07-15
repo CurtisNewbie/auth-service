@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.remote.feign;
 
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.local.api.LocalAccessLogService;
+import com.curtisnewbie.service.auth.local.api.AccessLogService;
 import com.curtisnewbie.service.auth.remote.vo.AccessLogInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccessLogServiceFeignController implements AccessLogServiceFeign {
 
     @Autowired
-    private LocalAccessLogService localAccessLogService;
+    private AccessLogService localAccessLogService;
 
     @Override
     public Result<Void> save(AccessLogInfoVo accessLogVo) {

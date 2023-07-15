@@ -14,17 +14,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 /**
- * Test {@link LocalOperateLogService}
+ * Test {@link OperateLogService}
  *
  * @author yongjie.zhuang
  */
 @Transactional
 @Rollback
 @SpringBootTest(classes = {AuthServiceApplication.class, TestMapperConfig.class})
-public class TestLocalOperateLogService {
+public class TestOperateLogService {
 
     @Autowired
-    private LocalOperateLogService operateLogService;
+    private OperateLogService operateLogService;
 
     @Test
     public void shouldSaveOperateLogInfo() {

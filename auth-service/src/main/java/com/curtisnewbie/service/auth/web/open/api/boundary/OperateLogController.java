@@ -6,7 +6,7 @@ import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.common.vo.Result;
 import com.curtisnewbie.goauth.client.PathDoc;
-import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
+import com.curtisnewbie.service.auth.local.api.OperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import com.curtisnewbie.service.auth.web.open.api.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OperateLogController {
 
     @Autowired
-    private LocalOperateLogService operateLogService;
+    private OperateLogService operateLogService;
 
     @PathDoc(description = "List operate logs", resourceCode = Resources.OPERATE_LOG, resourceName = Resources.OPERATE_LOG_NAME)
     @PostMapping("/history")

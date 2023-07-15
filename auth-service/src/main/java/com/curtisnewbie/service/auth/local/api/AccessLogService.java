@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * @author yongjie.zhuang
  */
 @Validated
-public interface LocalAccessLogService {
+public interface AccessLogService {
 
     /**
      * Save access_log entity

@@ -16,17 +16,17 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 /**
- * Test {@link LocalAccessLogService}
+ * Test {@link AccessLogService}
  *
  * @author yongjie.zhuang
  */
 @SpringBootTest(classes = {AuthServiceApplication.class, TestMapperConfig.class})
-public class TestLocalAccessLogService {
+public class TestAccessLogService {
 
     private static final String TEST_IP = "xxx.xxx.xxx.xxx";
 
     @Autowired
-    LocalAccessLogService localAccessLogService;
+    AccessLogService localAccessLogService;
 
     @Autowired
     AccessLogTestMapper testMapper;

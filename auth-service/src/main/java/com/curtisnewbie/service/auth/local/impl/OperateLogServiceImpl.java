@@ -6,7 +6,7 @@ import com.curtisnewbie.common.vo.PageableList;
 import com.curtisnewbie.common.vo.PagingVo;
 import com.curtisnewbie.service.auth.dao.OperateLog;
 import com.curtisnewbie.service.auth.infrastructure.repository.mapper.OperateLogMapper;
-import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
+import com.curtisnewbie.service.auth.local.api.OperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import static com.curtisnewbie.common.util.PagingUtil.forPage;
  * @author yongjie.zhuang
  */
 @Service
-public class OperateLogServiceImpl implements LocalOperateLogService {
+public class OperateLogServiceImpl implements OperateLogService {
 
     @Autowired
     private OperateLogMapper operateLogMapper;

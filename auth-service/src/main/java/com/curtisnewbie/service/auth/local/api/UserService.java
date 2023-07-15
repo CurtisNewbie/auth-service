@@ -68,9 +68,6 @@ public interface UserService {
      * Register user
      * <p>
      * User registered here must be reviewed by the admins, only the approved user can be used
-     * <p>
-     * Users registered here are by default {@link UserRole#GUEST}
-     * <p>
      *
      * @see com.curtisnewbie.service.auth.remote.consts.AuthServiceError#USER_ALREADY_REGISTERED
      */

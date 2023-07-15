@@ -1,7 +1,7 @@
 package com.curtisnewbie.service.auth.remote.feign;
 
 import com.curtisnewbie.common.vo.Result;
-import com.curtisnewbie.service.auth.local.api.LocalOperateLogService;
+import com.curtisnewbie.service.auth.local.api.OperateLogService;
 import com.curtisnewbie.service.auth.remote.vo.OperateLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OperateLogServiceController implements OperateLogServiceFeign {
 
     @Autowired
-    private LocalOperateLogService localOperateLogService;
+    private OperateLogService localOperateLogService;
 
     @Override
     public Result<Void> saveOperateLogInfo(OperateLogVo operateLogVo) {

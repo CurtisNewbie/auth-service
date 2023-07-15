@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * @author yongjie.zhuang
  */
 @Validated
-public interface LocalOperateLogService {
+public interface OperateLogService {
 
     /**
      * Save operate_log info
